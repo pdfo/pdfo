@@ -28,13 +28,12 @@ Then NumPy will be installed by default. NumPy provides F2PY.
 
 0.3. Install Microsoft Visual Studio according to 
 https://visualstudio.microsoft.com . Make sure to include "C++ Build Tools"
-and "Microsoft Windows SDK" in your installation. Microsoft Windows SDK
-can also be installed separately according to 
-https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/
+in the Workloads pane, and "Microsoft Windows SDK" in the Individual Components
+pane.
 
 0.4. Install the Intel Fortran compiler according to
 https://software.intel.com/en-us/fortran-compilers . Your installation has to
-include the Python libraries (included by default).
+include the Intel Distribution for Python (included by default).
 
 
 1. Installation
