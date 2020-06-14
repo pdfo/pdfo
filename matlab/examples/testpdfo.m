@@ -23,6 +23,7 @@ function testpdfo(release, precision, nrun)
 all_solvers =  {'uobyqa', 'newuoa', 'bobyqa', 'lincoa', 'cobyla', 'pdfo'};
 
 % Supress the following warning
+orig_warning_state = warning;
 cellfun(@(solver) warning('off', [solver, ':Debug']), all_solvers);
 cellfun(@(solver) warning('off', [solver, ':ChkFunval']), all_solvers);
 cellfun(@(solver) warning('off', [solver, ':Classical']), all_solvers);
@@ -194,11 +195,7 @@ for irun = 1 : nrun
     end
 end
 
-% Recover the warning behavior
-cellfun(@(solver) warning('on', [solver, ':Debug']), all_solvers);
-cellfun(@(solver) warning('on', [solver, ':ChkFunval']), all_solvers);
-cellfun(@(solver) warning('on', [solver, ':Classical']), all_solvers);
-cellfun(@(solver) warning('on', [solver, ':ReviseX0']), all_solvers);
+warning(orig_warning_state); % Restore the behavior of displaying warnings
 
 return
 
