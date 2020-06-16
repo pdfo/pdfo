@@ -23,7 +23,9 @@ Visual Studio, and Intel Fortran compiler (ifort), which can be installed in
 the following way.
 
 0.1. Install Python (either version 3.0 and onwards, 3.7 and earlier) according
-to https://www.python.org .
+to https://www.python.org . Note that the Python installed from the Microsoft
+Store may not work. In addition, the version of Python has to be compatible with
+the Intel Fortran compiler; otherwise, Python may complain about missing dll.
 
 0.2. Install the latest version of SciPy. See https://www.scipy.org/install.html .
 Then NumPy will be installed by default. NumPy provides F2PY.
@@ -33,11 +35,12 @@ https://visualstudio.microsoft.com . Make sure to include "C++ Build Tools"
 in the Workloads pane, and "Microsoft Windows SDK" in the Individual Components
 pane.
 
-0.4. Install the Intel Fortran compiler according to
-https://software.intel.com/en-us/fortran-compilers . Your installation has to
-include the Intel Distribution for Python (included by default). It supports
-only Python 3.7 and earlier: make sure that your version of Python is
-compatible.
+0.4. Install the Intel Fortran compiler (ifort) according to
+https://software.intel.com/en-us/fortran-compilers .
+Your installation has to include the Intel Distribution for Python (included
+by default). Note that ifort may not support the latest version of Python.
+As of June 15, 2020, the most recent release of ifort supports Python 3.7
+according to the Key Specifications of the Intel Distribution for Python.
 
 
 1. Installation
