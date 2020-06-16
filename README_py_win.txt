@@ -25,7 +25,7 @@ the following way.
 0.1. Install Python (either version 3.0 and onwards, 3.7 and earlier) according
 to https://www.python.org . Note that the Python installed from the Microsoft
 Store may not work. In addition, the version of Python has to be compatible with
-the Intel Fortran compiler; otherwise, Python may complain about missing dll.
+the Intel Fortran compiler; otherwise, Python may complain of missing dll.
 
 0.2. Install the latest version of SciPy. See https://www.scipy.org/install.html .
 Then NumPy will be installed by default. NumPy provides F2PY.
