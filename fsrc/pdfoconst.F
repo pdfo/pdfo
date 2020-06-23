@@ -34,8 +34,9 @@ C that REAL(KIND=8) will be of double precision.
       real(kind=dp), parameter :: TENTH = 0.1D0
       real(kind=dp), parameter :: HALF = 0.5D0
       real(kind=dp), parameter :: HUGENUM = huge(HALF)
-      real(kind=dp), parameter :: HUGEFUN = min(1.0D42, sqrt(HUGENUM))
-      real(kind=dp), parameter :: HUGECON = min(1.0D42, sqrt(HUGENUM))
+      integer, parameter :: maxe = maxexponent(zero)
+      real(kind=dp), parameter :: hugefun = 2.0D0**min(100, maxe/2)
+      real(kind=dp), parameter :: hugecon = hugefun
 
       integer, parameter :: int4 = selected_int_kind(8)
       ! int4 is the kind for integer*4
