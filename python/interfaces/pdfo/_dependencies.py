@@ -67,7 +67,7 @@ class OptimizeResult(dict):
         1. If `constraints` is a dictionary or an instance of NonlinearConstraint or LinearConstraint, then
            `constr_value` is an ndarray, whose value is `constraints['fun'](x)`, `constraints.fun(x)`, or
            `constraints.A*x`.
-        2. If `constraints` is a list of dictionaries or instances of NonlinearConstraint or LinearConstraint, then 
+        2. If `constraints` is a list of dictionaries or instances of NonlinearConstraint or LinearConstraint, then
            `constr_value` is a list of ndarrays described in 1, each of which is the value of the corresponding
            component in `constraints`.
         If a nonlinear constraint is trivial (i.e., it has -inf as th lower bound and +inf as th upper bound), then its
@@ -119,11 +119,11 @@ class OptimizeResult(dict):
 class Bounds:
     """Bound structure.
 
-    Bounds(lb, ub) specifies a bound constraint 
+    Bounds(lb, ub) specifies a bound constraint
 
     lb <= x <= ub,
 
-    where x is an n-dimensional vector. 
+    where x is an n-dimensional vector.
 
     Attributes
     ----------
@@ -173,15 +173,18 @@ class Bounds:
         if len(self.lb.shape) != 1 or len(self.ub.shape) != 1 or self.lb.size != self.ub.size:
             raise AttributeError('The sizes of the bounds are inconsistent; checks the shapes of the arrays.')
 
+    def __repr__(self):
+        return '{}({}, {})'.format(type(self).__name__, self.lb, self.ub)
+
 
 class LinearConstraint:
     """Linear constraint structure.
 
-    LinearConstraint(A, lb, ub) specifies a linear constraint 
+    LinearConstraint(A, lb, ub) specifies a linear constraint
 
     lb <= A*x <= ub,
 
-    where x is an n-dimensional vector.  
+    where x is an n-dimensional vector.
 
     Attributes
     ----------
@@ -255,13 +258,16 @@ class LinearConstraint:
                 (self.lb.size == 0 and self.ub.size == 0 and self.A.size > 0):
             raise AttributeError('The sizes of linear constraints are inconsistent; check the shapes of the arrays.')
 
+    def __repr__(self):
+        return '{}({}, {}, {})'.format(type(self).__name__, self.A, self.lb, self.ub)
+
 
 class NonlinearConstraint:
     """Nonlinear constraint structure.
 
-    NonlinearConstraint(fun, lb, ub) specifies a nonlinear constraint 
+    NonlinearConstraint(fun, lb, ub) specifies a nonlinear constraint
 
-    lb <= fun(x) <= ub. 
+    lb <= fun(x) <= ub.
 
     Attributes
     ----------
@@ -356,6 +362,9 @@ class NonlinearConstraint:
             warnings.warn(
                 'The sizes of the constraint bounds are inconsistent; check the shapes of the arrays.', Warning)
 
+    def __repr__(self):
+        return '{}({}, {}, {})'.format(type(self).__name__, self.fun, self.lb, self.ub)
+
 
 def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=None):
     """Pre-processing of the arguments.
@@ -418,6 +427,8 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
                 flag does not interfere with the warning and error printing.
             classical: bool, optional
                 Flag indicating whether to call the classical Powell code or not. By default, it is False.
+            eliminate_lin_eq: bool, optional
+                Flag indicating whether the linear equality constraints should be eliminated. By default, it is True.
             debug: bool, optional
                 Debugging flag. By default, it is False.
             chkfunval: bool, optional
@@ -457,9 +468,9 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     # At return, probinfo has the following fields:
     # 1. raw_data: problem data before preprocessing/validating, including fun, x0, constraints, lb, ub, options
     # 2. refined_data: problem data after preprocessing/validating, including fun, x0, constraints, lb, ub, options
-    # 3. fixedx: a bool vector indicating which variables are fixed by bound constraints
-    # 4. fixedx_value: the values of the variables fixed by bound constraints 
-    # 5. nofreex: whether all variables are fixed by bound constraints
+    # 3. fixedx: a bool vector indicating which variables are fixed by the constraints
+    # 4. fixedx_value: the values of the variables fixed by the constraints
+    # 5. nofreex: whether all variables are fixed by bound constraints and/or the linear equality constraints
     # 6. infeasible_bound: a bool vector indicating which bound constraints are infeasible
     # 7. infeasible_linear: a bool vector indicating which linear constraints are infeasible (up to naive tests)
     # 8. infeasible_nonlinear: a bool vector indicating which nonlinear constraints are infeasible (up to naive tests)
@@ -469,24 +480,24 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     # 12. scaling_factor: vector of scaling factors
     # 13. shift: vector of shifts
     # 14. reduced: whether the problem is reduced (due to fixed variables)
-    # 15. raw_type: problem type before reduction
-    # 16. raw_dim: problem dimension before reduction
-    # 17. refined_type: problem type after reduction
-    # 18. refined_dim: problem dimension after reduction
-    # 19. feasibility_problem: whether the problem is a feasibility problem
-    # 20. user_options_fields: the fields in the user-specified options
-    # 21. warnings: warnings during the preprocessing/validation
-    # 22. constr_metadata: metadata of each constraint, which is needed to build the output constr_value. It contains:
+    # 15. space_chg: function of the change of space (if applicable)
+    # 16. bounds_in_lin_eq: indices of the bounds added in the linear inequalities (if applicable)
+    # 17. raw_type: problem type before reduction
+    # 18. raw_dim: problem dimension before reduction
+    # 19. refined_type: problem type after reduction
+    # 20. refined_dim: problem dimension after reduction
+    # 21. feasibility_problem: whether the problem is a feasibility problem
+    # 22. user_options_fields: the fields in the user-specified options
+    # 23. warnings: warnings during the preprocessing/validation
+    # 24. constr_metadata: metadata of each constraint, which is needed to build the output constr_value. It contains:
     #         - linear_indices: the indices of the linear constraints in the argument `constraints`.
     #         - nonlinear_indices: the indices of the nonlinear constraints in the argument `constraints`.
     #         - data: a list of metadata for each constraint (length, bounds, dropped indices, ...).
-    prob_info = dict()
-    prob_info['raw_data'] = \
-        {'objective': fun, 'x0': x0, 'args': args, 'bounds': bounds, 'constraints': constraints, 'options': options}
+    prob_info = {'raw_data': {'objective': fun, 'x0': x0, 'args': args, 'bounds': bounds, 'constraints': constraints,
+                              'options': options}, 'feasibility_problem': False}
 
     # If fun is None, then we are dealing with a feasibility problem; set fun to a fake objective function that
     # returns a constant.
-    prob_info['feasibility_problem'] = False
     if fun is None:
         prob_info['feasibility_problem'] = True
 
@@ -561,7 +572,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     prob_info['infeasible_bound'] = infeasible_bound
     prob_info['fixedx'] = fixed_indices
     prob_info['fixedx_value'] = fixed_values
-    
+
     # Since fixedx_value may be revised in _constraints_validation, we will record it in prob_info only after that. We
     # save its current value in fixedx_value_save, which will be used when calculating the constriant violation at x0.
     fixed_values_save = fixed_values.copy()
@@ -569,10 +580,11 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     # Validate the linear and nonlinear constraint, and define its feasibility.
     # 1. The constraints will be reduced if some but not all variables are fixed by the bound constraints. See
     #    _bounds_validation for why we do not reduce the problem when all variables are fixed.
-    # 2. The 'trivial constraints' will be excluded (if any). 
+    # 2. The 'trivial constraints' will be excluded (if any).
     # 3. In addition, get the indices of infeasible and trivial constraints (if any) and save the information in
     # prob_info.
     free_indices = np.logical_not(fixed_indices)
+    fixed_bounds = fixed_indices.copy()  # components fixed only by the bounds
     prob_info['reduced'] = any(fixed_indices) and any(free_indices)
     constraints_c, raw_constraints_c, infeasible_linear, infeasible_nonlinear, trivial, infeasible, prob_info = \
         _constraints_validation(invoker, constraints, lenx0, fixed_indices, fixed_values, x0_c, prob_info)
@@ -582,56 +594,29 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     prob_info['infeasible'] = infeasible
     prob_info['trivial_linear'] = trivial
     fixed_values = prob_info['fixedx_value']  # it may be changed if the problem is infeasible
-    
+
     # Problem type before reduction
     prob_info['raw_type'] = _problem_type(lb, ub, constraints_c)
     prob_info['raw_dim'] = lenx0
 
-    # Reduce fun, x0, lb, and ub if some but not all variables are fixed by the bound constraints.
+    # Reduce fun, x0, lb, and ub if some but not all variables are fixed by the bound constraints. A copy of the
+    # original bounds are kept for sake of clarity if some variables are fixed by the bound constraints, and the rest by
+    # the linear equality constraints.
+    lb_old, ub_old = lb.copy(), ub.copy()
     if prob_info['reduced']:
         x0_c = x0_c[free_indices]
         lb = lb[free_indices]
         ub = ub[free_indices]
         lenx0 = x0_c.size
-        prob_info['reduced'] = True
 
         def fun_c_reduced(freex_value):
             return fun_c(_fullx(freex_value, fixed_values, free_indices, fixed_indices))
     else:
-        fun_c_reduced = fun_c  # the variable vector is not reduced
-
-    # Problem after reduction.
-    prob_info['refined_type'] = _problem_type(lb, ub, constraints_c)
-    prob_info['refined_dim'] = lenx0
+        fun_c_reduced = fun_c
 
     # After pre-processing the linear/bound constraints, the problem may turn out infeasible, or x may turn out fixed by
     # the bounds.
     prob_info['nofreex'] = all(prob_info['fixedx'])
-    if prob_info['infeasible']:
-        prob_info['constrv_x0'], prob_info['nlc_x0'] = \
-            _constr_violation(invoker, x0_c, lb, ub, constraints_c, prob_info)
-        
-        # The constraint violation calculated by _constr_violation does not include the violation of x0 for the bounds
-        # corresponding to fixedx; the corresponding values of x0 are in fixedx_value, while the values of the bounds
-        # (lb and ub are the same up to eps) are in fixedx_value_save. Thus the violation is
-        # abs(fixedx_value-fixedx_value_save).
-        max_fixed = np.nanmax(np.abs(fixed_values - fixed_values_save)) if fixed_values.size > 0 else 0
-        prob_info['constrv_x0'] = max(prob_info['constrv_x0'], max_fixed)
-    elif prob_info['nofreex']:
-        prob_info['constrv_fixedx'], prob_info['nlc_fixedx'] = \
-            _constr_violation(invoker, prob_info['fixedx_value'], lb, ub, constraints_c, prob_info)
-
-    # Can the invoker handle the given problem? This should be done after the problem type has been 'refined' (for
-    # example, newuoa can handle a bound-constrained problem if every defined bound is fixed).
-    if not _prob_solv_match(prob_info['refined_type'], invoker.lower()):
-        if invoker.lower() == 'pdfo':
-            raise SystemError(
-                '{}: UNEXPECTED ERROR: problem and solver do not match; it should not happen when the invoker is pdfo '
-                'or the problem is not a structure.'.format(fun_name))
-        else:
-            raise ValueError(
-                '{}: a {} problem received; {} cannot solve '
-                'it.'.format(fun_name, prob_info['refined_type'].replace('-', ' '), invoker))
 
     # Validate and preprocess options, adopt default options if needed. This should be done after reducing the problem,
     # because BOBYQA requires rhobeg <= min(ub-lb)/2.
@@ -642,22 +627,6 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     # option that is not in user_options_fields.
     options_c, prob_info['user_options_fields'], method = \
         _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings)
-
-    # Revise x0 for bound and linearly constrained problems. This is necessary for LINCOA, which accepts only a feasible
-    # x0. Should we do this even if there are nonlinear constraints? For now, we do not, because doing so may
-    # dramatically increase the infeasibility of x0 with respect to the nonlinear constraints.
-    if prob_info['refined_type'] in ['bound-constrained', 'linearly-constrained'] and not prob_info['nofreex'] and \
-            not prob_info['infeasible']:
-        x0_old = x0_c
-        # Another possibility for bound-constrained problems: xind = (x0 < lb) | (x0 > ub);
-        # x0(xind) = (lb(xind) + ub(xind))/2;
-        result = _project(x0_c, lb, ub, constraints_c)
-        x0_c = result.x
-        if np.linalg.norm(x0_old - x0_c) > eps * max(1.0, np.linalg.norm(x0_old)) and \
-                not prob_info['feasibility_problem']:
-            warn_message = '{}: x0 is revised to satisfy the constraints.'.format(invoker)
-            warnings.warn(warn_message, Warning)
-            list_warnings.append(warn_message)
 
     # Scale the problem if necessary and if intended, x_before_scaling = scaling_factor.*x_after_scaling + shift.
     # This should be done after revising x0, which can affect the shift.
@@ -676,6 +645,110 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
         prob_info['scaled'] = True
         prob_info['scaling_factor'] = scaling_factor
         prob_info['shift'] = shift
+
+    # If the problem contains any linear equality constraints, remove them from the constraints and force the iterates
+    # to lie on the affine space generate by them as long as possible. The affine space is computed using the QR
+    # factorization with pivoting (or the SVD factorization) of the Jacobian of the linear equality constraints.
+    if not prob_info['nofreex'] and not prob_info['infeasible'] and options_c['eliminate_lin_eq']:
+        space_chg, lb, ub, constraints_c, prob_info = _eliminate_linear_equalities(
+            invoker, constraints_c, x0_c, lb, ub, prob_info, list_warnings)
+
+        # The space dimension reduction may engender that NPT is no more in the required interval.
+        options_c = _pre_npt_elimination(invoker, lb.size, prob_info['user_options_fields'], options_c, list_warnings)
+    else:
+        space_chg = None
+    prob_info['space_chg'] = space_chg
+
+    if prob_info['nofreex']:
+        # If the variables are fixed by both the bounds and the linear equality constraints, we should revert the
+        # scaling. Note that only the values fixed by the linear equality constraints are scaled, not the one fixed by
+        # the bounds.
+        fun_c_reduced = fun_c
+        if prob_info['scaled']:
+            x0_c = prob_info['scaling_factor'] * x0_c + prob_info['shift']
+            lb = prob_info['scaling_factor'] * lb + prob_info['shift']
+            ub = prob_info['scaling_factor'] * ub + prob_info['shift']
+            fixed_lin = np.logical_not(fixed_bounds)
+            prob_info['fixedx_value'][fixed_lin] *= prob_info['scaling_factor']
+            prob_info['fixedx_value'][fixed_lin] += prob_info['shift']
+            constraints_c = raw_constraints_c
+            prob_info['scaled'] = False
+            prob_info['scaling_factor'] = np.ones(lenx0)
+            prob_info['shift'] = np.zeros_like(x0_c)
+
+    # If an explicit formulation for the linear equality constraints has been found, the bound constraints become linear
+    # inequality constraints, and the existing constraints are modified to fit the new searching space. The bounds
+    # cannot be kept as is, since they may not be bound constraints for the modified space. Consider for example in a
+    # three-dimensional space the box-constraints defined by a cube, and observe that there exists a section of it
+    # (i.e., an intersection between the cube and an affine hyperplane of a single linear equality constraint) that
+    # gives rise to an hexagonal slice (that is hence not a box constraint on the plane).
+    if not prob_info['nofreex'] and not prob_info['infeasible'] and space_chg is not None:
+        lenx0 = lb.size
+        x0_c = np.zeros(lenx0, dtype=np.float64)  # the intercept contains the information about the original x0
+
+        # The nonlinear constraint function is composed with the affine transformation.
+        if constraints_c['nonlinear'] is not None:
+            # The construction of the vector of variables including the fixed ones has already been made.
+            ctr_fct_ori = constraints_c['nonlinear']['fun']
+            constraints_c['nonlinear'] = {
+                'type': 'ineq',
+                'fun': lambda x_red: ctr_fct_ori(space_chg(x_red))
+            }
+
+    # Problem after reduction.
+    prob_info['refined_type'] = _problem_type(lb, ub, constraints_c)
+    prob_info['refined_dim'] = lenx0
+
+    # Can the invoker handle the given problem? This should be done after the problem type has been 'refined' (for
+    # example, NEWUOA can handle a bound-constrained problem if every defined bound is fixed).
+    if not _prob_solv_match(prob_info['refined_type'], invoker.lower()):
+        if invoker.lower() == 'pdfo':
+            raise SystemError(
+                '{}: UNEXPECTED ERROR: problem and solver do not match; it should not happen when the invoker is pdfo '
+                'or the problem is not a structure.'.format(fun_name))
+        else:
+            raise ValueError(
+                '{}: a {} problem received; {} cannot solve '
+                'it.'.format(fun_name, prob_info['refined_type'].replace('-', ' '), invoker))
+
+    # Revise x0 for bound and linearly constrained problems. This is necessary for LINCOA, which accepts only a feasible
+    # x0. Should we do this even if there are nonlinear constraints? For now, we do not, because doing so may
+    # dramatically increase the infeasibility of x0 with respect to the nonlinear constraints.
+    if prob_info['refined_type'] in ['bound-constrained', 'linearly-constrained'] and not prob_info['nofreex'] and \
+            not prob_info['infeasible']:
+        x0_ori = x0_c.copy()
+        result = _project(x0_c, lb, ub, constraints_c)
+        x0_c = result.x
+
+        if not prob_info['feasibility_problem'] and \
+                np.linalg.norm(x0_ori - x0_c) > eps * max(1.0, np.linalg.norm(x0_ori)):
+            warn_message = '{}: x0 is revised to satisfy the constraints.'.format(invoker)
+            warnings.warn(warn_message, Warning)
+            list_warnings.append(warn_message)
+
+    if prob_info['infeasible']:
+        # The problem turned infeasible when analyzing the linear equality constraints. The original x0 should be
+        # restored to include the reduced variables, together with the constraints.
+        prob_info['constrv_x0'], prob_info['nlc_x0'] = \
+            _constr_violation(invoker, x0_c, lb, ub, constraints_c, prob_info)
+
+        # The constraint violation calculated by _constr_violation does not include the violation of x0 for the bounds
+        # corresponding to fixedx; the corresponding values of x0 are in fixedx_value, while the values of the bounds
+        # (lb and ub are the same up to eps) are in fixedx_value_save. Thus the violation is
+        # abs(fixedx_value-fixedx_value_save).
+        max_fixed = np.nanmax(np.abs(fixed_values - fixed_values_save)) if fixed_values.size > 0 else 0
+        prob_info['constrv_x0'] = max(prob_info['constrv_x0'], max_fixed)
+    elif prob_info['nofreex']:
+        prob_info['constrv_fixedx'], prob_info['nlc_fixedx'] = \
+            _constr_violation(invoker, prob_info['fixedx_value'], lb_old, ub_old, raw_constraints_c, prob_info)
+
+    # If is possible that both prob_info['reduced'] and prob_info['nofreex'] are True, if the bound constraint fixed
+    # some (but not all) constraints and the linear equality constraint fixed the others.
+    if space_chg is not None and not prob_info['nofreex']:
+        def fun_c_space(freex_value):
+            return fun_c_reduced(space_chg(freex_value))
+    else:
+        fun_c_space = fun_c_reduced  # the variable vector is not reduced
 
     # Select a solver if the invoker is 'pdfo' and no one is provided.
     if invoker.lower() == 'pdfo':
@@ -698,7 +771,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
 
     # The refined data can be useful when debugging. It will be used in postpdfo even if the debug mode is not enabled.
     prob_info['refined_data'] = \
-        {'objective': fun_c_reduced, 'x0': x0_c, 'lb': lb, 'ub': ub, 'constraints': constraints_c, 'options': options_c}
+        {'objective': fun_c_space, 'x0': x0_c, 'lb': lb, 'ub': ub, 'constraints': constraints_c, 'options': options_c}
 
     # When the problem is a linear feasibility problem, PDFO will return the current x0, which has been revised by
     # project. The constraint violation at x0 is needed to set the output. Note that there is no nonlinear constraint in
@@ -711,12 +784,12 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
         # Do not carry the raw data with us unless in debug mode.
         del prob_info['raw_data']
 
-    if not options_c['debug'] and not prob_info['scaled']:
         # The refined data is used only when the problem is scaled. It can also be useful when debugging.
-        prob_info['refined_data'] = dict()
         # Set this field to empty instead of remove it, because postpdfo require that this field exists.
+        if not prob_info['scaled']:
+            prob_info['refined_data'] = {}
 
-    return fun_c_reduced, x0_c, {'lb': lb, 'ub': ub}, constraints_c, options_c, method, prob_info
+    return fun_c_space, x0_c, {'lb': lb, 'ub': ub}, constraints_c, options_c, method, prob_info
 
 
 def _bounds_validation(invoker, bounds, lenx0):
@@ -1021,11 +1094,13 @@ def _constraints_validation(invoker, constraints, lenx0, fixed_indices, fixed_va
             trivial = np.asarray([], dtype=bool)
             infeasible_linear = np.asarray([], dtype=bool)
         else:
-            row_norm_inf = np.max(np.abs(a_reduced), 1)
-            zero = (row_norm_inf == 0)
-            infeasible_zero = np.logical_or(np.logical_and(zero, lb_reduced > 0), np.logical_and(zero, ub_reduced < 0))
-            trivial_zero = np.logical_and(np.logical_and(zero, lb_reduced <= 0), np.logical_and(zero, ub_reduced >= 0))
-            row_norm_inf[zero] = 1.0
+            row_norm_inf = np.nanmax(np.abs(a_reduced), 1)
+            zero_rows = (row_norm_inf == 0)
+            infeasible_zero = np.logical_or(np.logical_and(zero_rows, lb_reduced > 0),
+                                            np.logical_and(zero_rows, ub_reduced < 0))
+            trivial_zero = np.logical_and(np.logical_and(zero_rows, lb_reduced <= 0),
+                                          np.logical_and(zero_rows, ub_reduced >= 0))
+            row_norm_inf[zero_rows] = 1.0
             lb_linear_norm = lb_reduced / row_norm_inf
             ub_linear_norm = ub_reduced / row_norm_inf
             lb_ub_and = np.logical_and(np.logical_and(np.isinf(lb_linear_norm), lb_linear_norm < 0),
@@ -1173,6 +1248,262 @@ def _constraints_validation(invoker, constraints, lenx0, fixed_indices, fixed_va
            infeasible_nonlinear, trivial, infeasible, prob_info
 
 
+def _eliminate_linear_equalities(invoker, constraints, x0, lb, ub, prob_info, list_warnings):
+    """Computation of the affine hyperplane on which the iterates should lie if any. It is done using a QR
+    factorization with pivoting of the Jacobian of the linear equality constraints if SciPy is installed, and using its
+    SVD otherwise.
+
+    Parameters
+    ----------
+    invoker: str
+        The name of the invoker.
+    constraints: dict
+        The general constraints of the problem, defined as a dictionary with fields:
+            linear: LinearConstraint
+                The linear constraints of the problem.
+            nonlinear: NonlinearConstraint
+                The nonlinear constraints of the problem.
+    x0: ndarray, shape (n,)
+        The same as in prepdfo.
+    lb: ndarray, shape (n,)
+        The same as in prepdfo.
+    ub: ndarray, shape (n,)
+        The same as in prepdfo.
+    prob_info: dict
+        The problem information.
+    list_warnings: list
+        The same as in prepdfo.
+
+    Returns
+    -------
+    The modified `prob_info`, and
+    space_chg: callable
+        The function that perform the change of space
+    lb: ndarray, shape (n,)
+        The same as in prepdfo.
+    ub: ndarray, shape (n,)
+        The same as in prepdfo.
+    prob_info: dict
+        The problem information.
+
+    Authors
+    -------
+    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
+    Department of Applied Mathematics,
+    The Hong Kong Polytechnic University.
+
+    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    """
+    if not isinstance(constraints, dict) or not ({'linear', 'nonlinear'} <= set(constraints.keys())):
+        raise ValueError('{}: UNEXPECTED ERROR: the constraint should be defined as internal type.'.format(invoker))
+
+    if constraints['linear'] is not None and not prob_info['nofreex'] and not prob_info['infeasible']:
+        # Get a boolean array indicating whether the constraints are equality ones or not. We consider that a constraint
+        # is an equality one if the relative difference between the lower bound and the upper bound of the constraint is
+        # at most 10 times the machine epsilon.
+        # Note: it is important to keep the inequality strict! If any bound is infinite, the corresponding constraint
+        # would otherwise be considered as equality (because np.inf <= np.inf).
+        lin_eq_indices = np.less(
+            np.abs(constraints['linear'].ub - constraints['linear'].lb),
+            10 * eps * np.maximum(1, np.abs(constraints['linear'].lb) + np.abs(constraints['linear'].ub)))
+        if np.any(lin_eq_indices):
+            # Some linear equality constraints have been detected, and their indices are stored in lin_eq_indices. We
+            # first need to find a point feasible for the linear equality constraints and to store it in intercept.
+            # Since x0 has previously been projected onto the bound and linear constraints, it is likely to satisfy, but
+            # if not, attempt to project it.
+            lin_ineq_indices = np.logical_not(lin_eq_indices)
+            a_eq = constraints['linear'].A[lin_eq_indices]
+            col_norm = np.sum(np.square(a_eq), axis=0)
+            zero_col = np.less(col_norm, 10 * eps * np.sum(col_norm))
+            p_zeros = np.arange(x0.size)
+            p_zeros = np.r_[p_zeros[np.logical_not(zero_col)], p_zeros[zero_col]]
+            p_zeros_inv = np.argsort(p_zeros)
+            n_red = x0.size - sum(zero_col)
+            a_eq = a_eq[:, np.logical_not(zero_col)]
+            b_eq = (constraints['linear'].lb[lin_eq_indices] + constraints['linear'].ub[lin_eq_indices]) / 2
+            x0_old = x0.copy()
+
+            try:
+                from scipy.linalg import qr
+
+                # Scipy is installed. Compute the QR factorization with pivoting of the Jacobian of the linear equality
+                # constraints, and deduced from it the consistency of the system and the reduced form of the linear
+                # equality constraints.
+                q_eq, r_eq, p_eq = qr(a_eq, pivoting=True)
+
+                # The rank of the Jacobian of the linear equality constraints is determined with a relative error of 10
+                # times the machine epsilon.
+                rcn = np.cumsum(np.flip(np.sum(np.square(r_eq), axis=1)))
+                rank_a_eq = sum(np.greater_equal(rcn, 10 * eps * rcn[-1]))
+
+                # Compute the coefficients of the hyperplane associated with the linear equality constraints.
+                qtb = np.dot(q_eq.T, b_eq)
+                riv = np.linalg.inv(r_eq[:rank_a_eq, :rank_a_eq])  # r_eq[:rank, :rank] is invertible and assumed small
+                comp = np.abs(qtb[rank_a_eq:])
+                if any(np.greater(comp, 10 * eps * np.max(np.abs(qtb), initial=1))):
+                    # The linear equality constraints are infeasible
+                    space_chg = None
+                    intercept = None
+                    prob_info['infeasible'] = True
+                else:
+                    # Compute the reduced form.
+                    null_basis = -np.dot(riv, r_eq[:rank_a_eq, rank_a_eq:])
+                    p_inv = np.argsort(p_eq)  # equivalent to the transposition of the matrix of permutation
+                    x0 = x0[p_zeros]
+                    x0[:n_red] = x0[p_eq]
+                    feasible = np.r_[np.dot(riv, qtb[:rank_a_eq]) + np.dot(null_basis, x0[rank_a_eq:n_red]),
+                                     x0[rank_a_eq:]]
+                    intercept = np.r_[feasible[p_inv], feasible[n_red:]]
+                    intercept = intercept[p_zeros_inv]
+
+                    if rank_a_eq < x0.size:
+                        # Compute the reduced form of the bounds.
+                        lb = lb[p_zeros]
+                        ub = ub[p_zeros]
+                        lb[:n_red] = lb[p_eq]
+                        ub[:n_red] = ub[p_eq]
+                        p_restore = np.arange(x0.size)
+                        p_restore[:n_red] = p_restore[p_inv]
+                        p_restore = p_restore[p_zeros_inv]
+
+                        # Compute the reduced form of the linear constraints.
+                        A_perm = constraints['linear'].A[lin_ineq_indices, :]
+                        A_perm = A_perm[:, p_zeros]
+                        A_perm[:, :n_red] = A_perm[:, p_eq]
+                        constraints['linear'].A = np.c_[
+                            np.dot(A_perm[:, :rank_a_eq], null_basis) + A_perm[:, rank_a_eq:n_red], A_perm[:, n_red:]]
+                        bound_shift = np.dot(A_perm, feasible)
+                        constraints['linear'].lb = constraints['linear'].lb[lin_ineq_indices] - bound_shift
+                        constraints['linear'].ub = constraints['linear'].ub[lin_ineq_indices] - bound_shift
+                        row_inf = np.logical_and(
+                            np.logical_and(np.isinf(lb[:rank_a_eq]), lb[:rank_a_eq] < 0),
+                            np.logical_and(np.isinf(ub[:rank_a_eq]), ub[:rank_a_eq] > 0))
+                        row_finite = np.logical_not(row_inf)
+                        constraints['linear'].A = np.r_[
+                            constraints['linear'].A,
+                            np.c_[null_basis[row_finite, :], np.zeros((sum(row_finite), x0.size - n_red))]]
+                        row_finite_bounds = np.r_[row_finite, np.full(x0.size - rank_a_eq, False)]
+                        prob_info['bounds_in_lin_eq'] = np.where(np.logical_and(p_restore < rank_a_eq,
+                                                                                row_finite_bounds[p_restore]))[0]
+                        constraints['linear'].lb = np.r_[constraints['linear'].lb,
+                                                         lb[row_finite_bounds] - feasible[row_finite_bounds]]
+                        constraints['linear'].ub = np.r_[constraints['linear'].ub,
+                                                         ub[row_finite_bounds] - feasible[row_finite_bounds]]
+
+                        # The reduced bounds consist only of the last rows.
+                        lb = lb[rank_a_eq:] - x0[rank_a_eq:]
+                        ub = ub[rank_a_eq:] - x0[rank_a_eq:]
+
+                    def space_chg(y):
+                        x = np.r_[np.dot(null_basis, y[:n_red-rank_a_eq]), y] + feasible
+                        x[:n_red] = x[p_inv]
+                        x = x[p_zeros_inv]
+
+                        return x
+
+            except ImportError:
+                # SciPy is not installed so that the SVD factorization is used instead.
+                u_eq, s_eq, vh_eq = np.linalg.svd(a_eq)
+                scn = np.cumsum(np.flip(s_eq))
+                rank_a_eq = sum(np.greater_equal(scn, 10 * eps * scn[-1]))
+                utb = np.dot(b_eq, u_eq)
+                comp = np.abs(utb[rank_a_eq:])
+                if any(np.greater(comp, 10 * eps * np.max(np.abs(utb), initial=1))):
+                    # The linear equality constraints are infeasible.
+                    space_chg = None
+                    intercept = None
+                    prob_info['infeasible'] = True
+                else:
+                    # Compute the reduced form.
+                    x0 = x0[p_zeros]
+                    feasible = np.dot(np.multiply(np.divide(1, s_eq[:rank_a_eq]), utb[:rank_a_eq]),
+                                      vh_eq[:rank_a_eq, :])
+                    feasible = np.r_[
+                        feasible + np.dot(np.dot(vh_eq[rank_a_eq:, :], x0[:n_red]), vh_eq[rank_a_eq:, :]), x0[n_red:]]
+                    intercept = feasible[p_zeros_inv]
+
+                    if rank_a_eq < x0.size:
+                        # Compute the reduced form of the bounds.
+                        lb = lb[p_zeros]
+                        ub = ub[p_zeros]
+
+                        # Compute the reduced form of the linear constraints.
+                        A_perm = constraints['linear'].A[lin_ineq_indices, :]
+                        A_perm = A_perm[:, p_zeros]
+                        constraints['linear'].A = np.c_[np.dot(A_perm[:, :n_red], vh_eq[rank_a_eq:, :].T),
+                                                        A_perm[:, n_red:]]
+                        bound_shift = np.dot(A_perm, feasible)
+                        constraints['linear'].lb = constraints['linear'].lb[lin_ineq_indices] - bound_shift
+                        constraints['linear'].ub = constraints['linear'].ub[lin_ineq_indices] - bound_shift
+                        row_inf = np.logical_and(
+                            np.logical_and(np.isinf(lb[:n_red]), lb[:n_red] < 0),
+                            np.logical_and(np.isinf(ub[:n_red]), ub[:n_red] > 0))
+                        row_finite = np.logical_not(row_inf)
+                        constraints['linear'].A = np.r_[
+                            constraints['linear'].A,
+                            np.c_[vh_eq[rank_a_eq:, row_finite].T, np.zeros((sum(row_finite), x0.size - n_red))]]
+                        row_finite_bounds = np.r_[row_finite, np.full(x0.size - n_red, False)]
+                        prob_info['bounds_in_lin_eq'] = np.where(np.logical_and(p_zeros_inv < n_red,
+                                                                                row_finite_bounds[p_zeros_inv]))[0]
+                        constraints['linear'].lb = np.r_[constraints['linear'].lb,
+                                                         lb[row_finite_bounds] - feasible[row_finite_bounds]]
+                        constraints['linear'].ub = np.r_[constraints['linear'].ub,
+                                                         ub[row_finite_bounds] - feasible[row_finite_bounds]]
+
+                        # The reduced bounds consist only of the last rows.
+                        lb = np.r_[np.full(n_red - rank_a_eq, -np.inf), lb[n_red:] - x0[n_red:]]
+                        ub = np.r_[np.full(n_red - rank_a_eq, np.inf), ub[n_red:] - x0[n_red:]]
+
+                    def space_chg(y):
+                        x = np.r_[np.dot(y[:n_red-rank_a_eq], vh_eq[rank_a_eq:, :]), y[n_red-rank_a_eq:]] + feasible
+                        x = x[p_zeros_inv]
+
+                        return x
+
+            if space_chg is not None and not prob_info['infeasible'] and rank_a_eq < x0.size:
+                # The process may have created rows of zero in the Jacobian matrix of the linear inequality constraints.
+                # They should be removed.
+                if constraints['linear'].A.size > 0:
+                    row_norm_inf = np.nanmax(np.abs(constraints['linear'].A), 1)
+                    if np.logical_or(constraints['linear'].lb[row_norm_inf == 0] > 0,
+                                     constraints['linear'].ub[row_norm_inf == 0] < 0):
+                        raise ValueError('{}: the linear inequalities are inconsistent.'.format(invoker))
+                    constraints['linear'].A = constraints['linear'].A[row_norm_inf > 0, :]
+                    constraints['linear'].lb = constraints['linear'].lb[row_norm_inf > 0]
+                    constraints['linear'].ub = constraints['linear'].ub[row_norm_inf > 0]
+                    if constraints['linear'].A.size == 0:
+                        constraints['linear'] = None
+                else:
+                    constraints['linear'] = None
+
+            if intercept is not None and np.linalg.norm(x0_old - intercept) > 10 * eps * max(1.0, np.linalg.norm(x0)):
+                warn_message = '{}: x0 is revised to satisfy the linear equality constraints.'.format(invoker)
+                warnings.warn(warn_message, Warning)
+                list_warnings.append(warn_message)
+
+            if not prob_info['infeasible'] and rank_a_eq == x0.size:
+                # The coefficient of the vector of variables are fixed by the linear constraints. Set the values of
+                # coefficients that are not fixed by the bounds. Note that we choose prob_info['fixedx'].size
+                # for the size of the problem and not lenx0, because some values may have been removed earlier
+                # because of the bounds.
+                space_chg = None
+                prob_info['nofreex'] = True
+                fixed_values = np.empty(prob_info['fixedx'].size, dtype=np.float64)
+                fixed_values[prob_info['fixedx']] = prob_info['fixedx_value']
+                fixed_values[np.logical_not(prob_info['fixedx'])] = intercept
+                prob_info['fixedx_value'] = fixed_values
+                np.ndarray.fill(prob_info['fixedx'], True)
+        else:
+            # No linear equality constraint has been found.
+            space_chg = None
+    else:
+        # The problem is either infeasible, fixed by the bounds or admits no linear constraints.
+        space_chg = None
+
+    return space_chg, lb, ub, constraints, prob_info
+
+
 def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
     """Validation and pre-processing of the options.
 
@@ -1230,6 +1561,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
     rhoend = 1e-6
     ftarget = -np.inf
     classical = False  # call the classical Powell code?
+    eliminate_lin_eq = True
     scale = False  # scale the problem according to bounds?
     honour_x0 = False  # Respect the user-defined x0? Needed by BOBYQA
     quiet = True
@@ -1257,7 +1589,8 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
         method = invoker
 
     # Check whether the used provided any unknown option.
-    known_field = ['maxfev', 'rhobeg', 'rhoend', 'ftarget', 'classical', 'quiet', 'debug', 'chkfunval']
+    known_field = ['maxfev', 'rhobeg', 'rhoend', 'ftarget', 'classical', 'eliminate_lin_eq', 'quiet', 'debug',
+                   'chkfunval']
     if method is None or method.lower() in ['bobyqa', 'lincoa', 'newuoa']:
         known_field.append('npt')
     if method is None or method.lower() in ['bobyqa', 'cobyla', 'lincoa']:
@@ -1491,7 +1824,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
             validated = True
 
     if not validated:  # options['classical'] has not got a valid value yet.
-        options['classical'] = scale
+        options['classical'] = classical
     options['classical'] = np.bool(options['classical'])
     if options['classical']:
         warn_message = \
@@ -1499,6 +1832,22 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
             "to disable classical mode.".format(invoker)
         warnings.warn(warn_message, Warning)
         list_warnings.append(warn_message)
+
+    # Validate options['eliminate_lin_eq'].
+    validated = False
+    if 'eliminate_lin_eq' in option_fields:
+        if not isinstance(options['eliminate_lin_eq'], (bool, np.bool)):
+            warn_message = \
+                '{}: invalid eliminate_lin_eq flag; it should be True or False; it is set to ' \
+                '{}.'.format(invoker, eliminate_lin_eq)
+            warnings.warn(warn_message, Warning)
+            list_warnings.append(warn_message)
+        else:
+            validated = True
+
+    if not validated:  # options['eliminate_lin_eq'] has not got a valid value yet.
+        options['eliminate_lin_eq'] = eliminate_lin_eq
+    options['eliminate_lin_eq'] = np.bool(options['eliminate_lin_eq'])
 
     # Validate options['honour_x0'].
     validated = False
@@ -1561,7 +1910,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
                 '{}: invalid chkfunval flag; it should be True or False; it is set to {}.'.format(invoker, chkfunval)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
-        elif not options['debug']:
+        elif options['chkfunval'] and not options['debug']:
             warn_message = \
                 '{}: chkfunval = True but debug = False; chkfunval is set to false; set both flags to true to check ' \
                 'function values.'.format(invoker)
@@ -2006,8 +2355,8 @@ def _scale_problem(fun, x0, lb, ub, constraints, list_warnings):
         a = constraints['linear'].A
         lb = constraints['linear'].lb
         ub = constraints['linear'].ub
-        constraints_c['linear'] = \
-            LinearConstraint(np.dot(a, np.diag(scaling_factor)), lb=lb - np.dot(a, shift), ub=ub - np.dot(a, shift))
+        ashift = np.dot(a, shift)
+        constraints_c['linear'] = LinearConstraint(np.dot(a, np.diag(scaling_factor)), lb=lb - ashift, ub=ub - ashift)
 
     # Scale the nonlinear constraints.
     if constraints['nonlinear'] is not None:
@@ -2249,6 +2598,20 @@ def _pre_rhobeg_x0(invoker, x0, lb, ub, user_options_fields, options, list_warni
     return x0, options
 
 
+def _pre_npt_elimination(invoker, n, user_options_fields, options, list_warnings):
+    npt_old = options['npt']
+    options['npt'] = max(min(npt_old, (n + 1) * (n + 2) // 2), n + 2)
+
+    if npt_old != options['npt'] and 'npt' in user_options_fields:
+        warn_message = \
+            '{}: the dimension of the searching space has been reduced, and npt must be revised to satisfy the ' \
+            'requirements.'.format(invoker)
+        warnings.warn(warn_message, Warning)
+        list_warnings.append(warn_message)
+
+    return options
+
+
 def _project(x0, lb, ub, constraints, options=None):
     """Projection of the initial guess onto the feasible set.
 
@@ -2351,26 +2714,19 @@ def _project(x0, lb, ub, constraints, options=None):
         # Direct projection onto the bound constraints
         x_proj = np.nanmin((np.nanmax((x0_c, lb_c), axis=0), ub_c), axis=0)
         return OptimizeResult(x=x_proj)
-    elif np.equal(constraints['linear'].lb, constraints['linear'].ub).all() and np.max(lb_c) <= -max_con and \
-            np.min(ub_c) >= max_con:
+    elif all(np.less_equal(np.abs(constraints['linear'].ub - constraints['linear'].lb), eps)) and \
+            np.max(lb_c) <= -max_con and np.min(ub_c) >= max_con:
         # The linear constraints are all equality constraints. The projection can therefore be done by solving the
-        # least-square problem: min ||A*x - (b - A*x_0)||.
-        try:
-            from scipy.linalg import lstsq
+        # least-squares problem: min ||A*x - (b - A*x_0)||.
+        a = constraints['linear'].A
+        b = (constraints['linear'].lb + constraints['linear'].ub) / 2
+        xi, _, _, _ = np.linalg.lstsq(a, b - np.dot(a, x0_c), rcond=None)
 
-            a = constraints['linear'].A
-            b = constraints['linear'].lb
-            xi, _, _, _ = lstsq(a, b - np.dot(a, x0_c))
+        # The problem is not bounded. However, if the least-square solver returned values bigger in absolute value
+        # than max_con, they will be reduced to this bound.
+        x_proj = np.nanmin((np.nanmax((x0_c + xi, lb_c), axis=0), ub_c), axis=0)
 
-            # The problem is not bounded. However, if the least-square solver returned values bigger in absolute value
-            # than max_con, they will be reduced to this bound.
-            x_proj = np.nanmin((np.nanmax((x0_c + xi, lb_c), axis=0), ub_c), axis=0)
-
-            return OptimizeResult(x=x_proj)
-        except ImportError:
-            # We can try to project the initial guess to the feasible set by solving the associated optimization
-            # problem. DO NOT remove not to raise any useless exception.
-            pass
+        return OptimizeResult(x=x_proj)
 
     if constraints['linear'] is not None:
         try:
@@ -2655,7 +3011,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     output['x'] = x_c
     output['fun'] = fx_c
     output['status'] = exitflag_c
-    output['success'] = (exitflag_c in [0, 1, 14]) or (exitflag_c == 13 and constrviolation_c == 0)
+    output['success'] = (exitflag_c in [0, 1, 14]) or (exitflag_c == 13 and abs(constrviolation_c) <= 1e-15)
     if len(stack()) >= 4 and stack()[2][3].lower() == 'pdfo':
         output['nfev'] = nf_c
         output['constrviolation'] = constrviolation_c
@@ -2674,14 +3030,17 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
 
     # Validate prob_info.
     prob_info_fields = \
-        {'infeasible', 'warnings', 'scaled', 'reduced', 'fixedx', 'fixedx_value', 'refined_type', 'raw_type',
-         'infeasible_linear', 'infeasible_bound', 'feasibility_problem'}
+        {'infeasible', 'nofreex', 'warnings', 'scaled', 'reduced', 'space_chg', 'fixedx', 'fixedx_value',
+         'refined_type', 'raw_type', 'infeasible_linear', 'infeasible_bound', 'feasibility_problem'}
     if prob_info is None or not isinstance(prob_info, dict) or not (prob_info_fields <= set(prob_info.keys())) or \
             not isinstance(prob_info['infeasible'], (bool, np.bool)) or \
+            not isinstance(prob_info['nofreex'], (bool, np.bool)) or \
             not hasattr(prob_info['warnings'], '__len__') or \
             not all(map(lambda pi: isinstance(pi, str), prob_info['warnings'])) or \
             not isinstance(prob_info['scaled'], (bool, np.bool)) or \
-            not isinstance(prob_info['reduced'], (bool, np.bool)) or not hasattr(prob_info['fixedx'], '__len__') or \
+            not isinstance(prob_info['reduced'], (bool, np.bool)) or \
+            not (prob_info['space_chg'] is None or callable(prob_info['space_chg'])) or \
+            not hasattr(prob_info['fixedx'], '__len__') or \
             not all(map(lambda pi: isinstance(pi, (bool, np.bool_)), prob_info['fixedx'])) or \
             not hasattr(prob_info['fixedx_value'], '__len__') or \
             not all(map(lambda pi: isinstance(pi, scalar_types), prob_info['fixedx_value'])) or \
@@ -2738,39 +3097,67 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
             '{}: UNEXPECTED ERROR: {} returns a nf <= 0 unexpectedly with exitflag '
             '{}'.format(invoker, method, exitflag_c))
 
-    # The problem was (possibly) scaled, scale it back.
     # The scaling affects constrviolation when there are bound constraint. Hence constrviolation has to be recalculated
     # so that it equals the constraint violation of the returned x with respect to the original problem.  Ideally, chist
     # should also be recalculated. However, it is impossible because we do not save the history of x. Therefore, when
     # prob_info['scaled'] == True, chist is not the history of constraint violation of the original problem but the
     # scaled one. It it not consistent with constrviolation. Without saving of history of x, we cannot do better.
     # Before recalculating constrviolation, save the one returned by the solver, because it will be used in debug mode
-    # when checking whether fx is consistent with fhist and chist. See the definition of fhistf for details.
+    # when checking whether fx is consistent with fhist and chist. See the definition of fhist for details.
     constrv_returned = constrviolation_c
     if prob_info_c['scaled']:
         # First calculate the residuals of the linear constraints. This must be calculated before x is scaled back.
-        # Otherwise, we would have to scale also the linear constraints back to get the correct residuals.
+        # Otherwise, we would have to scale also the linear constraints back to get the correct residuals. When
+        # descaling the bound information contained in the linear constraints, we should not apply any shift, since this
+        # information is already contained in the evaluation.
         linear = prob_info_c['refined_data']['constraints']['linear']
         if linear is not None:
             ax = np.dot(linear.A, x_c)
-            r = np.r_[linear.lb - ax, ax - linear.ub]
+            r1 = linear.lb - ax
+            r2 = ax - linear.ub
+            if prob_info_c['space_chg'] is not None:
+                to_scale = prob_info_c['bounds_in_lin_eq']
+                if to_scale.size > 0:
+                    r1[-to_scale.size:] *= prob_info_c['scaling_factor'][to_scale]
+                    r2[-to_scale.size:] *= prob_info_c['scaling_factor'][to_scale]
+            r = np.r_[r1, r2]
         else:
             r = np.asarray([np.nan])
+
+        if prob_info_c['space_chg'] is not None:
+            # The space was (possibly) changed, change it back.
+            x_c = prob_info_c['space_chg'](x_c)
+            lb = prob_info_c['space_chg'](prob_info_c['refined_data']['lb'])
+            ub = prob_info_c['space_chg'](prob_info_c['refined_data']['ub'])
+        else:
+            lb = prob_info_c['refined_data']['lb']
+            ub = prob_info_c['refined_data']['ub']
 
         # Scale x back.
         x_c = prob_info_c['scaling_factor'] * x_c + prob_info_c['shift']
 
         # Scale the bounds back.
-        lb = prob_info_c['scaling_factor'] * prob_info_c['refined_data']['lb']
+        lb *= prob_info_c['scaling_factor']
+        ub *= prob_info_c['scaling_factor']
         lb += prob_info_c['shift']
-        ub = prob_info_c['scaling_factor'] * prob_info_c['refined_data']['ub']
         ub += prob_info_c['shift']
 
         # We only need to calculate constrviolation for lincoa and cobyla, because uobyqa and newuoa do not handle
         # constrained problems, while bobyqa is a feasible method and should return constrviolation = 0 regardless of
         # the scaling unless something goes wrong.
+        if prob_info_c['space_chg'] is not None:
+            not_to_scale = prob_info_c['bounds_in_lin_eq']
+            to_scale = np.array([i for i in np.arange(x_c.size) if i not in not_to_scale])
+            if to_scale.size > 0:
+                conv_bounds = np.r_[lb[to_scale] - x_c[to_scale], x_c[to_scale] - ub[to_scale]]
+            else:
+                conv_bounds = [-np.inf]
+        elif not prob_info_c['nofreex']:
+            conv_bounds = np.r_[lb - x_c, x_c - ub]
+        else:
+            conv_bounds = [-np.inf]
         if method == 'lincoa':
-            conv_n = np.concatenate((r, lb - x_c, x_c - ub))
+            conv_n = np.concatenate((r, conv_bounds))
             conv_n = np.nanmax((np.zeros_like(conv_n), conv_n), axis=0)
             constrviolation_c = np.max(conv_n)
         else:
@@ -2778,14 +3165,17 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
             nlc = np.asarray([-np.inf], dtype=np.float64)
             if 'constr_value' in output.keys():
                 nlc = np.asarray(output['constr_value'], dtype=np.float64)
-            conv = np.concatenate((r, lb - x_c, x_c - ub, nlc))
+            conv = np.concatenate((r, conv_bounds, nlc))
             if np.isnan(conv).all():
                 constrviolation_c = np.nan
             else:
                 constrviolation_c = np.nanmax(np.append(conv, 0))
+    elif prob_info_c['space_chg'] is not None:
+        # The space was (possibly) changed, change it back.
+        x_c = prob_info_c['space_chg'](x_c)
 
     # The problem was (possibly) reduced, get the full x.
-    if prob_info_c['reduced']:
+    if prob_info_c['reduced'] and not prob_info['nofreex']:
         x_c = _fullx(x_c, prob_info_c['fixedx_value'], np.logical_not(prob_info_c['fixedx']), prob_info_c['fixedx'])
     output['x'] = x_c
 
@@ -2808,11 +3198,11 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
             output['nfev'] = 0
 
     # Revise constrviolation and chist according to problem type.
-    max_c = 0 if chist_c is None or chist_c.size == 0 else np.nanmax(chist_c)
-    if prob_info_c['refined_type'] == 'unconstrained' and (constrviolation_c > 0 or max_c > 0):
-        raise ValueError(
-            '{}: UNEXPECTED ERROR: {} returns positive constrviolations for an unconstrained '
-            'problem.'.format(invoker, method))
+    # max_c = 0 if chist_c is None or chist_c.size == 0 else np.nanmax(chist_c)
+    # if prob_info_c['refined_type'] == 'unconstrained' and (constrviolation_c > 0 or max_c > 0):
+    #     raise ValueError(
+    #         '{}: UNEXPECTED ERROR: {} returns positive constrviolations for an unconstrained '
+    #         'problem.'.format(invoker, method))
 
     if prob_info_c['raw_type'] == 'unconstrained':
         if 'constrviolation' in output.keys():
@@ -2865,7 +3255,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     elif exitflag_c == 12:
         output['message'] = 'Return from {} because the gradient of a constraint is zero.'.format(method)
     elif exitflag_c == 13:
-        output['message'] = 'Return from {} because all the variables are fixed by the bounds.'.format(method)
+        output['message'] = 'Return from {} because all the variables are fixed by the constraints.'.format(method)
     elif exitflag_c == 14:
         output['message'] = '{} receives a linear feasibility problem and finds a feasible point.'.format(method)
     elif exitflag_c == 15:
@@ -3111,13 +3501,13 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
             # The list of constraint values contains some NaN values because some constraints were not considered by the
             # code: the user should be informed.
             w_message = \
-                '{}: some nonlinear constraints components are trivial. They are not evaluated during the' \
-                ' computation, and their values are represented by NaN in constr_value.'.format(invoker)
+                '{}: some constraints components are trivial. They are not evaluated during the computation, and ' \
+                'their values are represented by NaN in constr_value.'.format(invoker)
             warnings.warn(w_message, Warning)
             warning_list.append(w_message)
         if any(map(lambda a: a.size == 0, constr_value)):
-            w_message = '{}: some nonlinear constraints are trivial. They are not evaluated during the computation,' \
-                        ' and they are represented by empty arrays in constr_value.'.format(invoker)
+            w_message = '{}: some constraints are trivial. They are not evaluated during the computation, and they ' \
+                        'are represented by empty arrays in constr_value.'.format(invoker)
             warnings.warn(w_message, Warning)
             warning_list.append(w_message)
 

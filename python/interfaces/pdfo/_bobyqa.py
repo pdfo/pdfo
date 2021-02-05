@@ -62,6 +62,8 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
                 flag does not interfere with the warning and error printing.
             classical: bool, optional
                 Flag indicating whether to call the classical Powell code or not. By default, it is False.
+            eliminate_lin_eq: bool, optional
+                Flag indicating whether the linear equality constraints should be eliminated. By default, it is True.
             debug: bool, optional
                 Debugging flag. By default, it is False.
             chkfunval: bool, optional
