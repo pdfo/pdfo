@@ -259,11 +259,19 @@ addpath(interfaces);
 path_saved = false;
 orig_warning_state = warning;
 warning('off', 'MATLAB:SavePath:PathNotSaved'); % Maybe we do not have the permission to save path.
-if savepath == 0
+if savepath == 0 || (numel(userpath) > 0 && savepath(fullfile(userpath, 'pathdef.m')) == 0)
     % SAVEPATH saves the current MATLABPATH in the path-defining file,
     % which is by default located at:
     % fullfile(matlabroot, 'toolbox', 'local', 'pathdef.m')
-    % 0 if the file was saved successfully; 1 otherwise
+    % It returns 0 if the file was saved successfully; 1 otherwise.
+    % If savepath fails (probably because we do not have the permission to 
+    % write the above pathdefi.m file), then we try saving the path to the
+    % user-specific pathdef.m file, which is located in userpath.
+    % On linux, userpath = '$HOME/Documents/MATLAB'. However, if $HOME/Documents 
+    % does not exist, then userpath = []. In this case, we will not save path 
+    % to the user-specific pathdef.m file. Otherwise, we will only get a pathdef.m 
+    % in the current directory, which will not be executed when MATLAB starts
+    % from other directories.  
     path_saved = true;
 end
 warning(orig_warning_state); % Restore the behavior of displaying warnings
@@ -282,11 +290,11 @@ if exist(user_startup, 'file')
 end
 
 if ~path_saved && numel(userpath) > 0 
-    % Administrators may set userpath to empty for certain users, especially 
-    % on servers. In that case, userpath = [], and user_startup = 'startup.m'.
-    % We will not use user_startup. Otherwise, we will only get a startup.m 
-    % in the current directory, which will not be executed when MATLAB starts
-    % from other directories.  
+    % On linux, userpath = '$HOME/Documents/MATLAB'. However, if $HOME/Documents 
+    % does not exist, then userpath = [], and user_startup = 'startup.m'.
+    % In this case, we will not use user_startup. Otherwise, we will only get 
+    % a startup.m in the current directory, which will not be executed when 
+    % MATLAB starts from other directories.  
 
     % We first check whether the last line of the user startup script is an 
     % empty line (or the file is empty or even does not exist at all). 
