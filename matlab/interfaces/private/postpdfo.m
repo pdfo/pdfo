@@ -524,7 +524,7 @@ if options.debug && ~options.classical
         fhistf = fhistf(chist <= max(constrv_returned, 0));
     end
     minf = min([fhistf,fx]);
-%% Zaikun 2021-05-26: The following test is disabled for lincoa for them moment. lincoa may not pass it.
+%% Zaikun 2021-05-26: The following test is disabled for lincoa for the moment. lincoa may not pass it.
 %%    if (fx ~= minf) && ~(isnan(fx) && isnan(minf)) && ~(strcmp(solver, 'lincoa') && constr_modified)
     if (fx ~= minf) && ~(isnan(fx) && isnan(minf)) && ~strcmp(solver, 'lincoa')
         % Public/unexpected error
