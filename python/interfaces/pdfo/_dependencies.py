@@ -3321,8 +3321,10 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
         else:
             min_f = np.nanmin((fx_c, np.nanmin(fhistf)))
 
-        if fx != min_f and not (np.isnan(fx) and np.isnan(min_f)) and method != 'lincoa' and \
-                'constr_modified' in output.keys() and output['constr_modified']:
+        # Tom 2021-05-26: The following test is disabled for lincoa for the moment.
+        # if fx != min_f and not (np.isnan(fx) and np.isnan(min_f)) and method != 'lincoa' and \
+        #         'constr_modified' in output.keys() and output['constr_modified']:
+        if fx != min_f and not (np.isnan(fx) and np.isnan(min_f)) and method != 'lincoa':
             raise ValueError(
                 '{}: UNEXPECTED ERROR: {} returns an fhist that does not match nf or fx'.format(invoker, method))
 
