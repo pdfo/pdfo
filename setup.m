@@ -1,6 +1,6 @@
 function setup(varargin)
 %SETUP compiles the package and try adding the package into the search path.
-%   
+%
 %   Let solvername be a string indicating a solver name, and options be
 %   a structure indicating compilation options. Then setup can be called
 %   in the following ways:
@@ -11,7 +11,7 @@ function setup(varargin)
 %
 %   In addition, one can uninstall the package by calling
 %
-%   setup uninstall 
+%   setup uninstall
 %
 %   or remove the compiled MEX files by calling
 %
@@ -84,9 +84,9 @@ if verLessThan('matlab', '8.3') % MATLAB R2014a = MATLAB 8.3
     return
 end
 
-% Interpret the input. 
+% Interpret the input.
 solver_list = {'uobyqa', 'newuoa', 'bobyqa', 'lincoa', 'cobyla'}; % Solvers to compile; by default, it contains all solvers
-options = struct(); % Compilation options 
+options = struct(); % Compilation options
 wrong_input = false;
 solver = 'ALL'; % The solver to compile specified by the user; by default, it is 'ALL', meaning all solvers
 if nargin == 1
@@ -128,7 +128,7 @@ if strcmp(solver, 'uninstall')
     return;
 end
 
-% Decide which solver(s) to compile. 
+% Decide which solver(s) to compile.
 if ismember(solver, solver_list)
     solver_list = {solver};
 elseif ~strcmpi(solver, 'ALL')
@@ -137,9 +137,9 @@ elseif ~strcmpi(solver, 'ALL')
 end
 
 % Exit if wrong input detected.
-if wrong_input 
+if wrong_input
     return;
-end 
+end
 
 % Extract compilation options.
 if isempty(options)
@@ -264,14 +264,14 @@ if savepath == 0 || (numel(userpath) > 0 && savepath(fullfile(userpath, 'pathdef
     % which is by default located at:
     % fullfile(matlabroot, 'toolbox', 'local', 'pathdef.m')
     % It returns 0 if the file was saved successfully; 1 otherwise.
-    % If savepath fails (probably because we do not have the permission to 
+    % If savepath fails (probably because we do not have the permission to
     % write the above pathdefi.m file), then we try saving the path to the
     % user-specific pathdef.m file, which is located in userpath.
-    % On linux, userpath = '$HOME/Documents/MATLAB'. However, if $HOME/Documents 
-    % does not exist, then userpath = []. In this case, we will not save path 
-    % to the user-specific pathdef.m file. Otherwise, we will only get a pathdef.m 
+    % On linux, userpath = '$HOME/Documents/MATLAB'. However, if $HOME/Documents
+    % does not exist, then userpath = []. In this case, we will not save path
+    % to the user-specific pathdef.m file. Otherwise, we will only get a pathdef.m
     % in the current directory, which will not be executed when MATLAB starts
-    % from other directories.  
+    % from other directories.
     path_saved = true;
 end
 warning(orig_warning_state); % Restore the behavior of displaying warnings
@@ -289,21 +289,21 @@ if exist(user_startup, 'file')
     end
 end
 
-if ~path_saved && numel(userpath) > 0 
-    % On linux, userpath = '$HOME/Documents/MATLAB'. However, if $HOME/Documents 
+if ~path_saved && numel(userpath) > 0
+    % On linux, userpath = '$HOME/Documents/MATLAB'. However, if $HOME/Documents
     % does not exist, then userpath = [], and user_startup = 'startup.m'.
-    % In this case, we will not use user_startup. Otherwise, we will only get 
-    % a startup.m in the current directory, which will not be executed when 
-    % MATLAB starts from other directories.  
+    % In this case, we will not use user_startup. Otherwise, we will only get
+    % a startup.m in the current directory, which will not be executed when
+    % MATLAB starts from other directories.
 
-    % We first check whether the last line of the user startup script is an 
-    % empty line (or the file is empty or even does not exist at all). 
+    % We first check whether the last line of the user startup script is an
+    % empty line (or the file is empty or even does not exist at all).
     % If yes, we do not need to put a line break before the path adding string.
     if exist(user_startup, 'file')
         startup_text_cells = regexp(fileread(user_startup), '\n', 'split');
         last_line_empty = isempty(startup_text_cells) || (isempty(startup_text_cells{end}) && isempty(startup_text_cells{max(1, end-1)}));
     else
-        last_line_empty = true;  
+        last_line_empty = true;
     end
     file_id = fopen(user_startup, 'a');
     if file_id ~= -1 % If FOPEN cannot open the file, it returns -1
@@ -347,7 +347,7 @@ return
 
 %%%%%%%%%%%%%%% Function for file names with handling wildcard %%%%%%%%%%%
 function full_files = files_with_wildcard(dir_name, wildcard_string)
-%FULL_FILES returns a cell array of files that match the wildcard_string 
+%FULL_FILES returns a cell array of files that match the wildcard_string
 % under dir_name.
 % MATLAB R2015b does not handle commands with wildcards like
 % delete(*.o)
@@ -493,7 +493,7 @@ if exist(user_startup, 'file')
     full_add_path_string = sprintf('%s\t%s Added by PDFO', add_path_string, '%');
     try
         del_str_ln(user_startup, full_add_path_string);
-    catch 
+    catch
         % Do nothing.
     end
 end
