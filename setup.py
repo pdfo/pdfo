@@ -18,11 +18,18 @@ import shutil
 import re
 from os import listdir, remove, walk
 from os.path import dirname, abspath, join, relpath
+import sys
 
 try:
     from numpy.distutils.core import setup, Extension
 except:
     raise Exception('\nPlease install NumPy before installing PDFO.\n')
+
+if sys.platform == "win32":
+    # Fix build with gcc under windows.
+    # See https://github.com/jameskermode/f90wrap/issues/96
+    from numpy.f2py.cfuncs import includes0
+    includes0["setjmp.h"] = '#include <setjmpex.h>'
 
 # Set the paths to all the folders that will be used to build PDFO.
 CURRENT_WD = dirname(abspath(__file__))

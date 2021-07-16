@@ -1,0 +1,49 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, macos-10.15, windows-2019]
+
+    steps:
+      - name: Provide gfortran (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          # https://github.com/actions/virtual-environments/issues/2524
+          # https://github.com/cbg-ethz/dce/blob/master/.github/workflows/pkgdown.yaml
+          sudo ln -s /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
+          sudo mkdir /usr/local/gfortran
+          sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11 /usr/local/gfortran/lib
+          gfortran --version
+
+      - name: Provide gfortran (Windows)
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@v2
+
+      - name: Tell distutils to use mingw (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          echo "[build]`ncompiler=mingw32" | Out-File -Encoding ASCII ~/pydistutils.cfg
+
+      - uses: actions/checkout@v2
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.0.0
+        env:
+          # Disable building for PyPy and 32bit.
+          CIBW_SKIP: pp* *-win32 *-manylinux_i686
+          # Package the DLL dependencies in the wheel for windows (done by default for the other platforms).
+          # delvewheel cannot mangle the libraries, stripping does not work.
+          CIBW_BEFORE_BUILD_WINDOWS: pip install delvewheel
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel show {wheel} && delvewheel repair -w {dest_dir} {wheel} --no-mangle-all"
+          # Run the tests.
+          CIBW_TEST_COMMAND: python -m unittest pdfo.testpdfo
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ./wheelhouse/*.whl
