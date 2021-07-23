@@ -9,11 +9,12 @@ import numpy as np
 
 python_version = sys.version_info.major
 if python_version >= 3:
-    # From Python 3, we can check the signature of the function and ensure that the objective and constraint function
-    # are correctly defined.
+    # From Python 3, we can check the signature of the function and ensure that
+    # the objective and constraint function are correctly defined.
     from inspect import signature
 
-scalar_types = (int, float, np.generic)  # all the accepted scalar types; np.generic correspond to all NumPy types
+# All the accepted scalar types; np.generic correspond to all NumPy types.
+scalar_types = (int, float, np.generic)
 eps = np.finfo(np.float64).eps
 solver_list = ['uobyqa', 'newuoa', 'bobyqa', 'lincoa', 'cobyla']
 invoker_list = solver_list[:]
@@ -92,26 +93,62 @@ class OptimizeResult(dict):
     Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
     """
 
-    # Get an element of the optimization result structure.
+    def __delattr__(self, key):
+        r"""
+        Delete the attribute ``key``. This method is called by the built-in
+        command ``del obj.key``, where ``obj`` is an instance of this class.
+        """
+        super(self.__class__, self).__delitem__(key)
+
+    def __dir__(self):
+        r"""
+        Return the list of the names of the attributes in the current scope.
+        This method is called when the built-in function ``dir(obj)`` is called,
+        where ``obj`` is an instance of this class.
+        """
+        return list(self.keys())
+
     def __getattr__(self, name):
+        r"""
+        Return the value of the attribute ``name``. This method raises an
+        `AttributeError` exception if such an attribute does not exist and is
+        called when the built-in access ``obj.name`` is called, where ``obj`` is
+        an instance of this class.
+        """
         try:
             return self[name]
-        except KeyError:
-            raise AttributeError('The following attribute does not exist: {}.'.format(name))
+        except KeyError as e:
+            raise AttributeError(name) from e
 
-    # Set an element of the optimization result structure.
-    __setattr__ = dict.__setitem__
-
-    # Delete an element of the optimization result structure.
-    __delattr__ = dict.__delitem__
-
-    # Display the optimization result structure.
     def __repr__(self):
-        if self.keys():
-            maxlength = max(map(len, self.keys())) + 1
+        r"""
+        Return a string representation of an instance of this class, which looks
+        like a valid Python expression that can be used to recreate an object
+        with the same value (given an appropriate environment).
+        """
+        items = sorted(self.items())
+        args = ', '.join(k + '=' + repr(v) for k, v in items)
+        return self.__class__.__name__ + '(' + args + ')'
 
-            # The dictionary is returned by sorting the elements according to its keys.
-            return '\n'.join([k.rjust(maxlength) + ': ' + repr(self[k]) for k in sorted(self.keys())])
+    def __setattr__(self, key, value):
+        r"""
+        Assign the value ``value`` to the attribute ``key``. This method is
+        called when the built-in assignment ``obj.key = value`` is made, where
+        ``obj`` is an instance of this class.
+        """
+        super(self.__class__, self).__setitem__(key, value)
+
+    def __str__(self):
+        r"""
+        Return an informal string representation of an instance of this class,
+        which is designed to be nicely printable. This method is called when the
+        built-in functions ``format(obj)`` or ``print(obj)`` is called, where
+        ``obj`` is an instance of this class.
+        """
+        if self.keys():
+            items = sorted(self.items())
+            width = max(map(len, self.keys())) + 1
+            return '\n'.join(k.rjust(width) + ': ' + str(v) for k, v in items)
         else:
             return self.__class__.__name__ + '()'
 
@@ -128,9 +165,11 @@ class Bounds:
     Attributes
     ----------
     lb: ndarray, shape (n,)
-        The lower-bound vector of the constraint.
+        The lower-bound vector of the constraint. Set ``lb`` to ``-numpy.inf``
+        to disable these bounds.
     ub: ndarray, shape (n,)
-        The upper-bound vector of the constraint.
+        The upper-bound vector of the constraint. Set ``ub`` to ``numpy.inf``
+        to disable these bounds.
 
     Authors
     -------
@@ -169,6 +208,12 @@ class Bounds:
         if len(self.ub.shape) > 1 and np.prod(self.ub.shape) == self.ub.size:
             self.ub = self.ub.reshape(self.ub.size)
 
+        # Broadcast the bounds if necessary.
+        if self.lb.size == 1:
+            self.lb = np.copy(np.broadcast_to(self.lb, self.ub.shape))
+        elif self.ub.size == 1:
+            self.ub = np.copy(np.broadcast_to(self.ub, self.lb.shape))
+
         # Check the length of the attributes.
         if len(self.lb.shape) != 1 or len(self.ub.shape) != 1 or self.lb.size != self.ub.size:
             raise AttributeError('The sizes of the bounds are inconsistent; checks the shapes of the arrays.')
@@ -191,9 +236,11 @@ class LinearConstraint:
     A: ndarray, shape (m,n)
         The coefficient matrix of the constraint.
     lb: ndarray, shape (m,)
-        The lower-bound vector of the constraint.
+        The lower-bound vector of the constraint. Set ``lb`` to ``-numpy.inf``
+        to disable these bounds.
     ub: ndarray, shape (m,)
-        The upper-bound vector of the constraint.
+        The upper-bound vector of the constraint. Set ``ub`` to ``numpy.inf``
+        to disable these bounds.
 
     Authors
     -------
@@ -247,6 +294,12 @@ class LinearConstraint:
         if len(self.A.shape) in [0, 1]:
             self.A = self.A.reshape((1, self.A.size))
 
+        # Broadcast the bounds if necessary.
+        if self.lb.size == 1:
+            self.lb = np.copy(np.broadcast_to(self.lb, self.ub.shape))
+        elif self.ub.size == 1:
+            self.ub = np.copy(np.broadcast_to(self.ub, self.lb.shape))
+
         # If no bounds have been provided, infinite values should be considered.
         if self.lb.size == 0 and self.ub.size == 0:
             self.lb = np.full(self.A.shape[0], -np.inf, dtype=np.float64)
@@ -274,9 +327,11 @@ class NonlinearConstraint:
     fun: callable
         The constraint function, which accepts a vector `x` at input and returns a vector of shape (m,).
     lb: ndarray, shape (m,)
-        The lower-bound vector of the constraint.
+        The lower-bound vector of the constraint. Set ``lb`` to ``-numpy.inf``
+        to disable these bounds.
     ub: ndarray, shape (m,)
-        The upper-bound vector of the constraint.
+        The upper-bound vector of the constraint. Set ``ub`` to ``numpy.inf``
+        to disable these bounds.
 
     Authors
     -------
@@ -356,6 +411,12 @@ class NonlinearConstraint:
             self.lb = self.lb.reshape(self.lb.size)
         if len(self.ub.shape) == 0:
             self.ub = self.ub.reshape(self.ub.size)
+
+        # Broadcast the bounds if necessary.
+        if self.lb.size == 1:
+            self.lb = np.copy(np.broadcast_to(self.lb, self.ub.shape))
+        elif self.ub.size == 1:
+            self.ub = np.copy(np.broadcast_to(self.ub, self.lb.shape))
 
         if len(self.lb.shape) != 1 or len(self.ub.shape) != 1 or \
                 (self.lb.size != self.ub.size and self.lb.size > 1 and self.ub.size > 1):
