@@ -98,7 +98,7 @@ class OptimizeResult(dict):
         Delete the attribute ``key``. This method is called by the built-in
         command ``del obj.key``, where ``obj`` is an instance of this class.
         """
-        super(self.__class__, self).__delitem__(key)
+        super(OptimizeResult, self).__delitem__(key)
 
     def __dir__(self):
         r"""
@@ -136,7 +136,7 @@ class OptimizeResult(dict):
         called when the built-in assignment ``obj.key = value`` is made, where
         ``obj`` is an instance of this class.
         """
-        super(self.__class__, self).__setitem__(key, value)
+        super(OptimizeResult, self).__setitem__(key, value)
 
     def __str__(self):
         r"""
