@@ -32,11 +32,8 @@ from .tests import test_pdfo as testpdfo
 __all__ = ['OptimizeResult', 'Bounds', 'LinearConstraint', 'NonlinearConstraint', 'bobyqa', 'cobyla', 'lincoa',
            'newuoa', 'uobyqa', 'pdfo', 'tests', 'testpdfo']
 __author__ = 'Tom M. Ragonneau and Zaikun Zhang'
-if datetime.now().year == 2020:
-    __copyright__ = 'Copyright {}, Tom M. Ragonneau and Zaikun Zhang'.format(datetime.now().year)
-else:
-    __copyright__ = 'Copyright 2020--{}, Tom M. Ragonneau and Zaikun Zhang'.format(datetime.now().year)
-__credits__ = ['Tom M. Ragonneau', 'Zaikun Zhang']
+__copyright__ = 'Copyright 2020--{}, Tom M. Ragonneau and Zaikun Zhang'.format(datetime.now().year)
+__credits__ = ['Tom M. Ragonneau', 'Zaikun Zhang', 'Antoine Dechaume']
 __license__ = 'LGPLv3+'
 __version__ = '1.0'
 __date__ = 'June, 2020'

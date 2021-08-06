@@ -575,6 +575,13 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     if args is not None and not hasattr(args, '__len__'):
         args = [args]
 
+    # Get the extrem barrier for the objective function.
+    try:
+        from .gethuge import gethuge
+    except ImportError:
+        import_error_so('gethuge')
+    hugefun = gethuge('fun')
+
     # The objective function should return a floating-point number.
     def fun_c(x):
         try:
@@ -587,9 +594,11 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
         elif (hasattr(fun_x, '__len__') or not isinstance(fun_x, scalar_types)) and fun_x is not None:
             raise ValueError('{}: the objective function should return a scalar.'.format(invoker))
 
-        # If the objective function returns None, then we are solving a feasibility problem. The returned value of fun_c
-        # will be interpreted as np.nan by the following statement.
-        return np.float64(fun_x)
+        fun_x = np.float64(fun_x)
+        if not np.isfinite(fun_x) or fun_x > hugefun:
+            fun_x = np.float64(hugefun)
+
+        return fun_x
 
     # The initial guess should be an unidimensional ndarray.
     if isinstance(x0, scalar_types):
@@ -1690,7 +1699,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
     # BOBYQA asks for the true scaling flag.
     validated = False
     if 'scale' in option_fields:
-        if not isinstance(options['scale'], (bool, np.bool)):
+        if not isinstance(options['scale'], (bool, np.bool_)):
             warn_message = '{}: invalid scale flag; it should be True or False; it is set to {}.'.format(invoker, scale)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
@@ -1707,7 +1716,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
 
     if not validated:  # options['scale'] has not got a valid value yet.
         options['scale'] = scale
-    options['scale'] = np.bool(options['scale'])
+    options['scale'] = bool(options['scale'])
 
     # Revise default rhobeg and rhoend if the solver is BOBYQA.
     if options['scale']:
@@ -1876,7 +1885,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
     # Validate options['classical'].
     validated = False
     if 'classical' in option_fields:
-        if not isinstance(options['classical'], (bool, np.bool)):
+        if not isinstance(options['classical'], (bool, np.bool_)):
             warn_message = \
                 '{}: invalid scale flag; it should be True or False; it is set to {}.'.format(invoker, classical)
             warnings.warn(warn_message, Warning)
@@ -1886,7 +1895,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
 
     if not validated:  # options['classical'] has not got a valid value yet.
         options['classical'] = classical
-    options['classical'] = np.bool(options['classical'])
+    options['classical'] = bool(options['classical'])
     if options['classical']:
         warn_message = \
             "{}: in classical mode, which is recommended only for research purpose; set options['classical']=False " \
@@ -1897,7 +1906,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
     # Validate options['eliminate_lin_eq'].
     validated = False
     if 'eliminate_lin_eq' in option_fields:
-        if not isinstance(options['eliminate_lin_eq'], (bool, np.bool)):
+        if not isinstance(options['eliminate_lin_eq'], (bool, np.bool_)):
             warn_message = \
                 '{}: invalid eliminate_lin_eq flag; it should be True or False; it is set to ' \
                 '{}.'.format(invoker, eliminate_lin_eq)
@@ -1908,12 +1917,12 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
 
     if not validated:  # options['eliminate_lin_eq'] has not got a valid value yet.
         options['eliminate_lin_eq'] = eliminate_lin_eq
-    options['eliminate_lin_eq'] = np.bool(options['eliminate_lin_eq'])
+    options['eliminate_lin_eq'] = bool(options['eliminate_lin_eq'])
 
     # Validate options['honour_x0'].
     validated = False
     if 'honour_x0' in option_fields:
-        if not isinstance(options['honour_x0'], (bool, np.bool)):
+        if not isinstance(options['honour_x0'], (bool, np.bool_)):
             warn_message = \
                 '{}: invalid honour_x0 flag; it should be True or False; it is set to {}.'.format(invoker, honour_x0)
             warnings.warn(warn_message, Warning)
@@ -1923,12 +1932,12 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
 
     if not validated:  # options['honour_x0'] has not got a valid value yet.
         options['honour_x0'] = honour_x0
-    options['honour_x0'] = np.bool(options['honour_x0'])
+    options['honour_x0'] = bool(options['honour_x0'])
 
     # Validate options['quiet'].
     validated = False
     if 'quiet' in option_fields:
-        if not isinstance(options['quiet'], (bool, np.bool)):
+        if not isinstance(options['quiet'], (bool, np.bool_)):
             warn_message = '{}: invalid quiet flag; it should be True or False; it is set to {}.'.format(invoker, quiet)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
@@ -1937,12 +1946,12 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
 
     if not validated:  # options['quiet'] has not got a valid value yet.
         options['quiet'] = quiet
-    options['quiet'] = np.bool(options['quiet'])
+    options['quiet'] = bool(options['quiet'])
 
     # Validate options['debug'].
     validated = False
     if 'debug' in option_fields:
-        if not isinstance(options['debug'], (bool, np.bool)):
+        if not isinstance(options['debug'], (bool, np.bool_)):
             warn_message = \
                 '{}: invalid debug flag; it should be True or False; it is set to {}.'.format(invoker, debugflag)
             warnings.warn(warn_message, Warning)
@@ -1952,7 +1961,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
 
     if not validated:  # options['debug'] has not got a valid value yet.
         options['debug'] = debugflag
-    options['debug'] = np.bool(options['debug'])
+    options['debug'] = bool(options['debug'])
     if options['debug']:
         warn_message = "{}: in debug mode; set options['debug']=False to disable debug.".format(invoker)
         warnings.warn(warn_message, Warning)
@@ -1966,7 +1975,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
     # Validate options['chkfunval'].
     validated = False
     if 'chkfunval' in option_fields:
-        if not isinstance(options['chkfunval'], (bool, np.bool)):
+        if not isinstance(options['chkfunval'], (bool, np.bool_)):
             warn_message = \
                 '{}: invalid chkfunval flag; it should be True or False; it is set to {}.'.format(invoker, chkfunval)
             warnings.warn(warn_message, Warning)
@@ -1982,7 +1991,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
 
     if not validated:  # options['chkfunval'] has not got a valid value yet.
         options['chkfunval'] = chkfunval
-    options['chkfunval'] = np.bool(options['chkfunval'])
+    options['chkfunval'] = bool(options['chkfunval'])
     if options['chkfunval']:
         warn_message = \
             "{}: checking whether fx = fun(x) and possibly conval = con(x) at exit, which will cost an extra " \
@@ -2609,7 +2618,7 @@ def _pre_rhobeg_x0(invoker, x0, lb, ub, user_options_fields, options, list_warni
     # Validate options.
     option_fields = {'honour_x0', 'rhobeg', 'rhoend'}
     if options is None or not isinstance(options, dict) or not (option_fields <= set(options.keys())) or \
-            not isinstance(options['honour_x0'], (bool, np.bool)) or \
+            not isinstance(options['honour_x0'], (bool, np.bool_)) or \
             not isinstance(options['rhobeg'], scalar_types) or not isinstance(options['rhoend'], scalar_types):
         raise ValueError('{}: UNEXPECTED ERROR: options should be a valid dictionary.'.format(invoker))
 
@@ -3084,9 +3093,9 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     # If the solver is not called by pdfo (can be pdfo directly), perform the post-processing.
     option_fields = {'quiet', 'debug', 'classical', 'chkfunval'}
     if options is None or not isinstance(options, dict) or not (option_fields <= set(options.keys())) or \
-            not isinstance(options['quiet'], (bool, np.bool)) or not isinstance(options['debug'], (bool, np.bool)) or \
-            not isinstance(options['classical'], (bool, np.bool)) or \
-            not isinstance(options['chkfunval'], (bool, np.bool)):
+            not isinstance(options['quiet'], (bool, np.bool_)) or not isinstance(options['debug'], (bool, np.bool_)) or \
+            not isinstance(options['classical'], (bool, np.bool_)) or \
+            not isinstance(options['chkfunval'], (bool, np.bool_)):
         raise ValueError('{}: UNEXPECTED ERROR: options should be a valid dictionary.'.format(invoker))
 
     # Validate prob_info.
@@ -3094,12 +3103,12 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
         {'infeasible', 'nofreex', 'warnings', 'scaled', 'reduced', 'space_chg', 'fixedx', 'fixedx_value',
          'refined_type', 'raw_type', 'infeasible_linear', 'infeasible_bound', 'feasibility_problem'}
     if prob_info is None or not isinstance(prob_info, dict) or not (prob_info_fields <= set(prob_info.keys())) or \
-            not isinstance(prob_info['infeasible'], (bool, np.bool)) or \
-            not isinstance(prob_info['nofreex'], (bool, np.bool)) or \
+            not isinstance(prob_info['infeasible'], (bool, np.bool_)) or \
+            not isinstance(prob_info['nofreex'], (bool, np.bool_)) or \
             not hasattr(prob_info['warnings'], '__len__') or \
             not all(map(lambda pi: isinstance(pi, str), prob_info['warnings'])) or \
-            not isinstance(prob_info['scaled'], (bool, np.bool)) or \
-            not isinstance(prob_info['reduced'], (bool, np.bool)) or \
+            not isinstance(prob_info['scaled'], (bool, np.bool_)) or \
+            not isinstance(prob_info['reduced'], (bool, np.bool_)) or \
             not (prob_info['space_chg'] is None or callable(prob_info['space_chg'])) or \
             not hasattr(prob_info['fixedx'], '__len__') or \
             not all(map(lambda pi: isinstance(pi, (bool, np.bool_)), prob_info['fixedx'])) or \
@@ -3110,7 +3119,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
             not hasattr(prob_info['infeasible_bound'], '__len__') or \
             not all(map(lambda pi: isinstance(pi, (bool, np.bool_)), prob_info['infeasible_bound'])) or \
             not isinstance(prob_info['refined_type'], str) or not isinstance(prob_info['raw_type'], str) or \
-            not isinstance(prob_info['feasibility_problem'], (bool, np.bool)):
+            not isinstance(prob_info['feasibility_problem'], (bool, np.bool_)):
         raise ValueError('{}: UNEXPECTED ERROR: prob_info should be a valid dictionary.'.format(invoker))
 
     prob_info_keys = prob_info.keys()
