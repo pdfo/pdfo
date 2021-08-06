@@ -1,14 +1,44 @@
-name: Build
+name: Build wheels
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheel for cp${{ matrix.python }}-${{ matrix.platform_id }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-20.04, macos-10.15, windows-2019]
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        python: [36, 37, 38, 39]
+        bitness: [32, 64]
+        include:
+          # Run 32 and 64 bit version in parallel for Linux and Windows.
+          # MacOS 10.14 Mojave is the last version that supports 32-bit software.
+          - os: windows-latest
+            bitness: 64
+            platform_id: win_amd64
+          - os: ubuntu-latest
+            bitness: 64
+            platform_id: manylinux_x86_64
+          - os: ubuntu-latest
+            bitness: 32
+            platform_id: manylinux_i686
+          - os: macos-latest
+            bitness: 64
+            platform_id: macosx_x86_64
+        exclude:
+          # Compilation for 32 bit version of Windows fails.
+          - os: windows-latest
+            bitness: 32
+          - os: macos-latest
+            bitness: 32
 
     steps:
       - name: Provide gfortran (macOS)
@@ -20,30 +50,32 @@ jobs:
           sudo mkdir /usr/local/gfortran
           sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11 /usr/local/gfortran/lib
           gfortran --version
-
       - name: Provide gfortran (Windows)
         if: runner.os == 'Windows'
         uses: msys2/setup-msys2@v2
 
       - name: Tell distutils to use mingw (Windows)
         if: runner.os == 'Windows'
-        run: |
-          echo "[build]`ncompiler=mingw32" | Out-File -Encoding ASCII ~/pydistutils.cfg
+        run: echo "[build]`ncompiler=mingw32" | Out-File -Encoding ASCII ~/pydistutils.cfg
 
-      - uses: actions/checkout@v2
+      - name: Checkout PDFO
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.0.0
         env:
-          # Disable building for PyPy and 32bit.
-          CIBW_SKIP: pp* *-win32 *-manylinux_i686
+          CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
           # Package the DLL dependencies in the wheel for windows (done by default for the other platforms).
           # delvewheel cannot mangle the libraries, stripping does not work.
           CIBW_BEFORE_BUILD_WINDOWS: pip install delvewheel
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel show {wheel} && delvewheel repair -w {dest_dir} {wheel} --no-mangle-all"
-          # Run the tests.
+          # Run the tests for each wheel.
           CIBW_TEST_COMMAND: python -m unittest pdfo.testpdfo
 
-      - uses: actions/upload-artifact@v2
+      - name: Store artifacts
+        uses: actions/upload-artifact@v2
         with:
           path: ./wheelhouse/*.whl

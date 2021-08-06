@@ -16,9 +16,9 @@ import platform
 import shutil
 
 import re
+import sys
 from os import listdir, remove, walk
 from os.path import dirname, abspath, join, relpath
-import sys
 
 try:
     from numpy.distutils.core import setup, Extension
