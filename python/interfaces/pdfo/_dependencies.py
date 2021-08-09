@@ -3401,6 +3401,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
         # Check whether constrviolation is correct.
         cobyla_prec = np.float64(1e-10)
         lincoa_prec = np.float64(1e-12)
+        gen_prec = np.float64(1e-12)
 
         # COBYLA cannot ensure fx=fun(x) or conval=con(x) due to rounding errors. Instead of checking the equality, we
         # check whether the relative error is within cobyla_prec. There can also be a difference between constrviolation
@@ -3459,7 +3460,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
         if options['chkfunval']:
             # Check whether fx = fun(x).
             if prob_info_c['raw_data']['objective'] is not None:
-                fun_x = prob_info_c['raw_data']['objective'](x_c)
+                fun_x = prob_info_c['raw_data']['objective'](x_c, *prob_info_c['raw_data']['args'])
             else:
                 fun_x = np.float64(0)
             if np.isnan(fun_x) or (fun_x > hugefun):
@@ -3467,11 +3468,11 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
                 # Due to extreme barrier (implemented when options['classical']=False), all the function values that are
                 # NaN or larger than hugefun are replaced by hugefun.
 
-            # It seems that COBYLA can return fx~=fun(x) due to rounding errors. Therefore, we cannot use 'fx != fun_x'
-            # to check COBYLA.
+            # It seems that COBYLA can return fx~=fun(x) due to rounding errors. Moreover, in the general case, the
+            # objective function may be noisy, in which case the exact comparison makes no sense.
             if not (np.isnan(fx_c) and np.isnan(fun_x)) and \
-                    not (fx_c == fun_x or (abs(fun_x - fx_c) <= cobyla_prec * max(1, abs(fx_c))) and
-                         method == 'cobyla'):
+                    not (abs(fun_x - fx_c) <= gen_prec * max(1, abs(fx_c)) or
+                         (abs(fun_x - fx_c) <= cobyla_prec * max(1, abs(fx_c))) and method == 'cobyla'):
                 raise ValueError(
                     '{}: UNEXPECTED ERROR: {} returns an fx that does not match x.'.format(invoker, method))
 
