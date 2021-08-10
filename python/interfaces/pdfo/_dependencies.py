@@ -1537,7 +1537,7 @@ def _eliminate_linear_equalities(invoker, constraints, x0, lb, ub, prob_info, li
                 if constraints['linear'].A.size > 0:
                     row_norm_inf = np.nanmax(np.abs(constraints['linear'].A), 1)
                     if np.logical_or(constraints['linear'].lb[row_norm_inf == 0] > 0,
-                                     constraints['linear'].ub[row_norm_inf == 0] < 0):
+                                     constraints['linear'].ub[row_norm_inf == 0] < 0).any():
                         raise ValueError('{}: the linear inequalities are inconsistent.'.format(invoker))
                     constraints['linear'].A = constraints['linear'].A[row_norm_inf > 0, :]
                     constraints['linear'].lb = constraints['linear'].lb[row_norm_inf > 0]
