@@ -9,6 +9,7 @@ on:
       - master
 
 jobs:
+  # Build the wheels for Windows, Linux, and macOS.
   build_wheels:
     name: Build wheel for cp${{ matrix.python }}-${{ matrix.platform_id }}
     runs-on: ${{ matrix.os }}
@@ -50,6 +51,7 @@ jobs:
           sudo mkdir /usr/local/gfortran
           sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11 /usr/local/gfortran/lib
           gfortran --version
+
       - name: Provide gfortran (Windows)
         if: runner.os == 'Windows'
         uses: msys2/setup-msys2@v2
@@ -79,3 +81,39 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: ./wheelhouse/*.whl
+
+  # Build the source distribution.
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PDFO
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+
+      - name: Build source distribution
+        run: |
+          cd ../../
+          python -m venv build_env
+          source build_env/bin/activate
+          python -m pip install numpy cython
+          python -m pip install twine
+          cd pdfo/pdfo
+          python setup.py sdist
+          twine check dist/*.tar.gz
+
+      - name: Test source distribution
+        run: |
+          cd ../../
+          python -m venv test_env
+          source test_env/bin/activate
+          python -m pip install pdfo/pdfo/dist/*.tar.gz
+          python -m unittest pdfo.testpdfo
+
+      - name: Store artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: dist/*.tar.gz
