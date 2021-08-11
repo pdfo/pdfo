@@ -142,7 +142,7 @@ class TestPDFO(unittest.TestCase):
                                 print('solver = {},\tfun = {}'.format(solver, fun_name), end='\t\t')
                                 print('fx = {0:1.15e},\tfopt={1:1.15e}'.format(fx, fopt))
 
-                            self.assertTrue(np.linalg.norm(global_res.x - x) == 0)
+                            self.assertTrue(np.linalg.norm(global_res.x - x) <= tol)
                             self.assertTrue((fx - fopt) / max(1, abs(fopt)) <= tol)
                 if not self.QUIET:
                     print('Succeed.')
