@@ -8,7 +8,7 @@ Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
 
 We look forward to your feedback! Thank you very much!
 
-June 2020, Hong Kong
+August 2021, Hong Kong
 ***********************************************************************
 
 PDFO (Powell's Derivative-Free Optimization solvers) is a cross-platform package
@@ -18,16 +18,14 @@ See https://www.pdfo.net for more information.
 
 To use the MATLAB version of PDFO, see README_mat.txt.
 
-To use the Python version of PDFO on Linux or Mac, see README_py_unix.txt.
-
-To use the Python version of PDFO on Windows, see README_py_win.txt.
+To use the Python version of PDFO, see README_py.txt.
 
 This package makes use of a modified version of Powell's Fortran code. See
 folder "original" in "fsrc" for Powell's original code.
 
-The development of this package is funded by the Hong Kong RGC Early Career
-Scheme (PolyU 253012/17P), the Hong Kong Ph.D. Fellowship Scheme (PF18-24698),
-and the Hong Kong Polytechnic University.
+The development of this package is funded by the Hong Kong RGC
+(ref. PolyU 253012/17P and PolyU 153054/20P), the Hong Kong Ph.D. Fellowship
+Scheme (ref. PF18-24698), and The Hong Kong Polytechnic University.
 
 PDFO is dedicated to the memory of late Professor Powell with gratitude for
 his inspiration and for the treasures he left to us. We are also grateful

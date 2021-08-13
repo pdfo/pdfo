@@ -1,3 +1,4 @@
+# Workflow to build and test wheel and source distributions
 name: Build wheels
 
 on:
@@ -7,21 +8,24 @@ on:
   pull_request:
     branches:
       - master
+  # Run the workflow when it is manually triggered
+  workflow_dispatch:
 
 jobs:
-  # Build the wheels for Windows, Linux, and macOS.
+  # Build the wheels for Windows, Linux, and macOS
   build_wheels:
     name: Build wheel for cp${{ matrix.python }}-${{ matrix.platform_id }}
     runs-on: ${{ matrix.os }}
     strategy:
+      # Ensure that all wheel builders finish even if failures occur
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
         python: [36, 37, 38, 39]
         bitness: [32, 64]
         include:
-          # Run 32 and 64 bit version in parallel for Linux and Windows.
-          # MacOS 10.14 Mojave is the last version that supports 32-bit software.
+          # Run 32 and 64 bit version in parallel for Linux and Windows
+          # MacOS 10.14 Mojave is the last version that supports 32-bit software
           - os: windows-latest
             bitness: 64
             platform_id: win_amd64
@@ -35,7 +39,7 @@ jobs:
             bitness: 64
             platform_id: macosx_x86_64
         exclude:
-          # Compilation for 32 bit version of Windows fails.
+          # Compilation for 32 bit version of Windows fails
           - os: windows-latest
             bitness: 32
           - os: macos-latest
@@ -70,11 +74,11 @@ jobs:
         uses: pypa/cibuildwheel@v2.0.0
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
-          # Package the DLL dependencies in the wheel for windows (done by default for the other platforms).
-          # delvewheel cannot mangle the libraries, stripping does not work.
+          # Package the DLL dependencies in the wheel for windows (done by default for the other platforms)
+          # delvewheel cannot mangle the libraries, stripping does not work
           CIBW_BEFORE_BUILD_WINDOWS: pip install delvewheel
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel show {wheel} && delvewheel repair -w {dest_dir} {wheel} --no-mangle-all"
-          # Run the tests for each wheel.
+          # Run the tests for each wheel
           CIBW_TEST_COMMAND: python -m unittest pdfo.testpdfo
 
       - name: Store artifacts
@@ -82,7 +86,7 @@ jobs:
         with:
           path: ./wheelhouse/*.whl
 
-  # Build the source distribution.
+  # Build the source distribution
   build_sdist:
     name: Build source distribution
     runs-on: ubuntu-latest
@@ -96,21 +100,31 @@ jobs:
 
       - name: Build source distribution
         run: |
+          # Move up two levels to create the building virtual environment outside of the source folder
           cd ../../
+          # Create and activate the building virtual environment
           python -m venv build_env
           source build_env/bin/activate
+          # Install the required Python dependencies
           python -m pip install numpy cython
           python -m pip install twine
+          # Move down to the source folder
           cd pdfo/pdfo
+          # Build the source distribution
           python setup.py sdist
+          # Check the distribution file
           twine check dist/*.tar.gz
 
       - name: Test source distribution
         run: |
+          # Move up two levels to create the testing virtual environment outside of the source folder
           cd ../../
+          # Create and activate the testing virtual environment
           python -m venv test_env
           source test_env/bin/activate
+          # Install PDFO via the source distribution
           python -m pip install pdfo/pdfo/dist/*.tar.gz
+          # Initiate the tests of PDFO
           python -m unittest pdfo.testpdfo
 
       - name: Store artifacts

@@ -1846,7 +1846,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
 
     if not validated:  # options['rhobeg'] has not got a valid value yet.
         if 'rhoend' in option_fields and isinstance(options['rhoend'], scalar_types):
-            options['rhobeg'] = max(rhobeg, options['rhoend'])
+            options['rhobeg'] = max(rhobeg, 1e1 * options['rhoend'])
         else:
             options['rhobeg'] = rhobeg
     options['rhobeg'] = np.float64(max(options['rhobeg'], eps))

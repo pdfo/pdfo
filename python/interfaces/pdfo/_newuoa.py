@@ -25,7 +25,7 @@ def newuoa(fun, x0, args=(), options=None):
 
         is equivalent to
 
-            ``newuoa(lambda x: fun(x, args), x0, options=options)``
+            ``newuoa(lambda x: fun(x, *args), x0, options=options)``
 
     options: dict, optional
         The options passed to the solver. It is a structure that contains optionally:

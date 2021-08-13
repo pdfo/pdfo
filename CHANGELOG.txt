@@ -51,3 +51,26 @@ Public beta release of PDFO.
   the solver selection function is invoked. They are taken into account now.
 - Python version: previously, the nonlinear constraints defined as a dictionary 
   cannot include NumPy functions of type <ufunc>. It is fixed now.
+
+## [1.1] - 2021-08-13
+
+### Added
+- Python version: the linear equality constraints are now eliminated explicitly
+  using a QR factorization with column pivoting (or an SVD factorization if
+  SciPy is not installed).
+- Python version: wheel distributions of the package are now available on PyPI
+  to ease the installation. The wheel distributions are generated automatically
+  using GitHub Actions.
+
+### Changed
+- If rhobeg is not provided but rhoend is available, the default value of rhobeg
+  is set to 10 * rhoend. Previously, it was rhoend.
+- Python version: undefined constraint bounds for Bounds, LinearConstraint, and
+  NonlinearConstraint can now be declared as numpy.inf with an appropriate sign.
+
+### Removed
+- Python version: Replaced deprecated numpy.bool calls by numpy.bool_.
+
+### Fixed
+- Python version: the call to the objective function during the debugging
+  mechanism did not include the extra arguments, which are added now.

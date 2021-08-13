@@ -165,7 +165,6 @@ if __name__ == '__main__':
             'Operating System :: POSIX :: Linux',
             'Operating System :: Microsoft :: Windows',
             'Programming Language :: Fortran',
-            'Programming Language :: Python :: 2.7',
             'Programming Language :: Python :: 3',
             'Topic :: Scientific/Engineering',
             'Topic :: Scientific/Engineering :: Mathematics',
@@ -176,6 +175,6 @@ if __name__ == '__main__':
         setup_requires=['pytest-runner'],
         tests_require=['pytest'],
         test_suite='pdfo.tests',
-        python_requires='>=2.7',
+        python_requires='>=3.6',
         zip_safe=True,
     )

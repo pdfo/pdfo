@@ -8,53 +8,45 @@ Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
 
 We look forward to your feedback! Thank you very much!
 
-June 2020, Hong Kong
+August 2021, Hong Kong
 ***********************************************************************
 
-This is the README file for the Python version of PDFO on Linux or Mac.
+This is the README file for the Python version of PDFO.
 See https://www.pdfo.net for more information.
-
-
-0. Prerequisites
-
-To use the Python version of PDFO on Linux or Mac, you need Python (headers
-included), NumPy, F2PY, and gfortran, which can be installed in the following way.
-
-0.1. Install Python (version 2.7 or above) according to https://www.python.org .
-To include the headers on Linux, python3-dev or python-dev should be installed
-depending on the Python you want to use; on Mac, the headers are included by
-default if you install Python using Homebrew.
-
-0.2. Install the latest version of SciPy. See https://www.scipy.org/install.html .
-Then NumPy will be installed by default. NumPy provides F2PY.
-
-0.3. Install gfortran using your package manager, e.g., apt on Debian/Ubuntu,
-yum on Fedora/RHEL/CentOS, and Homebrew on Mac.
-
-0.4. On Mac, it is necessary to install Xcode. See https://developer.apple.com/xcode/ .
-Xcode provides the libraries needed by F2PY. 
 
 
 1. Installation
 
-It is highly recommended to install PDFO via PyPI. 
+1.1. Recommended installation
+To use the Python version of PDFO on Linux, Mac, or Windows, you need Python
+(version 3.6 or above).
 
-Install pip in your system ( https://pip.pypa.io/en/stable/installing/ ).
-Then execute
+It is highly recommended to install PDFO via PyPI.
+
+Install pip in your system ( https://pip.pypa.io/en/stable/installing/ ) if
+you Python version does not incude it. Then execute
 
 python -m pip install pdfo
 
-in a command shell (e.g., the terminal in Linux or Mac). If your Python
-launcher is not python, adapt the command accordingly. If this command
-runs successfully, PDFO is installed. You may verify the installation by
+in a command shell (e.g., the terminal for Linux and macOS, or the Command
+Shell for Windows). If your Python launcher is not python, adapt the command
+accordingly. If this command runs successfully, PDFO is installed. You may
+verify the installation by
 
 python -m unittest pdfo.testpdfo
 
-Alternatively, PDFO can be installed from the source code: download and
+If you are an Anaconda user, PDFO is also available through the conda installer
+( https://anaconda.org/conda-forge/pdfo ). However, it is not managed by us.
+
+1.2. Alternative installation (using source distribution)
+Alternatively, although deeply discouraged, PDFO can be installed from the
+source code. It requires you to install additional Python headers, a Fortran
+compiler (e.g., gfortran), and F2PY (provided by NumPy). Download and
 decompress the source code package; you will obtain a folder containing
 setup.py; in a command shell, change your directory to this folder; then
-install PDFO by executing "python setup.py install --user", excluding the
-quotation marks.
+install PDFO by executing
+
+python -m pip install .
 
 
 2. Usage
@@ -63,7 +55,7 @@ quotation marks.
 pdfo, uobyqa, newuoa, bobyqa, lincoa, cobyla.
 
 2.2. The "pdfo" function can automatically identify the type of your problem
-and the call one of Powell's solvers. The other five functions call the solver
+and call one of Powell's solvers. The other five functions call the solver
 indicated by their names. It is highly recommended to use "pdfo" instead of
 "uobyqa", "newuoa", etc.
 
@@ -72,8 +64,8 @@ function available in scipy.optimize. You can call "pdfo" in exactly the same
 way as calling "minimize", without the derivative arguments (PDFO does not use
 derivatives).
 
-2.4. For detailed syntax of these functions, use the standard "help" command of
-Python. For example,
+2.4. For thedetailed syntax of these functions, use the standard "help" command
+of Python. For example,
 
 >>> from pdfo import pdfo
 >>> help(pdfo)

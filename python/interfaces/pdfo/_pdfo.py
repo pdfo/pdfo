@@ -43,7 +43,7 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
 
         is equivalent to
 
-            ``pdfo(lambda x: fun(x, args), x0, ...)``
+            ``pdfo(lambda x: fun(x, *args), x0, ...)``
 
     method: str, optional
         The name of the Powell method that will be used.

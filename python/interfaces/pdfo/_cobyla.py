@@ -25,7 +25,7 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
 
         is equivalent to
 
-            ``cobyla(lambda x: fun(x, args), x0, ...)``
+            ``cobyla(lambda x: fun(x, *args), x0, ...)``
 
     bounds: ndarray of tuple with shape(n,2), or Bounds, optional
         Bound constraints of the problem. It can be one of the two cases below. 

@@ -44,19 +44,15 @@ credits = {'Tom M. Ragonneau', 'Zaikun Zhang'};
 
 license = 'LGPLv3+';
 
-version = '1.0';
+version = '1.1';
 
-date = 'June, 2020';
+date = 'August, 2021';
 
 status = 'Production';
 
 message = 'Dedicated to late Professor M. J. D. Powell FRS (29 July 1936--19 April 2015).';
 
-if year(datetime) == 2020
-    copyright = sprintf('Copyright %d, Tom M. Ragonneau and Zaikun Zhang', year(datetime));
-else
-    copyright = sprintf('Copyright 2020--%d, Tom M. Ragonneau and Zaikun Zhang', year(datetime));
-end
+copyright = sprintf('Copyright 2020--%d, Tom M. Ragonneau and Zaikun Zhang', year(datetime));
 
 switch lower(request)
 case 'about'

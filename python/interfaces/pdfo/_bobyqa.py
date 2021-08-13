@@ -25,7 +25,7 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
 
         is equivalent to
 
-            ``bobyqa(lambda x: fun(x, args), x0, ...)``
+            ``bobyqa(lambda x: fun(x, *args), x0, ...)``
 
     bounds: ndarray of tuple with shape(n,2), or Bounds, optional
         Bound constraints of the problem. It can be one of the two cases below. 
