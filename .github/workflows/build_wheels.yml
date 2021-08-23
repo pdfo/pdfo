@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        python: [36, 37, 38, 39]
+        python: [37, 38, 39]
         bitness: [32, 64]
         include:
           # Run 32 and 64 bit version in parallel for Linux and Windows
@@ -108,8 +108,7 @@ jobs:
           python -m venv build_env
           source build_env/bin/activate
           # Install the required Python dependencies
-          python -m pip install numpy cython
-          python -m pip install twine
+          python -m pip install numpy twine
           # Move down to the source folder
           cd pdfo/pdfo
           # Build the source distribution

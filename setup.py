@@ -175,6 +175,6 @@ if __name__ == '__main__':
         setup_requires=['pytest-runner'],
         tests_require=['pytest'],
         test_suite='pdfo.tests',
-        python_requires='>=3.6',
+        python_requires='>=3.7',
         zip_safe=True,
     )

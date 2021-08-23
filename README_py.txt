@@ -19,7 +19,7 @@ See https://www.pdfo.net for more information.
 
 1.1. Recommended installation
 To use the Python version of PDFO on Linux, Mac, or Windows, you need Python
-(version 3.6 or above).
+(version 3.7 or above).
 
 It is highly recommended to install PDFO via PyPI.
 
