@@ -3625,22 +3625,6 @@ def import_error_so(missing_file=None):
     if missing_file is None:
         missing_file = invoker
 
-    # The error message is different on each platform (i.e., Windows based or UNIX based system).
-    import platform
-    system_os = platform.system()
-
-    system_known = True
-    if system_os.lower() in ['darwin', 'linux']:
-        system_os = 'unix'
-    elif system_os.lower() == 'windows':
-        system_os = 'win'
-    else:
-        system_known = False
-
-    if system_known:
-        raise ImportError(
-            '{} is missing, please execute `setup.py` (see `README_py_{}.txt`).'.format(missing_file, system_os))
-    else:
-        raise ImportError(
-            '{} is missing, please execute `setup.py` (see the README file corresponding to your '
-            'system).'.format(missing_file))
+    raise ImportError('{} is missing. Please reinstall {} and ensure the '
+                      'fulfilment of the requirements '
+                      '(numpy>=1.20.0).'.format(missing_file, __package__))

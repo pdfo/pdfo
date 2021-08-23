@@ -74,6 +74,8 @@ jobs:
         uses: pypa/cibuildwheel@v2.0.0
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
+          # Constrain the dependency versioning to build the package with the earliest supported version of NumPy
+          CIBW_DEPENDENCY_VERSIONS: ./constraints.txt
           # Package the DLL dependencies in the wheel for windows (done by default for the other platforms)
           # delvewheel cannot mangle the libraries, stripping does not work
           CIBW_BEFORE_BUILD_WINDOWS: pip install delvewheel
