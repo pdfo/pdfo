@@ -14,7 +14,7 @@ on:
 jobs:
   # Build the wheels for Windows, Linux, and macOS
   build_wheels:
-    name: Build wheel for cp${{ matrix.python }}-${{ matrix.platform_id }}
+    name: Build wheel for cp${{ matrix.python }}-${{ matrix.platform_id }}-${{ matrix.manylinux_image }}
     runs-on: ${{ matrix.os }}
     strategy:
       # Ensure that all wheel builders finish even if failures occur
@@ -23,27 +23,41 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
         python: [37, 38, 39]
         bitness: [32, 64]
+        manylinux_image: [manylinux1, manylinux2010, manylinux2014, manylinux_2_24]
         include:
-          # Run 32 and 64 bit version in parallel for Linux and Windows
+          # Run 32- and 64-bit versions in parallel for Linux
+          # Compilation for 32-bit version of Windows fails
           # MacOS 10.14 Mojave is the last version that supports 32-bit software
           - os: windows-latest
             bitness: 64
             platform_id: win_amd64
+          - os: macos-latest
+            bitness: 64
+            platform_id: macosx_x86_64
           - os: ubuntu-latest
             bitness: 64
             platform_id: manylinux_x86_64
           - os: ubuntu-latest
             bitness: 32
             platform_id: manylinux_i686
-          - os: macos-latest
-            bitness: 64
-            platform_id: macosx_x86_64
         exclude:
-          # Compilation for 32 bit version of Windows fails
+          # manylinux_image is not used on Windows and macOS
           - os: windows-latest
             bitness: 32
+          - os: windows-latest
+            manylinux_image: manylinux2010
+          - os: windows-latest
+            manylinux_image: manylinux2014
+          - os: windows-latest
+            manylinux_image: manylinux_2_24
           - os: macos-latest
             bitness: 32
+          - os: macos-latest
+            manylinux_image: manylinux2010
+          - os: macos-latest
+            manylinux_image: manylinux2014
+          - os: macos-latest
+            manylinux_image: manylinux_2_24
 
     steps:
       - name: Provide gfortran (macOS)
@@ -74,6 +88,8 @@ jobs:
         uses: pypa/cibuildwheel@v2.0.0
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
+          CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.manylinux_image }}
+          CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.manylinux_image }}
           # Constrain the dependency versioning to build the package with the earliest supported version of NumPy
           CIBW_DEPENDENCY_VERSIONS: ./constraints.txt
           # Package the DLL dependencies in the wheel for windows (done by default for the other platforms)
@@ -82,6 +98,7 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel show {wheel} && delvewheel repair -w {dest_dir} {wheel} --no-mangle-all"
           # Run the tests for each wheel
           CIBW_TEST_COMMAND: python -m unittest pdfo.testpdfo
+          CIBW_BUILD_VERBOSITY: 1
 
       - name: Store artifacts
         uses: actions/upload-artifact@v2
