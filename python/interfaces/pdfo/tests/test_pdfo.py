@@ -20,6 +20,7 @@ Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
 from __future__ import division, print_function, absolute_import
 
 import os
+import struct
 import sys
 import unittest
 import warnings
@@ -134,8 +135,8 @@ class TestPDFO(unittest.TestCase):
                             sys.stdout = default_stdout
 
                             tol = self.PRECISION
-                            if solver == 'cobyla':
-                                # the precision of cobyla is lower
+                            if solver == 'cobyla' or struct.calcsize('P') != 8:
+                                # the precision for cobyla and 32-bit platforms is lower
                                 tol = max(1e3 * tol, 1e-2)
 
                             if not self.QUIET and not self.RELEASE:
@@ -143,7 +144,7 @@ class TestPDFO(unittest.TestCase):
                                 print('fx = {0:1.15e},\tfopt={1:1.15e}'.format(fx, fopt))
 
                             self.assertTrue(np.linalg.norm(global_res.x - x) <= tol)
-                            self.assertTrue((fx - fopt) / max(1, abs(fopt)) <= tol)
+                            self.assertTrue((fx - fopt) / max(1., abs(fopt)) <= tol)
                 if not self.QUIET:
                     print('Succeed.')
 
