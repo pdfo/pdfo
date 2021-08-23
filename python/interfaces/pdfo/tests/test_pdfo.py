@@ -134,10 +134,12 @@ class TestPDFO(unittest.TestCase):
 
                             sys.stdout = default_stdout
 
+                            # the precision for cobyla is lower
                             tol = self.PRECISION
-                            if solver == 'cobyla' or struct.calcsize('P') != 8:
-                                # the precision for cobyla and 32-bit platforms is lower
+                            if solver == 'cobyla' and struct.calcsize('P') == 8:
                                 tol = max(1e3 * tol, 1e-2)
+                            elif solver == 'cobyla':
+                                tol = max(1e4 * tol, 1e-1)
 
                             if not self.QUIET and not self.RELEASE:
                                 print('solver = {},\tfun = {}'.format(solver, fun_name), end='\t\t')
