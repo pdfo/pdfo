@@ -171,7 +171,7 @@ if __name__ == '__main__':
             'Topic :: Software Development :: Libraries',
             'Topic :: Software Development :: Libraries :: Python Modules',
         ],
-        install_requires=['numpy'],
+        install_requires=['numpy>=1.20.0'],
         setup_requires=['pytest-runner'],
         tests_require=['pytest'],
         test_suite='pdfo.tests',
