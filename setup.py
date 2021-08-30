@@ -7,7 +7,7 @@ Professor M. J. D. Powell's derivative-free optimization solvers, including UOBY
 
 See https://www.pdfo.net for more information.
 """
-import setuptools
+import setuptools  # noqa
 
 from fnmatch import fnmatch
 
@@ -19,6 +19,9 @@ import re
 import sys
 from os import listdir, remove, walk
 from os.path import dirname, abspath, join, relpath
+
+if sys.version_info < (3, 7):
+    raise RuntimeError('Python version >= 3.7 required.')
 
 try:
     from numpy.distutils.core import setup, Extension
