@@ -1,162 +1,151 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """PDFO - Powell's Derivative-Free Optimization solvers
 
-PDFO (Powell's Derivative-Free Optimization solvers) is a cross-platform package providing interfaces for using late
-Professor M. J. D. Powell's derivative-free optimization solvers, including UOBYQA, NEWUOA, BOBYQA, LINCOA, and COBYLA.
+PDFO (Powell's Derivative-Free Optimization solvers) is a cross-platform
+package providing interfaces for using late Professor M. J. D. Powell's
+derivative-free optimization solvers, including UOBYQA, NEWUOA, BOBYQA, LINCOA,
+and COBYLA.
 
 See https://www.pdfo.net for more information.
 """
-import setuptools  # noqa
-
-from fnmatch import fnmatch
-
-import glob
-import platform
+import importlib
+import os
 import shutil
-
-import re
 import sys
-from os import listdir, remove, walk
-from os.path import dirname, abspath, join, relpath
 
-if sys.version_info < (3, 7):
-    raise RuntimeError('Python version >= 3.7 required.')
+from pkg_resources import parse_version
 
-try:
-    from numpy.distutils.core import setup, Extension
-except:
-    raise Exception('\nPlease install NumPy before installing PDFO.\n')
+if sys.version_info < (3, 6):
+    raise RuntimeError('Python version >= 3.6 required.')
 
-if sys.platform == "win32":
-    # Fix build with gcc under windows.
-    # See https://github.com/jameskermode/f90wrap/issues/96
-    from numpy.f2py.cfuncs import includes0
-    includes0["setjmp.h"] = '#include <setjmpex.h>'
+import builtins
+from pathlib import Path
 
-# Set the paths to all the folders that will be used to build PDFO.
-CURRENT_WD = dirname(abspath(__file__))
-PDFO_WD = join(CURRENT_WD, 'python')
-FSRC_WD = join(dirname(PDFO_WD), 'fsrc')
-FSRC_CLASSICAL_WD = join(FSRC_WD, 'classical')
-GATEWAYS_WD = join(PDFO_WD, 'py_gateways')
-GATEWAYS_CLASSICAL_WD = join(GATEWAYS_WD, 'classical')
-INTERFACES_WD = join(PDFO_WD, 'interfaces', 'pdfo')
+# Remove MANIFEST before importing setuptools to prevent improper updates.
+if os.path.exists('MANIFEST'):
+    os.remove('MANIFEST')
 
-# Set the options that will be given to F2PY to build PDFO.
-OPTIONS = ['--quiet']
+import setuptools  # noqa
+from distutils.command.clean import clean  # noqa
+from distutils.command.sdist import sdist  # noqa
 
-# Set the descriptions of the package.
+# This is a bit hackish: to prevent loading components that are not yet built,
+# we set a global variable to endow the main __init__ with with the ability to
+# detect whether it is loaded by the setup routine.
+BASE_DIR = Path(__file__).resolve(strict=True).parent
+sys.path.insert(0, str(BASE_DIR / 'python'))
+builtins.__PDFO_SETUP__ = True
+
+import pdfo  # noqa
+import pdfo._min_dependencies as min_deps  # noqa
+
+SETUPTOOLS_COMMANDS = {
+    'bdist_dumb',
+    'bdist_egg',
+    'bdist_rpm',
+    'bdist_msi',
+    'bdist_wheel',
+    'bdist_wininst',
+    'develop',
+    'easy_install',
+    'egg_info',
+    'install',
+    'install_egg_info',
+    'upload',
+}
+if SETUPTOOLS_COMMANDS.intersection(sys.argv[1:]):
+    extra_setuptools_args = dict(
+        zip_safe=False,
+        include_package_data=True,
+        extras_require={k: min_deps.tag_to_pkgs[k] for k in ['tests']},
+    )
+else:
+    extra_setuptools_args = {}
+
 DOCLINES = (__doc__ or '').split('\n')
 
 
-def clean():
-    """Clean up the arborescence of the package."""
-    folders_to_delete = ['build', 'develop-eggs', 'dist', 'eggs', '.eggs', 'sdist', 'wheels']
-    if platform.system() == 'windows':
-        files_to_delete = glob.glob('**/*.pyd')  # Windows-based binary files
-    else:
-        files_to_delete = glob.glob('**/*.so')  # Unix-based binary files
-    files_to_delete.extend(glob.glob('*.mod') + glob.glob('**/*.mod'))  # Fortran module files
-    files_to_delete.extend(glob.glob('**/*.o'))  # C and Fortran object files
-    for root, dirs, files in walk(CURRENT_WD):
-        for folder in dirs:
-            if fnmatch(folder, '*.egg-info'):
-                folders_to_delete.append(join(root, folder))
-        for file in files:
-            if fnmatch(file, '*.egg'):
-                files_to_delete.append(join(root, file))
+class CleanCommand(clean):
+    description = 'Remove build artifacts from the source tree'
 
-    for folder in folders_to_delete:
-        shutil.rmtree(folder, ignore_errors=True)
-    for tmp_file in files_to_delete:
-        try:
-            remove(tmp_file)
-        except:
-            # This exception should never occur, except if a user delete a file manually after running this script and
-            # before the execution of the remove command. Since it is almost impossible, the exception is just caught.
-            pass
+    def run(self):
+        super().run()
 
+        # Remove setuptools artifact directories and files.
+        shutil.rmtree(BASE_DIR / 'build', ignore_errors=True)
+        shutil.rmtree(BASE_DIR / 'dist', ignore_errors=True)
+        for dirname in BASE_DIR.glob('*.egg-info'):
+            shutil.rmtree(dirname)
 
-def build_solver(solver):
-    """Generates the extensions that should be compiled, i.e. Powell's code."""
-    # Default version: this extension corresponds to the Fortran code modified by Tom M. RAGONNEAU and Zaikun ZHANG.
-    sources = [
-        relpath(join(GATEWAYS_WD, '{}-interface.pyf'.format(solver))),
-        relpath(join(GATEWAYS_WD, '{}.f90'.format(solver))),
-    ]
-    solver_src = relpath(join(FSRC_WD, solver))
-    f77_extension = re.compile('.*\.f$')
-    sources.extend([join(solver_src, fortran) for fortran in filter(f77_extension.match, listdir(solver_src))])
-    ext_solver = Extension(name='pdfo.f{}'.format(solver), sources=sources, f2py_options=OPTIONS)
+        # Remove test and coverage cache directories and files.
+        shutil.rmtree(BASE_DIR / '.pytest_cache', ignore_errors=True)
 
-    # Classical version: this extension corresponds to the original Fortran code written by late Prof. Powell. They are
-    # called when the user provides the option classical=True to any of the Python interface.
-    sources = [
-        relpath(join(GATEWAYS_CLASSICAL_WD, '{}-interface.pyf'.format(solver))),
-        relpath(join(GATEWAYS_CLASSICAL_WD, '{}.f90'.format(solver))),
-    ]
-    solver_src = relpath(join(FSRC_CLASSICAL_WD, solver))
-    f77_extension = re.compile('.*\.f$')
-    sources.extend([join(solver_src, fortran) for fortran in filter(f77_extension.match, listdir(solver_src))])
-    ext_solver_classical = Extension(name='pdfo.f{}_classical'.format(solver), sources=sources, f2py_options=OPTIONS)
+        # Remove the 'MANIFEST' file.
+        if Path(BASE_DIR, 'MANIFEST').is_file():
+            os.unlink(BASE_DIR / 'MANIFEST')
 
-    return ext_solver, ext_solver_classical
+        for dirpath, dirnames, filenames in os.walk(BASE_DIR / 'python'):
+            dirpath = Path(dirpath).resolve(strict=True)
+            for dirname in dirnames:
+                if dirname == '__pycache__':
+                    shutil.rmtree(dirpath / dirname)
+            for filename in filenames:
+                basename, extension = os.path.splitext(filename)
+                if extension in ('.dll', '.pyc', '.pyd', '.so', '.mod', '.o'):
+                    os.unlink(dirpath / filename)
 
 
-# Define the PDFO's extensions
-#    * PDFOCONST holds all the general constants.
-#    * GETHUGE gives the maximal values that the Fortran code can handle for each type.
-EXT_MODULES = [
-    Extension(
-        name='pdfo.pdfoconst',
-        sources=[
-            relpath(join(GATEWAYS_WD, 'pdfoconst-interface.pyf')),
-            relpath(join(FSRC_WD, 'pdfoconst.F'))
-        ],
-        f2py_options=OPTIONS),
-    Extension(
-        name='pdfo.gethuge',
-        sources=[
-            relpath(join(GATEWAYS_WD, 'gethuge-interface.pyf')),
-            relpath(join(GATEWAYS_WD, 'gethuge.f90'))
-        ],
-        f2py_options=OPTIONS),
-]
-for algorithm in ['uobyqa', 'newuoa', 'bobyqa', 'lincoa', 'cobyla']:
-    # Generate the default and classical extensions to the Powell's Fortran code
-    EXT_MODULES.extend(build_solver(algorithm))
+cmdclass = {'clean': CleanCommand, 'sdist': sdist}
 
 
-if __name__ == '__main__':
-    clean()
+def configuration(parent_package='', top_path=None):
+    from numpy.distutils.misc_util import Configuration
+    config = Configuration(None, parent_package, top_path)
+    config.set_options(
+        ignore_setup_xxx_py=True,
+        assume_default_configuration=True,
+        delegate_options_to_subpackages=True,
+        quiet=True,
+    )
 
-    setup(
+    config.add_subpackage('python.pdfo')
+
+    return config
+
+
+def check_pkg_status(pkg, min_version):
+    message = '{} version >= {} required.'.format(pkg, min_version)
+    try:
+        module = importlib.import_module(pkg)
+        pkg_version = module.__version__  # noqa
+        if parse_version(pkg_version) < parse_version(min_version):
+            message += ' The current version is {}.'.format(pkg_version)
+            raise ValueError(message)
+    except ModuleNotFoundError:
+        raise ModuleNotFoundError(message)
+
+
+def setup_package():
+    metadata = dict(
         name='pdfo',
-        version=open('VERSION.txt').read().rstrip(),
-        description=DOCLINES[0],
-        long_description='\n'.join(DOCLINES[2:]),
-        long_description_content_type='text/plain',
         author='Tom M. Ragonneau and Zaikun Zhang',
         author_email='pdfocode@gmail.com',
         maintainer='Tom M. Ragonneau and Zaikun Zhang',
         maintainer_email='pdfocode@gmail.com',
+        version=pdfo.__version__,
+        description=DOCLINES[0],
+        long_description='\n'.join(DOCLINES[2:]),
+        long_description_content_type='text/plain',
+        keywords='Powell Derivative-Free Optimization UOBYQA NEWUOA BOBYQA '
+                 'LINCOA COBYLA',
+        license='GNU Lesser General Public License v3 or later (LGPLv3+)',
         url='https://www.pdfo.net',
-        download_url='https://www.pdfo.net/docs.html#releases',
+        download_url='https://pypi.org/project/pdfo/#files',
         project_urls={
             'Bug Tracker': 'https://github.com/pdfo/pdfo/issues',
             'Documentation': 'https://www.pdfo.net',
             'Source Code': 'https://github.com/pdfo/pdfo',
         },
-        packages=['pdfo', 'pdfo.tests'],
-        package_dir={
-            'pdfo': relpath(INTERFACES_WD),
-            'pdfo.tests': relpath(join(INTERFACES_WD, 'tests')),
-        },
-        include_package_data=True,
-        ext_modules=EXT_MODULES,
-        license='GNU Lesser General Public License v3 or later (LGPLv3+)',
-        keywords='Powell Derivative-Free Optimization UOBYQA NEWUOA BOBYQA LINCOA COBYLA',
         classifiers=[
             'Development Status :: 5 - Production/Stable',
             'Intended Audience :: Developers',
@@ -169,15 +158,49 @@ if __name__ == '__main__':
             'Operating System :: Microsoft :: Windows',
             'Programming Language :: Fortran',
             'Programming Language :: Python :: 3',
+            'Programming Language :: Python :: 3.6',
+            'Programming Language :: Python :: 3.7',
+            'Programming Language :: Python :: 3.8',
+            'Programming Language :: Python :: 3.9',
+            'Programming Language :: Python :: 3.10',
             'Topic :: Scientific/Engineering',
             'Topic :: Scientific/Engineering :: Mathematics',
             'Topic :: Software Development :: Libraries',
             'Topic :: Software Development :: Libraries :: Python Modules',
         ],
-        install_requires=['numpy>=1.20.0'],
-        setup_requires=['pytest-runner'],
-        tests_require=['pytest'],
-        test_suite='pdfo.tests',
-        python_requires='>=3.7',
-        zip_safe=True,
+        platforms=['Linux', 'macOS', 'Unix', 'Windows'],
+        cmdclass=cmdclass,
+        python_requires='>=3.6',
+        install_requires=min_deps.tag_to_pkgs['install'],
+        **extra_setuptools_args
     )
+
+    distutils_commands = {
+        'check',
+        'clean',
+        'egg_info',
+        'dist_info',
+        'install_egg_info',
+        'rotate',
+    }
+    commands = [arg for arg in sys.argv[1:] if not arg.startswith('-')]
+    if all(command in distutils_commands for command in commands):
+        from setuptools import setup
+    else:
+        check_pkg_status('numpy', min_deps.NUMPY_MIN_VERSION)
+
+        from numpy.distutils.core import setup
+
+        if sys.platform == "win32":
+            # Fix build with gcc under windows.
+            # See https://github.com/jameskermode/f90wrap/issues/96
+            from numpy.f2py.cfuncs import includes0
+            includes0["setjmp.h"] = '#include <setjmpex.h>'
+
+        metadata['configuration'] = configuration
+    setup(**metadata)
+
+
+if __name__ == '__main__':
+    setup_package()
+    del builtins.__PDFO_SETUP__  # noqa

@@ -5,7 +5,7 @@
 Notes
 -----
 Do NOT follow the syntax here when you use pdfo. This file is written for testing purpose, and it uses quite atypical
-syntax. See rosenbrock_example.py for an illustration about how to use pdfo.
+syntax. See rosenbrock.py for an illustration about how to use pdfo.
 
 Authors
 -------

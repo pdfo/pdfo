@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        python: [37, 38, 39]
+        python: [36, 37, 38, 39]
         bitness: [32, 64]
         manylinux_image: [manylinux1, manylinux2010, manylinux2014, manylinux_2_24]
         include:
@@ -90,8 +90,6 @@ jobs:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
           CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.manylinux_image }}
           CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.manylinux_image }}
-          # Constrain the dependency versioning to build the package with the earliest supported version of NumPy
-          CIBW_DEPENDENCY_VERSIONS: ./constraints.txt
           # Package the DLL dependencies in the wheel for windows (done by default for the other platforms)
           # delvewheel cannot mangle the libraries, stripping does not work
           CIBW_BEFORE_BUILD_WINDOWS: pip install delvewheel

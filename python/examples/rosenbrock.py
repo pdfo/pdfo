@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Illustration of how to use pdfo.
 
 Authors
@@ -11,7 +10,7 @@ The Hong Kong Polytechnic University.
 
 Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
 """
-from pdfo import pdfo, Bounds, LinearConstraint, NonlinearConstraint
+from python.pdfo import pdfo, Bounds, LinearConstraint, NonlinearConstraint
 # If SciPy (version 1.1 or above) is installed, then Bounds, LinearConstraint,
 # and NonlinearConstraint can alternatively be imported from scipy.optimize.
 import numpy as np

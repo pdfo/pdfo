@@ -132,7 +132,7 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
     --------
     1. The following code
 
-    >>> from pdfo import *
+    >>> from python.pdfo import *
     >>> import numpy as np
     >>> lin_con = LinearConstraint(2, None, 3)
     >>> options = {'maxfev': 50}
@@ -145,7 +145,7 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
 
     2. The following code
 
-    >>> from pdfo import *
+    >>> from python.pdfo import *
     >>> obj = lambda x: x[0]**2 + x[1]**2
     >>> con = lambda x: x[0]**2 - x[1]
     >>> bounds = Bounds([0, 0.5], [2, 3])

@@ -5,11 +5,12 @@ from inspect import stack
 import numpy as np
 
 
-def uobyqa(fun, x0, args=(), options=None):
-    """UOBYQA: Unconstrained Optimization BY Quadratic Approximation
+def newuoa(fun, x0, args=(), options=None):
+    """NEWUOA: NEW Unconstrained Optimization Algorithm
 
-    The algorithm is described in [M. J. D. Powell, UOBYQA: unconstrained optimization by quadratic approximation, Math.
-    Program., 92(B):555--582, 2002].
+    The algorithm is described in [M. J. D. Powell, The NEWUOA software for unconstrained optimization without
+    derivatives, In Large-Scale Nonlinear Optimization, eds. G. Di Pillo and M. Roma, pages 255--297, Springer, New
+    York, US, 2006].
 
     Parameters
     ----------
@@ -20,24 +21,26 @@ def uobyqa(fun, x0, args=(), options=None):
     args: tuple, optional
         The extra-arguments to pass to the objective function. For example,
 
-            ``uobyqa(fun, x0, args, options)``
+            ``newuoa(fun, x0, args, options)``
 
         is equivalent to
 
-            ``uobyqa(lambda x: fun(x, *args), x0, options=options)``
+            ``newuoa(lambda x: fun(x, *args), x0, options=options)``
 
     options: dict, optional
         The options passed to the solver. It is a structure that contains optionally:
             rhobeg: float, optional
                 Initial value of the trust region radius, which should be a positive scalar. Typically, `options['rhobeg']`
-                should in the order of  one tenth of the greatest expected change to a variable. By default, it is 1.
+                should be in the order of one tenth of the greatest expected change to a variable. By default, it is 1.
             rhoend: float, optional
                 Final value of the trust region radius, which should be a positive scalar. `options['rhoend']` should
                 indicate typically the accuracy required in the final values of the variables. Moreover,
                 `options['rhoend']` should be no more than `options['rhobeg']` and is by default 1e-6.
             maxfev: int, optional
                 Upper bound of the number of calls of the objective function `fun`. Its value must be not less than
-                (n+1)*(n+2)/2+1. By default, it is 500*n.
+                `options['npt']`+1. By default, it is 500*n.
+            npt: int, optional
+                Number of interpolation points of each model used in Powell's Fortran code. By default, it is 2*n+1.
             ftarget: float, optional
                 Target value of the objective function. If an iterate achieves an objective function value lower or
                 equal to `options['ftarget']`, the algorithm stops immediately. By default, it is -numpy.inf.
@@ -72,17 +75,17 @@ def uobyqa(fun, x0, args=(), options=None):
     bobyqa : Bounded Optimization BY Quadratic Approximations
     cobyla : Constrained Optimization BY Linear Approximations
     lincoa : LINearly Constrained Optimization Algorithm
-    newuoa : NEW Unconstrained Optimization Algorithm
+    uobyqa : Unconstrained Optimization BY Quadratic Approximation
     pdfo : Powell's Derivative-Free Optimization solvers
 
     Examples
     --------
     1. The following code
 
-    >>> from pdfo import *
+    >>> from python.pdfo import *
     >>> import numpy as np
     >>> options = {'maxfev': 50}
-    >>> uobyqa(np.cos, -1, options=options)
+    >>> newuoa(np.cos, -1, options=options)
 
     solves
         min  cos(x)
@@ -90,10 +93,10 @@ def uobyqa(fun, x0, args=(), options=None):
 
     2. The following code
 
-    >>> from pdfo import *
+    >>> from python.pdfo import *
     >>> obj = lambda x: x[0]**2 + x[1]**2
     >>> options = {'maxfev': 200}
-    >>> uobyqa(obj, [0, 1], options=options)
+    >>> newuoa(obj, [0, 1], options=options)
 
     solves
         min  x^2 + y^2
@@ -125,7 +128,7 @@ def uobyqa(fun, x0, args=(), options=None):
         invoker = ''
 
     # A cell that records all the warnings.
-    # Why do we record the warning message in output['warnings'] instead of prob_info['warnings']? Because, if uobyqa is
+    # Why do we record the warning message in output['warnings'] instead of prob_info['warnings']? Because, if newuoa is
     # called by pdfo, then prob_info will not be passed to postpdfo, and hence the warning message will be lost. To the
     # contrary, output will be passed to postpdfo anyway.
     output = dict()
@@ -146,29 +149,32 @@ def uobyqa(fun, x0, args=(), options=None):
         exitflag = 14
     else:
         # Extract the options and parameters.
+        npt = options_c['npt']
         maxfev = options_c['maxfev']
         rhobeg = options_c['rhobeg']
         rhoend = options_c['rhoend']
         ftarget = options_c['ftarget']
 
-        # UOBYQA is not intended to solve univariate problem; most likely, the solver will fail.
-        n = x0_c.size
-        if n <= 1:
-            w_message = '{}: a univariate problem received; {} may fail. Try other solvers.'.format(fun_name, fun_name)
-            warnings.warn(w_message, Warning)
-            output['warnings'].append(w_message)
-
         # The largest integer in the fortran functions; the factor 0.99 provides a buffer.
         max_int = np.floor(0.99 * gethuge('integer'))
+        n = x0_c.size
 
-        # The smallest nw, i.e., the nw with npt = (n+1)*(n+2)/2. If it is larger than a threshold (system dependent),
-        # the problem is too large to be executed on the system.
-        min_nw = (n * (42 + n * (23 + n * (8 + n))) + max(2 * n**2, 18 * n)) / 4
+        # The smallest nw, i.e., the nw with npt = n + 2. If it is larger than a threshold (system dependent), the
+        # problem is too large to be executed on the system.
+        min_nw = (n + 15) * (2 * n + 2) + 3 * n * (n + 3) / 2
         if min_nw + 1 >= max_int:
             executor = invoker.lower() if invoker == 'pdfo' else fun_name
             # nw would suffer from overflow in the Fortran code, exit immediately.
             raise SystemError('{}: problem too large for {}. Try other solvers.'.format(executor, fun_name))
 
+        # The largest possible value for npt given that nw <= max_int.
+        max_npt = max(n + 2, np.floor(0.5 * (-n - 13 + np.sqrt((n - 13) ** 2 + 4 * (max_int - 3 * n * (n + 3) / 2 - 1)))))
+        if npt > max_npt:
+            npt = max_npt
+            w_message = \
+                '{}: npt is so large that it is unable to allocate the workspace; it is set to {}'.format(fun_name, npt)
+            warnings.warn(w_message, Warning)
+            output['warnings'].append(w_message)
         if maxfev > max_int:
             maxfev = max_int
             w_message = '{}: maxfev exceeds the upper limit of Fortran integer; it is set to {}'.format(fun_name, maxfev)
@@ -178,15 +184,15 @@ def uobyqa(fun, x0, args=(), options=None):
         # Call the Fortran code.
         try:
             if options_c['classical']:
-                from . import fuobyqa_classical as fuobyqa
+                from . import fnewuoa_classical as fnewuoa
             else:
-                from . import fuobyqa
+                from . import fnewuoa
         except ImportError:
             from ._dependencies import import_error_so
             import_error_so()
 
-        x, fx, exitflag, fhist = fuobyqa.muobyqa(x0_c, rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
-        nf = int(fuobyqa.fuobyqa.nf)
+        x, fx, exitflag, fhist = fnewuoa.mnewuoa(npt, x0_c, rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
+        nf = int(fnewuoa.fnewuoa.nf)
 
     # Postprocess the result.
     return postpdfo(x, fx, exitflag, output, fun_name, nf, fhist, options_c, prob_info)
