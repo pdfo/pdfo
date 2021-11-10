@@ -108,7 +108,7 @@ def configuration(parent_package='', top_path=None):
         quiet=True,
     )
 
-    config.add_subpackage('python.pdfo')
+    config.add_subpackage('pdfo', str(BASE_DIR / 'python' / 'pdfo'))
 
     return config
 
