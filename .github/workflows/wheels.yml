@@ -131,35 +131,6 @@ jobs:
             python: 310
             platform_id: macosx_x86_64
 
-          # macOS arm64 (libgfortran not yet ready)
-          #   + delocate-listdeps /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/cibuildwheela9fk2r30/built_wheel/pdfo-1.2-cp38-cp38-macosx_11_0_arm64.whl && delocate-wheel --require-archs arm64 -w /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/cibuildwheela9fk2r30/repaired_wheel /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/cibuildwheela9fk2r30/built_wheel/pdfo-1.2-cp38-cp38-macosx_11_0_arm64.whl
-          #  /usr/local/Cellar/gcc/11.2.0_3/lib/gcc/11/libgcc_s.1.dylib
-          #  /usr/local/Cellar/gcc/11.2.0_3/lib/gcc/11/libgfortran.5.dylib
-          #  /usr/local/Cellar/gcc/11.2.0_3/lib/gcc/11/libquadmath.0.dylib
-          #  Traceback (most recent call last):
-          #    File "/Library/Frameworks/Python.framework/Versions/3.8/bin/delocate-wheel", line 8, in <module>
-          #      sys.exit(main())
-          #    File "/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/delocate/cmd/delocate_wheel.py", line 128, in main
-          #      copied = delocate_wheel(
-          #    File "/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/delocate/delocating.py", line 662, in delocate_wheel
-          #      raise DelocationError(
-          #  delocate.delocating.DelocationError: Some missing architectures in wheel
-          #  Required arch arm64 missing from /usr/local/Cellar/gcc/11.2.0_3/lib/gcc/11/libgfortran.5.dylib
-          #  Required arch arm64 missing from /usr/local/Cellar/gcc/11.2.0_3/lib/gcc/11/libquadmath.0.dylib
-          # - os: macos-latest
-          #   bitness: 64
-          #   python: 38
-          #   platform_id: macosx_arm64
-          # - os: macos-latest
-          #   bitness: 64
-          #   python: 39
-          #   platform_id: macosx_arm64
-          # - os: macos-latest
-          #   bitness: 64
-          #   python: 310
-          #   platform_id: macosx_arm64
-          #   platform_id: macosx_arm64
-
     steps:
       - name: Provide gfortran (Windows)
         if: runner.os == 'Windows'
