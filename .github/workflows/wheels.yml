@@ -1,4 +1,7 @@
-# Workflow to build and test wheel and source distributions
+# .github/workflows/wheels.yml
+# GitHub Actions configuration file for building wheels
+# See https://github.com/pypa/cibuildwheel for details
+
 name: wheels
 
 on:
