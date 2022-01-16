@@ -158,7 +158,7 @@ jobs:
           CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.manylinux_image }}
           CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.manylinux_image }}
           CIBW_MANYLINUX_AARCH64_IMAGE: ${{ matrix.manylinux_image }}
-          CIBW_ENVIRONMENT: PIP_DEFAULT_TIMEOUT=21600
+          CIBW_ENVIRONMENT: PIP_DEFAULT_TIMEOUT=21600 PIP_EXTRA_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
           CIBW_TEST_SKIP: "*-macosx_arm64"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: bash build_tools/github/repair_windows_wheels.sh {wheel} {dest_dir}
           CIBW_BEFORE_BUILD_WINDOWS: python -m pip install delvewheel
