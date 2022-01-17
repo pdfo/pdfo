@@ -95,22 +95,22 @@ jobs:
             manylinux_image: manylinux2014
 
           # 64-bit Linux manylinux2014 aarch64
-          - os: self-hosted
+          - os: [self-hosted, Linux, ARM64]
             python: 37
             bitness: 64
             platform_id: manylinux_aarch64
             manylinux_image: manylinux2014
-          - os: self-hosted
+          - os: [self-hosted, Linux, ARM64]
             python: 38
             bitness: 64
             platform_id: manylinux_aarch64
             manylinux_image: manylinux2014
-          - os: self-hosted
+          - os: [self-hosted, Linux, ARM64]
             python: 39
             bitness: 64
             platform_id: manylinux_aarch64
             manylinux_image: manylinux2014
-          - os: self-hosted
+          - os: [self-hosted, Linux, ARM64]
             python: 310
             bitness: 64
             platform_id: manylinux_aarch64
@@ -147,11 +147,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Python
-        if: ${{ runner.arch == 'X86' || runner.arch == 'X64' }}
+        if: ${{ matrix.platform_id != 'manylinux_aarch64' }}
         uses: actions/setup-python@v2
 
       - name: Build wheels on manylinux_aarch64
-        if: ${{ matrix.platform_id == 'manylinux_aarch64'}}
+        if: ${{ matrix.platform_id == 'manylinux_aarch64' }}
         run: bash build_tools/github/build_wheels.sh
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
@@ -162,7 +162,7 @@ jobs:
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Build wheels on other platforms
-        if: ${{ matrix.platform_id != 'manylinux_aarch64'}}
+        if: ${{ matrix.platform_id != 'manylinux_aarch64' }}
         run: bash build_tools/github/build_wheels.sh
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
