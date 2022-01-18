@@ -1,6 +1,7 @@
 # PDFO for MATLAB: Powell's Derivative-Free Optimization solvers
 
-Dedicated to late Professor M. J. D. Powell FRS (1936&ndash;2015).
+Dedicated to late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
+FRS (1936&ndash;2015).
 
 We look forward to your feedback! Thank you very much!
 
@@ -58,9 +59,9 @@ PDFO provides the following MATLAB functions:
 `pdfo`, `uobyqa`, `newuoa`, `bobyqa`, `lincoa`, `cobyla`.
 
 The `pdfo` function can automatically identify the type of your problem
-and then call one of Powell's solvers. The other five functions call the solver
-indicated by their names. It is highly recommended using `pdfo` instead of
-`uobyqa`, `newuoa`, etc.
+and then call one of [Powell's](https://www.zhangzk.net/powell.html) solvers.
+The other five functions call the solver indicated by their names. It is highly
+recommended using `pdfo` instead of `uobyqa`, `newuoa`, etc.
 
 The `pdfo` function is designed to be compatible with the `fmincon`
 function available in the [Optimization Toolbox](https://www.mathworks.com/products/optimization.html)
