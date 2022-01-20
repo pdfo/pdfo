@@ -47,7 +47,7 @@ you will obtain a folder containing `setup.py`; in a command shell, change your
 directory to this folder; then install PDFO by executing
 
 ```bash
-python -m pip install /.
+python -m pip install ./
 ```
 
 ## Usage
