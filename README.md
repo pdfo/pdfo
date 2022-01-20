@@ -21,14 +21,14 @@ and COBYLA. See https://www.pdfo.net for more information.
 - To use the Python version of PDFO, see [README_py.md](https://github.com/pdfo/pdfo/blob/main/README_py.md).
 
 This package makes use of a modified version of [Powell's](https://www.zhangzk.net/powell.html)
-Fortran code. See folder [`original`](https://github.com/pdfo/pdfo/tree/main/fsrc/original)
-for [Powell's](https://www.zhangzk.net/powell.html) original code.
+Fortran code. See the folder [`original`](https://github.com/pdfo/pdfo/tree/main/fsrc/original)
+under `fsrc` for [Powell's](https://www.zhangzk.net/powell.html) original code.
 
 ## Acknowledgments
 
 The development of this package is funded by the [UGC](https://www.ugc.edu.hk/)
-of Hong Kong (ref. PolyU 253012/17P, PolyU 153054/20P, and 
-[HKPFS](https://cerg1.ugc.edu.hk/hkpfs/) PF18-24698), and The Hong Kong 
+of Hong Kong (ref. PolyU 253012/17P, PolyU 153054/20P, and
+[HKPFS](https://cerg1.ugc.edu.hk/hkpfs/) PF18-24698), and The Hong Kong
 Polytechnic University.
 
 PDFO is dedicated to the memory of late Professor [Powell](https://www.zhangzk.net/powell.html)

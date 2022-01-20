@@ -5,7 +5,7 @@ FRS (1936&ndash;2015).
 
 We look forward to your feedback! Thank you very much!
 
-This is the README for the MATLAB version of PDFO.
+This is the README for the Python version of PDFO.
 See https://www.pdfo.net for more information.
 
 ## Installation
@@ -41,13 +41,13 @@ If you are an Anaconda user, PDFO is also available through the conda installer
 Alternatively, although deeply discouraged, PDFO can be installed from the
 source code. It requires you to install additional Python headers, a Fortran
 compiler (e.g., [gfortran](https://gcc.gnu.org/fortran/)), and
-[F2PY](https://numpy.org/doc/stable/f2py/) (provided by 
+[F2PY](https://numpy.org/doc/stable/f2py/) (provided by
 [NumPy](https://numpy.org/)). Download and decompress the source code package;
 you will obtain a folder containing `setup.py`; in a command shell, change your
 directory to this folder; then install PDFO by executing
 
 ```bash
-python -m pip install .
+python -m pip install /.
 ```
 
 ## Usage
