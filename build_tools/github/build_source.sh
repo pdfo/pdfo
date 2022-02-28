@@ -18,4 +18,4 @@ cd pdfo/pdfo
 python setup.py sdist
 
 # Check the distribution file
-twine check dist/*.tar.gz
+python -m twine check dist/*.tar.gz

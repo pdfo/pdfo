@@ -134,6 +134,20 @@ jobs:
             python: 310
             platform_id: macosx_x86_64
 
+          # macOS arm64
+          - os: macos-latest
+            bitness: 64
+            python: 38
+            platform_id: macosx_arm64
+          - os: macos-latest
+            bitness: 64
+            python: 39
+            platform_id: macosx_arm64
+          - os: macos-latest
+            bitness: 64
+            python: 310
+            platform_id: macosx_arm64
+
     steps:
       - name: Provide gfortran (Windows)
         if: runner.os == 'Windows'
