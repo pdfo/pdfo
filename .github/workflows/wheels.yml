@@ -162,7 +162,7 @@ jobs:
 
       - name: Setup Python
         if: ${{ matrix.platform_id != 'manylinux_aarch64' }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
 
       - name: Build wheels on manylinux_aarch64
         if: ${{ matrix.platform_id == 'manylinux_aarch64' }}
@@ -204,7 +204,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
 
       - name: Build source distribution
         run: bash build_tools/github/build_source.sh
@@ -229,7 +229,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
