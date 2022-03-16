@@ -6,7 +6,7 @@ numpy_nodepr_api = {
 
 
 def configuration(parent_package='', top_path=None):
-    from numpy.distutils.misc_util import Configuration, get_numpy_include_dirs
+    from numpy.distutils.misc_util import Configuration
     config = Configuration('pdfo', parent_package, top_path)
 
     base_dir = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -19,13 +19,11 @@ def configuration(parent_package='', top_path=None):
     sources = [gtw_dir / 'pdfoconst-interface.pyf', fsrc_dir / 'pdfoconst.F']
     config.add_extension('pdfoconst',
                          sources=list(map(str, sources)),
-                         include_dirs=[get_numpy_include_dirs()],
                          **numpy_nodepr_api)
 
     sources = [gtw_dir / 'gethuge-interface.pyf', gtw_dir / 'gethuge.f90']
     config.add_extension('gethuge',
                          sources=list(map(str, sources)),
-                         include_dirs=[get_numpy_include_dirs()],
                          **numpy_nodepr_api)
 
     for alg in ['uobyqa', 'newuoa', 'bobyqa', 'lincoa', 'cobyla']:
@@ -34,7 +32,6 @@ def configuration(parent_package='', top_path=None):
         sources.extend(fsrc.glob('*.f'))
         config.add_extension(f'f{alg}',
                              sources=list(map(str, sources)),
-                             include_dirs=[get_numpy_include_dirs()],
                              **numpy_nodepr_api)
 
         fsrc = Path(fsrc_c_dir, alg)
@@ -42,7 +39,6 @@ def configuration(parent_package='', top_path=None):
         sources.extend(fsrc.glob('*.f'))
         config.add_extension(f'f{alg}_classical',
                              sources=list(map(str, sources)),
-                             include_dirs=[get_numpy_include_dirs()],
                              **numpy_nodepr_api)
 
     config.add_data_dir('tests')

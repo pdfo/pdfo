@@ -11,9 +11,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   build_wheels:
-    name: Build wheel for cp${{ matrix.python }}-${{ matrix.platform_id }}-${{ matrix.manylinux_image }}
+    name: Build wheel for cp${{ matrix.python }}-${{ matrix.platform }}-${{ matrix.manylinux_image }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -21,173 +25,129 @@ jobs:
       matrix:
         include:
           # 64-bit Windows
-          - os: windows-latest
+          - os: windows-2019
             python: 37
-            bitness: 64
-            platform_id: win_amd64
-          - os: windows-latest
+            platform: win_amd64
+          - os: windows-2019
             python: 38
-            bitness: 64
-            platform_id: win_amd64
-          - os: windows-latest
+            platform: win_amd64
+          - os: windows-2019
             python: 39
-            bitness: 64
-            platform_id: win_amd64
-          - os: windows-latest
+            platform: win_amd64
+          - os: windows-2019
             python: 310
-            bitness: 64
-            platform_id: win_amd64
+            platform: win_amd64
 
           # 64-bit Linux manylinux2010
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             python: 37
-            bitness: 64
-            platform_id: manylinux_x86_64
+            platform: manylinux_x86_64
             manylinux_image: manylinux2010
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             python: 38
-            bitness: 64
-            platform_id: manylinux_x86_64
+            platform: manylinux_x86_64
             manylinux_image: manylinux2010
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             python: 39
-            bitness: 64
-            platform_id: manylinux_x86_64
+            platform: manylinux_x86_64
             manylinux_image: manylinux2010
 
           # 32-bit Linux manylinux2010
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             python: 37
-            bitness: 32
-            platform_id: manylinux_i686
+            platform: manylinux_i686
             manylinux_image: manylinux2010
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             python: 38
-            bitness: 32
-            platform_id: manylinux_i686
+            platform: manylinux_i686
             manylinux_image: manylinux2010
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             python: 39
-            bitness: 32
-            platform_id: manylinux_i686
+            platform: manylinux_i686
             manylinux_image: manylinux2010
 
           # 64-bit Linux manylinux2014 x86_64
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             python: 37
-            bitness: 64
-            platform_id: manylinux_x86_64
+            platform: manylinux_x86_64
             manylinux_image: manylinux2014
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             python: 38
-            bitness: 64
-            platform_id: manylinux_x86_64
+            platform: manylinux_x86_64
             manylinux_image: manylinux2014
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             python: 39
-            bitness: 64
-            platform_id: manylinux_x86_64
+            platform: manylinux_x86_64
             manylinux_image: manylinux2014
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             python: 310
-            bitness: 64
-            platform_id: manylinux_x86_64
+            platform: manylinux_x86_64
             manylinux_image: manylinux2014
 
           # 64-bit Linux manylinux2014 aarch64
           - os: [self-hosted, Linux, ARM64]
             python: 37
-            bitness: 64
-            platform_id: manylinux_aarch64
+            platform: manylinux_aarch64
             manylinux_image: manylinux2014
           - os: [self-hosted, Linux, ARM64]
             python: 38
-            bitness: 64
-            platform_id: manylinux_aarch64
+            platform: manylinux_aarch64
             manylinux_image: manylinux2014
           - os: [self-hosted, Linux, ARM64]
             python: 39
-            bitness: 64
-            platform_id: manylinux_aarch64
+            platform: manylinux_aarch64
             manylinux_image: manylinux2014
           - os: [self-hosted, Linux, ARM64]
             python: 310
-            bitness: 64
-            platform_id: manylinux_aarch64
+            platform: manylinux_aarch64
             manylinux_image: manylinux2014
 
-          # macOS x86_64
-          - os: macos-latest
-            bitness: 64
-            python: 37
-            platform_id: macosx_x86_64
-          - os: macos-latest
-            bitness: 64
+          # 64-bit macOS x86_64 and arm64
+          - os: macos-10.15
             python: 38
-            platform_id: macosx_x86_64
-          - os: macos-latest
-            bitness: 64
+            platform: macosx_*
+          - os: macos-10.15
             python: 39
-            platform_id: macosx_x86_64
-          - os: macos-latest
-            bitness: 64
+            platform: macosx_*
+          - os: macos-10.15
             python: 310
-            platform_id: macosx_x86_64
-
-          # macOS arm64
-          # - os: macos-latest
-          #   bitness: 64
-          #   python: 38
-          #   platform_id: macosx_arm64
-          # - os: macos-latest
-          #   bitness: 64
-          #   python: 39
-          #   platform_id: macosx_arm64
-          # - os: macos-latest
-          #   bitness: 64
-          #   python: 310
-          #   platform_id: macosx_arm64
+            platform: macosx_*
 
     steps:
-      - name: Provide gfortran (Windows)
-        if: runner.os == 'Windows'
+      - name: Provide gfortran on Windows
+        if: ${{ runner.os == 'Windows' }}
         uses: msys2/setup-msys2@v2
 
-      - name: Tell distutils to use mingw (Windows)
-        if: runner.os == 'Windows'
+      - name: Tell distutils to use mingw on Windows
+        if: ${{ runner.os == 'Windows' }}
         run: echo "[build]`ncompiler=mingw32" | Out-File -Encoding ASCII ~/pydistutils.cfg
 
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Setup Python
-        if: ${{ matrix.platform_id != 'manylinux_aarch64' }}
+        if: ${{ matrix.platform != 'manylinux_aarch64' }}
         uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
 
       - name: Build wheels on manylinux_aarch64
-        if: ${{ matrix.platform_id == 'manylinux_aarch64' }}
-        run: bash build_tools/github/build_wheels.sh
+        if: ${{ matrix.platform == 'manylinux_aarch64' }}
+        uses: pypa/cibuildwheel@v2.3.1
         env:
-          CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
-          CIBW_ARCHS: all
+          CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
           CIBW_MANYLINUX_AARCH64_IMAGE: ${{ matrix.manylinux_image }}
           CIBW_ENVIRONMENT: PIP_DEFAULT_TIMEOUT=21600 PIP_EXTRA_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
-          CIBW_TEST_COMMAND: bash {project}/build_tools/github/test_wheels.sh
-          CIBW_BUILD_VERBOSITY: 1
 
       - name: Build wheels on other platforms
-        if: ${{ matrix.platform_id != 'manylinux_aarch64' }}
-        run: bash build_tools/github/build_wheels.sh
+        if: ${{ matrix.platform != 'manylinux_aarch64' }}
+        uses: pypa/cibuildwheel@v2.3.1
         env:
-          CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
-          CIBW_ARCHS: all
+          CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
           CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.manylinux_image }}
           CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.manylinux_image }}
-          CIBW_TEST_SKIP: "*-macosx_arm64"
-          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: bash build_tools/github/repair_windows_wheels.sh {wheel} {dest_dir}
-          CIBW_BEFORE_BUILD_WINDOWS: python -m pip install delvewheel
-          CIBW_TEST_COMMAND: bash {project}/build_tools/github/test_wheels.sh
-          CIBW_BUILD_VERBOSITY: 1
 
       - name: Store artifacts
         uses: actions/upload-artifact@v2
@@ -197,7 +157,7 @@ jobs:
   # Build the source distribution
   build_sdist:
     name: Build source distribution
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout repository
@@ -205,6 +165,8 @@ jobs:
 
       - name: Setup Python
         uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
 
       - name: Build source distribution
         run: bash build_tools/github/build_source.sh
@@ -220,7 +182,7 @@ jobs:
   # Upload the distributions to Anaconda
   upload_anaconda:
     name: Upload to Anaconda
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: ${{ github.event_name != 'pull_request' }}
     needs: [build_wheels, build_sdist]
 
@@ -230,6 +192,8 @@ jobs:
 
       - name: Setup Python
         uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
