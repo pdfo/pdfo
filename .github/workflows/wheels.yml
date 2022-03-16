@@ -55,7 +55,7 @@ jobs:
           # 32-bit Linux manylinux2010
           - os: ubuntu-20.04
             python: 37
-            platform_id: manylinux_i686
+            platform: manylinux_i686
             manylinux_image: manylinux2010
           - os: ubuntu-20.04
             python: 38
@@ -128,13 +128,13 @@ jobs:
           submodules: true
 
       - name: Setup Python
-        if: ${{ matrix.platform_id != 'manylinux_aarch64' }}
+        if: ${{ matrix.platform != 'manylinux_aarch64' }}
         uses: actions/setup-python@v3
         with:
           python-version: '3.x'
 
       - name: Build wheels on manylinux_aarch64
-        if: ${{ matrix.platform_id == 'manylinux_aarch64' }}
+        if: ${{ matrix.platform == 'manylinux_aarch64' }}
         uses: pypa/cibuildwheel@v2.3.1
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
@@ -142,7 +142,7 @@ jobs:
           CIBW_ENVIRONMENT: PIP_DEFAULT_TIMEOUT=21600 PIP_EXTRA_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
 
       - name: Build wheels on other platforms
-        if: ${{ matrix.platform_id != 'manylinux_aarch64' }}
+        if: ${{ matrix.platform != 'manylinux_aarch64' }}
         uses: pypa/cibuildwheel@v2.3.1
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
