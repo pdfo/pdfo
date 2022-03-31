@@ -8,8 +8,6 @@
 Dedicated to late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
 FRS (1936&ndash;2015).
 
-We look forward to your feedback! Thank you very much!
-
 ## Getting started
 
 PDFO (Powell's Derivative-Free Optimization solvers) is a cross-platform package
@@ -26,12 +24,15 @@ under `fsrc` for [Powell's](https://www.zhangzk.net/powell.html) original code.
 
 ## Acknowledgments
 
-The development of this package is funded by the [UGC](https://www.ugc.edu.hk/)
-of Hong Kong (ref. PolyU 253012/17P, PolyU 153054/20P, and
-[HKPFS](https://cerg1.ugc.edu.hk/hkpfs/) PF18-24698), and The Hong Kong
-Polytechnic University.
-
 PDFO is dedicated to the memory of late Professor [Powell](https://www.zhangzk.net/powell.html)
-with gratitude for his inspiration and for the treasures he left to us. We are
-also grateful to Professor [Ya-xiang Yuan](http://lsec.cc.ac.cn/~yyx/) for his
+with gratitude for his inspiration and for the treasures he left to us. 
+
+We are grateful to Professor [Ya-xiang Yuan](http://lsec.cc.ac.cn/~yyx/) for his
 everlasting encouragement and support.
+
+The development of PDFO is a long-term project, which would not be sustainable without the continued
+funds from the [Hong Kong Research Grants Council](https://www.ugc.edu.hk/eng/rgc) 
+(ref. PolyU 253012/17P, PolyU 153054/20P, and PolyU 153066/21P), 
+the [Hong Kong Ph.D. Fellowship Scheme](https://cerg1.ugc.edu.hk/hkpfs) (ref. PF18-24698), 
+and the [Hong Kong Polytechnic University](https://www.polyu.edu.hk) (PolyU), 
+in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/ama) (AMA).
