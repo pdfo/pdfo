@@ -4,6 +4,10 @@ __pycache__/
 *$py.class
 
 # C/Fortran extensions
+fortranobject.c
+fortranobject.h
+*-f2pywrappers2.f90
+*module.c
 *.so
 *.pyd
 *.mod

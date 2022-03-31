@@ -133,6 +133,8 @@ def setup_package():
         maintainer='Tom M. Ragonneau and Zaikun Zhang',
         maintainer_email='pdfocode@gmail.com',
         version=pdfo.__version__,
+        packages=['pdfo'],
+        package_dir={'': 'python'},
         description=DOCLINES[0],
         long_description='\n'.join(DOCLINES[2:]),
         long_description_content_type='text/plain',
