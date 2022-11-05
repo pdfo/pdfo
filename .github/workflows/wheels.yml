@@ -108,6 +108,7 @@ jobs:
             python: 310
             platform: manylinux_aarch64
             manylinux_image: manylinux2014
+          - os: [self-hosted, Linux, ARM64]
             python: 311
             platform: manylinux_aarch64
             manylinux_image: manylinux2014
