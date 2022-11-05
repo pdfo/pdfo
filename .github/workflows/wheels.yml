@@ -37,6 +37,9 @@ jobs:
           - os: windows-2019
             python: 310
             platform: win_amd64
+          - os: windows-2019
+            python: 311
+            platform: win_amd64
 
           # 64-bit Linux manylinux2010
           - os: ubuntu-20.04
@@ -83,6 +86,10 @@ jobs:
             python: 310
             platform: manylinux_x86_64
             manylinux_image: manylinux2014
+          - os: ubuntu-20.04
+            python: 311
+            platform: manylinux_x86_64
+            manylinux_image: manylinux2014
 
           # 64-bit Linux manylinux2014 aarch64
           - os: [self-hosted, Linux, ARM64]
@@ -101,6 +108,9 @@ jobs:
             python: 310
             platform: manylinux_aarch64
             manylinux_image: manylinux2014
+            python: 311
+            platform: manylinux_aarch64
+            manylinux_image: manylinux2014
 
           # 64-bit macOS x86_64 and arm64
           - os: macos-10.15
@@ -111,6 +121,9 @@ jobs:
             platform: macosx_*
           - os: macos-10.15
             python: 310
+            platform: macosx_*
+          - os: macos-10.15
+            python: 311
             platform: macosx_*
 
     steps:
