@@ -149,7 +149,7 @@ jobs:
 
       - name: Build wheels on manylinux_aarch64
         if: ${{ matrix.platform == 'manylinux_aarch64' }}
-        uses: pypa/cibuildwheel@v2.3.1
+        uses: pypa/cibuildwheel@v2.11.3
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
           CIBW_MANYLINUX_AARCH64_IMAGE: ${{ matrix.manylinux_image }}
@@ -157,7 +157,7 @@ jobs:
 
       - name: Build wheels on other platforms
         if: ${{ matrix.platform != 'manylinux_aarch64' }}
-        uses: pypa/cibuildwheel@v2.3.1
+        uses: pypa/cibuildwheel@v2.11.3
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
           CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.manylinux_image }}
