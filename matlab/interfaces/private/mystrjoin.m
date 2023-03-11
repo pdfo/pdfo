@@ -7,7 +7,7 @@ function str = mystrjoin(C, delimiter)
 %               Department of Applied Mathematics,
 %               The Hong Kong Polytechnic University
 %
-%   Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+%   Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
 %   ***********************************************************************
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -90,7 +90,7 @@ class OptimizeResult(dict):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
 
     def __delattr__(self, key):
@@ -178,7 +178,7 @@ class Bounds:
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
 
     def __init__(self, lb=None, ub=None):
@@ -249,7 +249,7 @@ class LinearConstraint:
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
 
     def __init__(self, a=None, lb=None, ub=None):
@@ -340,7 +340,7 @@ class NonlinearConstraint:
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
 
     def __init__(self, fun, lb=None, ub=None):
@@ -510,7 +510,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     fun_name = stack()[0][3]  # name of the current function
     list_warnings = []
@@ -891,7 +891,7 @@ def _bounds_validation(invoker, bounds, lenx0):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     if bounds is not None and (not hasattr(bounds, '__len__') or len(bounds) != 0):
         try:
@@ -988,7 +988,7 @@ def _constraints_validation(invoker, constraints, lenx0, fixed_indices, fixed_va
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     if constraints is not None:
         try:
@@ -1363,7 +1363,7 @@ def _eliminate_linear_equalities(invoker, constraints, x0, lb, ub, prob_info, li
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     if not isinstance(constraints, dict) or not ({'linear', 'nonlinear'} <= set(constraints.keys())):
         raise ValueError('{}: UNEXPECTED ERROR: the constraint should be defined as internal type.'.format(invoker))
@@ -1605,7 +1605,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     # NOTE: We treat field names case-sensitively
 
@@ -2036,7 +2036,7 @@ def _constr_violation(invoker, x, lb, ub, constraints, prob_info):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     if not (hasattr(x, '__len__') and hasattr(lb, '__len__') and hasattr(ub, '__len__')):
         raise TypeError('{}: UNEXPECTED ERROR: the variable vector and the bounds should be vectors.'.format(invoker))
@@ -2128,7 +2128,7 @@ def _problem_type(lb, ub, constraints):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     # possible solvers
     fun_name = stack()[0][3]  # name of the current function
@@ -2181,7 +2181,7 @@ def _linear_constraints_constr(linear_constraint):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     fun_name = stack()[0][3]  # name of the current function
 
@@ -2237,7 +2237,7 @@ def _fullx(freex_value, fixedx_value, freex, fixedx):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     fun_name = stack()[0][3]  # name of the current function
 
@@ -2282,7 +2282,7 @@ def _prob_solv_match(problem_type, solver):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     # possible solvers
     fun_name = stack()[0][3]  # name of the current function
@@ -2359,7 +2359,7 @@ def _scale_problem(fun, x0, lb, ub, constraints, list_warnings):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     # possible solvers
     fun_name = stack()[0][3]  # name of the current function
@@ -2486,7 +2486,7 @@ def _solver_selection(invoker, method, options, prob_info, list_warnings):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     # possible solvers
     fun_name = stack()[0][3]  # name of the current function
@@ -2715,7 +2715,7 @@ def _project(x0, lb, ub, constraints, options=None):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     # possible solvers
     fun_name = stack()[0][3]  # name of the current function
@@ -2888,7 +2888,7 @@ def _augmented_linear_constraint(n, bounds, constraints):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) < 3 or stack()[1][3].lower() not in invoker_list:
@@ -2986,7 +2986,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     # With extreme barrier (implemented when options['classical']=False), all the function values that are NaN or larger
     # than hugefun are replaced by hugefun; all the constraint values that are NaN or larger than hugecon are replaced
@@ -3618,7 +3618,7 @@ def import_error_so(missing_file=None):
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
 
-    Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     invoker = stack()[1][3].lower()
 

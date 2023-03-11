@@ -4,7 +4,7 @@ function [x, fx, exitflag, output] = uobyqa(varargin)
 %
 %   minimize    fun(x).
 %
-%   In the backend, UOBYQA calls late Professor M.J.D. Powell's Fotran code 
+%   In the backend, UOBYQA calls the late Professor M.J.D. Powell's Fotran code 
 %   with the same name. The algorithm is described in [M. J. D. Powell,
 %   UOBYQA: unconstrained optimization by quadratic approximation. Math.
 %   Program., 92(B):555--582, 2002].
@@ -118,7 +118,7 @@ function [x, fx, exitflag, output] = uobyqa(varargin)
 %               Department of Applied Mathematics,
 %               The Hong Kong Polytechnic University.
 %
-%   Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+%   Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
 %   ***********************************************************************
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

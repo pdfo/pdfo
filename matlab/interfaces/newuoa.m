@@ -4,7 +4,7 @@ function [x, fx, exitflag, output] = newuoa(varargin)
 %
 %   minimize    fun(x).
 %
-%   In the backend, NEWUOA calls late Professor M.J.D. Powell's Fotran code 
+%   In the backend, NEWUOA calls the late Professor M.J.D. Powell's Fotran code 
 %   with the same name. The algorithm is described in [M. J. D. Powell,
 %   The NEWUOA software for unconstrained optimization without derivatives, 
 %   In Large-Scale Nonlinear Optimization, eds. G. Di Pillo and M. Roma, 
@@ -121,7 +121,7 @@ function [x, fx, exitflag, output] = newuoa(varargin)
 %               Department of Applied Mathematics,
 %               The Hong Kong Polytechnic University.
 %
-%   Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+%   Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
 %   ***********************************************************************
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

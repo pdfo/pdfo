@@ -7,7 +7,7 @@ function [x, fx, exitflag, output] = lincoa(varargin)
 %               Aeq * x = beq,
 %               lb <= x <= ub.
 %
-%   In the backend, LINCOA calls late Professor M.J.D. Powell's Fotran code 
+%   In the backend, LINCOA calls the late Professor M.J.D. Powell's Fotran code 
 %   with the same name.
 %
 %   The interface of LINCOA is similar to that of function FMINCON included 
@@ -163,7 +163,7 @@ function [x, fx, exitflag, output] = lincoa(varargin)
 %               Department of Applied Mathematics,
 %               The Hong Kong Polytechnic University
 %
-%   Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+%   Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
 %   ***********************************************************************
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

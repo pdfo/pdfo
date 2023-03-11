@@ -9,7 +9,7 @@ function [x, fx, exitflag, output] = pdfo(varargin)
 %               cineq(x) <= 0,
 %               ceq(x) = 0.
 %
-%   In the backend, PDFO calls late Professor M.J.D. Powell's Fotran code 
+%   In the backend, PDFO calls the late Professor M.J.D. Powell's Fotran code 
 %   UOBYQA, NEWUOA, BOBYQA, LINCOA, and COBYLA. 
 %
 %   The interface of PDFO is the same as that of function FMINCON included 
@@ -202,7 +202,7 @@ function [x, fx, exitflag, output] = pdfo(varargin)
 %               Department of Applied Mathematics,
 %               The Hong Kong Polytechnic University
 %
-%   Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+%   Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
 %   ***********************************************************************
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

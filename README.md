@@ -5,13 +5,13 @@
 [![pypi](https://img.shields.io/pypi/v/pdfo)](https://pypi.org/project/pdfo/)
 [![download](https://img.shields.io/pypi/dm/pdfo?label=pypi%20downloads)](https://pypi.org/project/pdfo/)
 
-Dedicated to late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
+Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
 FRS (1936&ndash;2015).
 
 ## Getting started
 
 PDFO (Powell's Derivative-Free Optimization solvers) is a cross-platform package
-providing interfaces for using late Professor [M. J. D. Powell's](https://www.zhangzk.net/powell.html)
+providing interfaces for using the late Professor [M. J. D. Powell's](https://www.zhangzk.net/powell.html)
 derivative-free optimization solvers, including UOBYQA, NEWUOA, BOBYQA, LINCOA,
 and COBYLA. See https://www.pdfo.net for more information.
 
@@ -24,7 +24,7 @@ under `fsrc` for [Powell's](https://www.zhangzk.net/powell.html) original code.
 
 ## Acknowledgments
 
-PDFO is dedicated to the memory of late Professor [Powell](https://www.zhangzk.net/powell.html)
+PDFO is dedicated to the memory of the late Professor [Powell](https://www.zhangzk.net/powell.html)
 with gratitude for his inspiration and for the treasures he left to us. 
 
 We are grateful to Professor [Ya-xiang Yuan](http://lsec.cc.ac.cn/~yyx/) for his

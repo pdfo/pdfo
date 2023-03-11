@@ -6,7 +6,7 @@
 !     Department of Applied Mathematics,
 !     The Hong Kong Polytechnic University.
 !
-! Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+! Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
 !
 ! This function returns in huge_value the upper bound for the Fortran type data_type. If the given type is unknown,
 ! this function will return -huge(0.0D0) in huge_value.

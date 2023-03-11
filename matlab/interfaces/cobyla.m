@@ -9,7 +9,7 @@ function [x, fx, exitflag, output] = cobyla(varargin)
 %               cineq(x) <= 0,
 %               ceq(x) = 0.
 %
-%   In the backend, COBYLA calls late Professor M.J.D. Powell's Fotran code
+%   In the backend, COBYLA calls the late Professor M.J.D. Powell's Fotran code
 %   with the same name. The algorithm is described in [M. J. D. Powell,
 %   A direct search optimization method that models the objective and
 %   constraint functions by linear interpolation, In Advances in Optimization
@@ -185,7 +185,7 @@ function [x, fx, exitflag, output] = cobyla(varargin)
 %               Department of Applied Mathematics,
 %               The Hong Kong Polytechnic University.
 %
-%   Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+%   Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
 %   ***********************************************************************
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

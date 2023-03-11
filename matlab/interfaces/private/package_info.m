@@ -7,7 +7,7 @@ function information = package_info(request)
 %               Department of Applied Mathematics,
 %               The Hong Kong Polytechnic University
 %
-%   Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+%   Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
 %   ***********************************************************************
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -30,7 +30,7 @@ else
     invoker = callstack(2).name; % Name of the function who calls this function
 end
 
-about = 'PDFO (Powell''s Derivative-Free Optimization solvers) is a cross-platform package providing interfaces for using late Professor M. J. D. Powell''s derivative-free optimization solvers, including UOBYQA, NEWUOA, BOBYQA, LINCOA, and COBYLA.';
+about = 'PDFO (Powell''s Derivative-Free Optimization solvers) is a cross-platform package providing interfaces for using the late Professor M. J. D. Powell''s derivative-free optimization solvers, including UOBYQA, NEWUOA, BOBYQA, LINCOA, and COBYLA.';
 
 author = 'Tom M. Ragonneau and Zaikun Zhang';
 
@@ -50,7 +50,7 @@ date = 'October, 2021';
 
 status = 'Production';
 
-message = 'Dedicated to late Professor M. J. D. Powell FRS (29 July 1936--19 April 2015).';
+message = 'Dedicated to the late Professor M. J. D. Powell FRS (29 July 1936--19 April 2015).';
 
 copyright = sprintf('Copyright 2020--%d, Tom M. Ragonneau and Zaikun Zhang', year(datetime));
 

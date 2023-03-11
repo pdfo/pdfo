@@ -6,7 +6,7 @@ C               and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
 C               Department of Applied Mathematics,
 C               The Hong Kong Polytechnic University
 C
-C   Dedicated to late Professor M. J. D. Powell FRS (1936--2015).
+C   Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
 C **********************************************************************
 
 C Remarks:
