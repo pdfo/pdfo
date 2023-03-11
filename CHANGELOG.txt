@@ -23,10 +23,10 @@ Public beta release of PDFO.
   DO loops and comparison operators.
 - All constraint violations are computed absolutely (instead of relatively)
 - Modify the scaling behavior. Scaling is performed only if all variables
-  have both upper and lower bounds. 
-- Change the default rhobeg to 0.5 when the problem is scaled. 
+  have both upper and lower bounds.
+- Change the default rhobeg to 0.5 when the problem is scaled.
 - Change the default rhobeg to min(ub-lb)/4 when the solver is BOBYQA.
-- Previously, if rhobeg is revised to be different from the default value, 
+- Previously, if rhobeg is revised to be different from the default value,
   then rhoend is set to min(rhobeg*rhoend_default/rhobeg_default, rhoend),
   where rhobeg_default = 1 and rhoend_default = 1e-6; now it is set to
   min(0.1*rhobeg, rhoend).
@@ -49,7 +49,7 @@ Public beta release of PDFO.
   avoid such a situation.
 - In last version, the user-specified npt, rhobeg, and rhoend are ignored if
   the solver selection function is invoked. They are taken into account now.
-- Python version: previously, the nonlinear constraints defined as a dictionary 
+- Python version: previously, the nonlinear constraints defined as a dictionary
   cannot include NumPy functions of type <ufunc>. It is fixed now.
 
 ## [1.1] - 2021-08-13
@@ -74,3 +74,8 @@ Public beta release of PDFO.
 ### Fixed
 - Python version: the call to the objective function during the debugging
   mechanism did not include the extra arguments, which are added now.
+
+## [NEXT RELEASE] - 2023-xx-yy
+
+### Changed
+- The license is changed from GNU LGPLv3+ to the 3-clause BSD license.
