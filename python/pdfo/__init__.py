@@ -26,7 +26,7 @@ __author__ = 'Tom M. Ragonneau and Zaikun Zhang'
 __copyright__ = f'Copyright 2020--{datetime.now().year}, ' \
                 f'Tom M. Ragonneau and Zaikun Zhang'
 __credits__ = ['Tom M. Ragonneau', 'Zaikun Zhang', 'Antoine Dechaume']
-__license__ = 'LGPLv3+'
+__license__ = '3-Clause BSD'
 __version__ = '1.2'
 __date__ = 'October, 2021'
 __maintainer__ = 'Tom M. Ragonneau and Zaikun Zhang'

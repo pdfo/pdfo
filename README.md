@@ -1,7 +1,7 @@
 # PDFO: Powell's Derivative-Free Optimization solvers
 
 [![wheels](https://github.com/pdfo/pdfo/actions/workflows/wheels.yml/badge.svg)](https://github.com/pdfo/pdfo/actions/workflows/wheels.yml)
-[![license](https://img.shields.io/badge/license-LGPLv3+-blue)](https://github.com/pdfo/pdfo/blob/main/LICENCE.txt)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![pypi](https://img.shields.io/pypi/v/pdfo)](https://pypi.org/project/pdfo/)
 [![download](https://img.shields.io/pypi/dm/pdfo?label=pypi%20downloads)](https://pypi.org/project/pdfo/)
 
@@ -25,14 +25,14 @@ under `fsrc` for [Powell's](https://www.zhangzk.net/powell.html) original code.
 ## Acknowledgments
 
 PDFO is dedicated to the memory of the late Professor [Powell](https://www.zhangzk.net/powell.html)
-with gratitude for his inspiration and for the treasures he left to us. 
+with gratitude for his inspiration and for the treasures he left to us.
 
 We are grateful to Professor [Ya-xiang Yuan](http://lsec.cc.ac.cn/~yyx/) for his
 everlasting encouragement and support.
 
 The development of PDFO is a long-term project, which would not be sustainable without the continued
-funds from the [Hong Kong Research Grants Council](https://www.ugc.edu.hk/eng/rgc) 
-(ref. PolyU 253012/17P, PolyU 153054/20P, and PolyU 153066/21P), 
-the [Hong Kong Ph.D. Fellowship Scheme](https://cerg1.ugc.edu.hk/hkpfs) (ref. PF18-24698), 
-and the [Hong Kong Polytechnic University](https://www.polyu.edu.hk) (PolyU), 
+funds from the [Hong Kong Research Grants Council](https://www.ugc.edu.hk/eng/rgc)
+(ref. PolyU 253012/17P, PolyU 153054/20P, and PolyU 153066/21P),
+the [Hong Kong Ph.D. Fellowship Scheme](https://cerg1.ugc.edu.hk/hkpfs) (ref. PF18-24698),
+and the [Hong Kong Polytechnic University](https://www.polyu.edu.hk) (PolyU),
 in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/ama) (AMA).

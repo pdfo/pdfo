@@ -140,7 +140,7 @@ def setup_package():
         long_description_content_type='text/plain',
         keywords='Powell Derivative-Free Optimization UOBYQA NEWUOA BOBYQA '
                  'LINCOA COBYLA',
-        license='GNU Lesser General Public License v3 or later (LGPLv3+)',
+        license='3-Clause BSD',
         url='https://www.pdfo.net',
         download_url='https://pypi.org/project/pdfo/#files',
         project_urls={
@@ -153,7 +153,7 @@ def setup_package():
             'Intended Audience :: Developers',
             'Intended Audience :: Education',
             'Intended Audience :: Science/Research',
-            'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
+            'License :: OSI Approved :: 3-Clause BSD',
             'Operating System :: Unix',
             'Operating System :: MacOS',
             'Operating System :: POSIX :: Linux',
