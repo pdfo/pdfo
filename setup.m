@@ -219,7 +219,12 @@ try
 % case of an error.
 
     % Compilation of function gethuge
-    mex(mex_options{:}, '-output', 'gethuge', fullfile(fsrc, 'pdfoconst.F'), fullfile(gateways, 'gethuge.F'));
+    if debug_flag
+        mex(mex_options{:}, '-output', 'gethuge', fullfile(fsrc, 'pdfoconst.F'), fullfile(gateways, 'gethuge.F'));
+    else
+        % With `evalc`, no warning will be emitted; if warnings are desirable, set options.debug to true
+        evalc('mex(mex_options{:}, ''-output'', ''gethuge'', fullfile(fsrc, ''pdfoconst.F''), fullfile(gateways, ''gethuge.F''))');
+    end
 
     for isol = 1 : length(solver_list)
         solver = solver_list{isol};
