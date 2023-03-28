@@ -166,7 +166,7 @@ end
 
 % Set MEX options.
 if debug_flag
-    mex_options = [{opt_option}, {ad_option}];
+    mex_options = [{opt_option}, {ad_option}, '-v'];
 else
     mex_options = [{opt_option}, {ad_option}, '-silent'];
 end
