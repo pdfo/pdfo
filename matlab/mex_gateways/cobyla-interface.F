@@ -223,8 +223,8 @@ C n_int is used when a variable of type INTEGER is needed
       call mxCopyPtrToReal8(MX_GET_DBLE(prhs(3)), x(1:n), n)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
 
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(4)), [rhobeg], mwOne)
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(5)), [rhoend], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(4)), rhobeg, mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(5)), rhoend, mwOne)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
 C Note the mwOne is of type mwSize; should not use literal constant 1
 C NEVER use literal constants in Fortran mex.
@@ -238,11 +238,11 @@ C other inputs (e.g., n, maxfun, npt) because the Fortran code does it
       end if
 
       call mxCopyPtrToReal8(MX_GET_DBLE(prhs(6)),
-     &     [maxfun_r], mwOne)
+     &     maxfun_r, mwOne)
       maxfun = int(maxfun_r, kind(maxfun))
 C maxfun will be an input to COBYLA, which requires maxfun to be
 C an INTEGER (not necessary the same as mwSize)
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(7)), [m_r], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(7)), m_r, mwOne)
       m = int(m_r, kind(m))
       m_int = int(m_r, kind(m_int))
       if (m .ne. m_int) then
@@ -252,7 +252,7 @@ C an INTEGER (not necessary the same as mwSize)
 C m will be used in mxCopyPtrToReal8, requiring it to be of type mwSize
 C m_int will be an input to COBYLA, which requires it to be
 C an INTEGER (not necessary the same as mwSize)
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(8)), [ftarget], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(8)), ftarget, mwOne)
 
       if (m .gt. 0 .and. m .ne. mxGetM(prhs(9))) then
 C m is number of constraints
@@ -429,7 +429,7 @@ C integer*4 mexCallMATLAB(integer*4 nlhs, mwPointer plhs, integer*4 nrhs, mwPoin
      & 'fcobyla: The objective function should return a scalar value.')
       end if
 
-      call mxCopyPtrToReal8(MX_GET_DBLE(plhs(1)), [funval], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(plhs(1)), funval, mwOne)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
 
 C Use extreme barrier to cope with 'hidden constraints'

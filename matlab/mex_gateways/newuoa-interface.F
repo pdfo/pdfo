@@ -203,8 +203,8 @@ C n_int is uUsed when a variable of type INTEGER is needed
       call mxCopyPtrToReal8(MX_GET_DBLE(prhs(2)), x(1:n), n)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
 
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(3)), [rhobeg], mwOne)
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(4)), [rhoend], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(3)), rhobeg, mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(4)), rhoend, mwOne)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
 C Note the mwOne is of type mwSize; should not use literal constant 1
 C NEVER use literal constants in Fortran mex.
@@ -218,13 +218,13 @@ C other inputs (e.g., n, maxfun, npt) because the Fortran code does it
       end if
 
       call mxCopyPtrToReal8(MX_GET_DBLE(prhs(5)),
-     &     [maxfun_r], mwOne)
+     &     maxfun_r, mwOne)
       maxfun = int(maxfun_r, kind(maxfun))
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(6)), [npt_r], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(6)), npt_r, mwOne)
       npt = int(npt_r, kind(npt))
 C maxfun and npt will be inputs to NEWUOA, which requires them to be
 C INTEGERs (not necessary the same as mwSize)
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(7)), [ftarget], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(7)), ftarget, mwOne)
 
 C Allocate workspace
       if (allocated(w)) deallocate (w)
@@ -343,7 +343,7 @@ C integer*4 mexCallMATLAB(integer*4 nlhs, mwPointer plhs, integer*4 nrhs, mwPoin
      & 'fnewuoa: The objective function should return a scalar value.')
       end if
 
-      call mxCopyPtrToReal8(MX_GET_DBLE(plhs(1)), [funval], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(plhs(1)), funval, mwOne)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
 
 C Use extreme barrier to cope with 'hidden constraints'

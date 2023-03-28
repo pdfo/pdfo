@@ -243,8 +243,8 @@ C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
       end if
       call mxCopyPtrToReal8(MX_GET_DBLE(prhs(4)), xu(1:n), n)
 
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(5)), [rhobeg], mwOne)
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(6)), [rhoend], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(5)), rhobeg, mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(6)), rhoend, mwOne)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
 C Note the mwOne is of type mwSize; should not use literal constant 1
 C NEVER use literal constants in Fortran mex.
@@ -258,15 +258,15 @@ C other inputs (e.g., n, maxfun, npt) because the Fortran code does it
       end if
 
       call mxCopyPtrToReal8(MX_GET_DBLE(prhs(7)),
-     &     [maxfun_r], mwOne)
+     &     maxfun_r, mwOne)
       maxfun = int(maxfun_r, kind(maxfun))
 C maxfun will be an input to BOBYQA, which requires maxfun to be
 C an INTEGER (not necessary the same as mwSize)
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(8)), [npt_r], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(8)), npt_r, mwOne)
       npt = int(npt_r, kind(npt))
 C npt will be an input to BOBYQA, which requires maxfun to be
 C an INTEGER (not necessary the same as mwSize)
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(9)), [ftarget], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(9)), ftarget, mwOne)
 
 C Allocate workspace
       if (allocated(w)) deallocate (w)
@@ -422,7 +422,7 @@ C integer*4 mexCallMATLAB(integer*4 nlhs, mwPointer plhs, integer*4 nrhs, mwPoin
      &    'fbobyqa: NULL pointer returned when mex calls fun.')
       else
           call mxCopyPtrToReal8(MX_GET_DBLE(plhs(1)),
-     &         [funval], mwOne)
+     &         funval, mwOne)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
       end if
 
