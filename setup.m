@@ -335,7 +335,7 @@ addpath(examples);
 fprintf('\nYou may also run ''testpdfo'' to test the package on a few examples.\n\n');
 
 if ~path_saved % All the path-saving attempts failed
-    fprintf('*** To use the pacakge in other MATLAB sessions, do one of the following. ***\n\n');
+    fprintf('*** To use the package in other MATLAB sessions, do one of the following. ***\n\n');
     fprintf('- EITHER run ''savepath'' right now if you have the permission to do so.\n\n');
     fprintf('- OR add the following line to your startup script\n');
     fprintf('  (see https://www.mathworks.com/help/matlab/ref/startup.html for information):\n\n');
