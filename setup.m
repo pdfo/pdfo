@@ -145,9 +145,11 @@ end
 if isempty(options)
     options = struct();
 end
-opt_option = '-O';  % Optimize the object code; this is the default
-if isfield(options, 'debug') && options.debug
+debug_flag = (isfield(options, 'debug') && options.debug);  % Debug or not; default is false
+if debug_flag
     opt_option = '-g';  % Debug mode; -g disables MEX's behavior of optimizing built object code
+else
+    opt_option = '-O';  % Optimize the object code; this is the default
 end
 
 % Detect whether we are running a 32-bit MATLAB, where maxArrayDim = 2^31-1,
@@ -163,7 +165,11 @@ else
 end
 
 % Set MEX options.
-mex_options = [{opt_option}, {ad_option}, '-silent'];
+if debug_flag
+    mex_options = [{opt_option}, {ad_option}];
+else
+    mex_options = [{opt_option}, {ad_option}, '-silent'];
+end
 
 % Check whether MEX is properly configured.
 fprintf('\nVerifying the set-up of MEX ... \n\n');
@@ -225,7 +231,11 @@ try
         cellfun(@(filename) delete(filename), modo_files);
         % Compile
         src_files = files_with_wildcard(fullfile(fsrc, solver), '*.f');
-        mex(mex_options{:}, '-output', ['f', solver], fullfile(fsrc, 'pdfoconst.F'), src_files{:}, fullfile(gateways, [solver, '-interface.F']));
+        if debug_flag
+            mex(mex_options{:}, '-output', ['f', solver], fullfile(fsrc, 'pdfoconst.F'), src_files{:}, fullfile(gateways, [solver, '-interface.F']));
+        else
+            evalc('mex(mex_options{:}, ''-output'', [''f'', solver], fullfile(fsrc, ''pdfoconst.F''), src_files{:}, fullfile(gateways, [solver, ''-interface.F'']))');
+        end
 
         % Compilation of the 'classical' version of solver
         % Clean up the source file directory
@@ -233,7 +243,11 @@ try
         cellfun(@(filename) delete(filename), modo_files);
         % Compile
         src_files = files_with_wildcard(fullfile(fsrc_classical, solver), '*.f');
-        mex(mex_options{:}, '-output', ['f', solver, '_classical'], fullfile(fsrc, 'pdfoconst.F'), src_files{:}, fullfile(gateways_classical, [solver, '-interface.F']));
+        if debug_flag
+            mex(mex_options{:}, '-output', ['f', solver, '_classical'], fullfile(fsrc, 'pdfoconst.F'), src_files{:}, fullfile(gateways_classical, [solver, '-interface.F']));
+        else
+            evalc('mex(mex_options{:}, ''-output'', [''f'', solver, ''_classical''], fullfile(fsrc, ''pdfoconst.F''), src_files{:}, fullfile(gateways_classical, [solver, ''-interface.F'']))');
+        end
 
         fprintf('Done.\n');
     end

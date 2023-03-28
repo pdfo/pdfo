@@ -1,19 +1,19 @@
 C The mex gateway for COBYLA
 C
 C **********************************************************************
-C   Authors:    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk) 
+C   Authors:    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
 C               and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
 C               Department of Applied Mathematics,
 C               The Hong Kong Polytechnic University
 C **********************************************************************
 
-C Remarks: 
+C Remarks:
 C
 C 1. Be careful with the "kind" and storage size for integer-type
 C (integer, mwSize, mwIndex) variables/functions. Some of them may be
 C 32bit, while they others may be 64bit, depending on the machine, the
 C version of matlab, and the compilation option of mex. Do NOT assume
-C any two of them to be the same. 
+C any two of them to be the same.
 C If ever a Segmentation Fault occurs, check these variables first.
 C
 C 2. Be careful with the line width limit. After preprocessing (macro
@@ -28,13 +28,13 @@ C defined in it. MX_GET_DBLE gets the pointer pointing to a real array.
 #ifdef MX_GET_DBLE
 #undef MX_GET_DBLE
 #endif
-#ifdef mxGetDoubles 
+#ifdef mxGetDoubles
 #define MX_GET_DBLE mxGetDoubles
 #else
-#define MX_GET_DBLE mxGetPr 
+#define MX_GET_DBLE mxGetPr
 #endif
 
-C Fortran code starts 
+C Fortran code starts
 
       module fcobyla ! Some global variables
       use pdfoconst ! See pdfoconst.F, which defines dp, int4, HUGENUM
@@ -48,16 +48,16 @@ C mwOne is used in mxCreateDoubleMatrix and mxCopyPtrToReal8,
 C whose signatures are
 C mwPointer mxCreateDoubleMatrix(mwSize m, mwSize n, integer*4 ComplexFlag)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
- 
+
 C Some global variables
-      mwPointer, save :: fun_ptr, con_ptr 
-C Objective function and constraints (pointers) 
-      mwSize, save :: nf ! Number of function evaluations 
+      mwPointer, save :: fun_ptr, con_ptr
+C Objective function and constraints (pointers)
+      mwSize, save :: nf ! Number of function evaluations
 C nf should be of type mwSize, because it will be later used as an
 C argument of mxCreateDoubleMatrix
-      real(dp), allocatable, save :: fhist(:) 
+      real(dp), allocatable, save :: fhist(:)
 C History of function evaluation
-      real(dp), allocatable, save :: chist(:) 
+      real(dp), allocatable, save :: chist(:)
 C History of constraint violation
       real(dp), allocatable, save :: conval_x0(:)
 C Constraint value at x0
@@ -68,9 +68,9 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       subroutine mexFunction(nlhs, plhs, nrhs, prhs)
 C subroutine mexFunction(integer nlhs, mwPointer plhs, integer nrhs, mwPointer prhs)
 C Entry point to Fortran MEX function
-C If the binary MEX file is named as FUNCTION_NAME.mex*** (file-name 
-C extension depends on the platform), then the following function is 
-C callable in matlab: 
+C If the binary MEX file is named as FUNCTION_NAME.mex*** (file-name
+C extension depends on the platform), then the following function is
+C callable in matlab:
 C [xopt, fopt, info, nf, fhist, convalopt, constrviolation, chist] = FUNCTION_NAME(fun, con, x0, rhobeg, rhoend, maxfun, m, ftarget, conval_x0)
 
       use fcobyla ! module 'pdfoconst' is used by 'fcobyla'
@@ -78,7 +78,7 @@ C [xopt, fopt, info, nf, fhist, convalopt, constrviolation, chist] = FUNCTION_NA
 
 C mexFunction arguments (dummy variables):
       integer, intent(in) :: nlhs, nrhs
-C nlhs and nrhs are of type INTEGER according to the documents of MATLAB R2019a 
+C nlhs and nrhs are of type INTEGER according to the documents of MATLAB R2019a
       mwPointer, intent(in) :: prhs(nrhs)
       mwPointer, intent(inout) :: plhs(nlhs)
 
@@ -88,18 +88,18 @@ C mwPointer mxCreateDoubleMatrix(mwSize m, mwSize n, integer*4 ComplexFlag)
       mwPointer, external :: mxCreateDoubleScalar
 C mwPointer mxCreateDoubleScalar(real*8 value)
       mwPointer, external :: MX_GET_DBLE
-C mwPointer MX_GET_DBLE(mwPointer pm); 
+C mwPointer MX_GET_DBLE(mwPointer pm);
 C can be replaced by mxGetDoubles since MATLAB R2018b
       mwSize, external :: mxGetM, mxGetN
 C mwPointer mxGetM(mwPointer pm), mxGetN(mwPointer pm)
       integer(int4), external :: mxIsDouble, mxIsClass
-C integer*4 mxIsDouble(mwPointer pm); 
+C integer*4 mxIsDouble(mwPointer pm);
 C integer*4 mxIsClass(mwPointer pm, character*(*) classname)
 
 C workspace and intermediate variables
       mwSize :: n, m
       integer :: n_int, m_int
-C n is the problem dimension; it is of type mwSize because it is 
+C n is the problem dimension; it is of type mwSize because it is
 C obtained by mxGetM. m is the number of constraints. It is of type
 C mwSize because it will be used in mxCopyPtrToReal8.
 C n_int and m_int are the INTEGER cast of n and m, i.e., n_int = int(n),
@@ -110,14 +110,14 @@ C needed (e.g., when calling COBYLA).
       real(dp) :: f, rhobeg, rhoend, maxfun_r, m_r, ftarget, resmax
       integer :: info, iprint, allocate_status
 C info and iprint are inputs to COBYLA, which requires them to be
-C INTEGERs (not necessarily the same as mwSize) 
+C INTEGERs (not necessarily the same as mwSize)
       integer :: maxfun, nw
-C maxfun will also be an input to COBYLA, which requires 
+C maxfun will also be an input to COBYLA, which requires
 C maxfun to be INTEGERs (not necessarily the same as mwSize).
 C nw is the size of workspace. nw = n*(3*n+2*m+11)+4*m+6 (see below).
 C nw is the largest size of memory allocated by this code. If the value
 C assigned to nw is so large that overflow occurs, then there will be
-C a Segmentation Fault!!! 
+C a Segmentation Fault!!!
 C The largest value of nw depends on the storage size of nw (~2E9 for
 C kind 4, and ~9E18 for kind 8). This imposes an upper limit on the size
 C of problem solvable by this code. If nw is INTEGER*4, assuming that
@@ -131,7 +131,7 @@ C Validate number of arguments.
 C subroutine mexErrMsgIdAndTxt(character*(*) errorid, character*(*) errormsg)
       end if
       if (nlhs .gt. 8) then
-         call mexErrMsgIdAndTxt ('fcobyla:nOutput', 
+         call mexErrMsgIdAndTxt ('fcobyla:nOutput',
      &   'fcobyla: At most 8 outputs.')
       end if
 
@@ -147,7 +147,7 @@ C Input 2: con (function handle)
      &    'fcobyla: Input 2 should be a function handle.')
       end if
 C Input 3: x0 (double column)
-      if (mxIsDouble(prhs(3)) .ne. 1 .or. mxGetM(prhs(3)) .lt. 1 
+      if (mxIsDouble(prhs(3)) .ne. 1 .or. mxGetM(prhs(3)) .lt. 1
      &    .or. mxGetN(prhs(3)) .ne. 1) then
           call mexErrMsgIdAndTxt('fcobyla:WrongInput',
      &    'fcobyla: Input 3 should be a column vector of doubles.')
@@ -189,7 +189,7 @@ C is recommended to pass integers as double variables and then cast
 C them back to integers when needed. Indeed, in MATLAB, even if we
 C define maxfun = 1000, the class of maxfun is double! To get an
 C integer maxfun, we would have to define maxfun = int32(1000) or
-C maxfun = int64(1000)! 
+C maxfun = int64(1000)!
 
 C Input 8: ftarget (double scalar)
       if (mxIsDouble(prhs(8)) .ne. 1 .or. mxGetM(prhs(8)) .ne. 1
@@ -198,7 +198,7 @@ C Input 8: ftarget (double scalar)
      &    'fcobyla: Input 8 should be a double.')
       end if
 C Input 9: conval_x0 (double column, can be empty)
-      if (mxIsDouble(prhs(9)) .ne. 1 .or. 
+      if (mxIsDouble(prhs(9)) .ne. 1 .or.
      &(mxGetM(prhs(9)) .gt. 0 .and. mxGetN(prhs(9)) .gt. 1)) then
           call mexErrMsgIdAndTxt('fcobyla:WrongInput',
      &    'fcobyla: Input 9 should be a column vector of doubles.')
@@ -208,9 +208,9 @@ C Read the inputs (there are 9)
       fun_ptr = prhs(1)
       con_ptr = prhs(2)
       n = mxGetM(prhs(3)) ! This is why n should be of type mwSize
-      n_int = int(n, kind(n_int)) 
+      n_int = int(n, kind(n_int))
 C n_int is used when a variable of type INTEGER is needed
-      if (n .ne. n_int) then 
+      if (n .ne. n_int) then
           call mexErrMsgIdAndTxt('fcobyla:IntError',
      &    'fcobyla: n does not equal n_int.')
       end if
@@ -223,38 +223,38 @@ C n_int is used when a variable of type INTEGER is needed
       call mxCopyPtrToReal8(MX_GET_DBLE(prhs(3)), x(1:n), n)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
 
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(4)), rhobeg, mwOne)
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(5)), rhoend, mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(4)), [rhobeg], mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(5)), [rhoend], mwOne)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
 C Note the mwOne is of type mwSize; should not use literal constant 1
-C NEVER use literal constants in Fortran mex. 
+C NEVER use literal constants in Fortran mex.
 
 C Check the values of rhobeg and rhoend. We do not check the values of
-C other inputs (e.g., n, maxfun, npt) because the Fortran code does it 
-      if (rhobeg .le. ZERO .or. rhobeg .lt. rhoend .or. 
+C other inputs (e.g., n, maxfun, npt) because the Fortran code does it
+      if (rhobeg .le. ZERO .or. rhobeg .lt. rhoend .or.
      &rhoend .lt. ZERO) then
           call mexErrMsgIdAndTxt('fcobyla:InvalidRhobegRhoend',
      &'fcobyla:rhobeg and rhoend do not satisfy rhobeg >= rhobeg > 0.')
       end if
 
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(6)), 
-     &     maxfun_r, mwOne)
-      maxfun = int(maxfun_r, kind(maxfun)) 
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(6)),
+     &     [maxfun_r], mwOne)
+      maxfun = int(maxfun_r, kind(maxfun))
 C maxfun will be an input to COBYLA, which requires maxfun to be
 C an INTEGER (not necessary the same as mwSize)
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(7)), m_r, mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(7)), [m_r], mwOne)
       m = int(m_r, kind(m))
       m_int = int(m_r, kind(m_int))
-      if (m .ne. m_int) then 
+      if (m .ne. m_int) then
           call mexErrMsgIdAndTxt('fcobyla:IntError',
      &    'fcobyla: m does not equal m_int.')
       end if
 C m will be used in mxCopyPtrToReal8, requiring it to be of type mwSize
 C m_int will be an input to COBYLA, which requires it to be
 C an INTEGER (not necessary the same as mwSize)
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(8)), ftarget, mwOne)
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(8)), [ftarget], mwOne)
 
-      if (m .ne. mxGetM(prhs(9))) then ! m is number of constraints 
+      if (m .ne. mxGetM(prhs(9))) then ! m is number of constraints
           call mexErrMsgIdAndTxt('fcobyla:WrongInput',
      &    'fcobyla: Length of input 9 should be m (input 7).')
       end if
@@ -264,7 +264,7 @@ C an INTEGER (not necessary the same as mwSize)
           call mexErrMsgIdAndTxt('fcobyla:InsufficientMemory',
      &    'fcobyla: allocate(conval_x0) failed.')
       end if
-      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(9)), 
+      call mxCopyPtrToReal8(MX_GET_DBLE(prhs(9)),
      &     conval_x0(1:m), m)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
 
@@ -310,13 +310,13 @@ C     Initialize global variables
       end if
       chist = HUGENUM
 
-C     Call COBYLA      
+C     Call COBYLA
       iprint = 0
-      call COBYLA(n_int, m_int, x, rhobeg, rhoend, iprint, maxfun, w, 
+      call COBYLA(n_int, m_int, x, rhobeg, rhoend, iprint, maxfun, w,
      &     iact, f, info, ftarget, resmax, conval)
-C Note that n is of type mwSize, yet COBYLA expects input 1 to be 
+C Note that n is of type mwSize, yet COBYLA expects input 1 to be
 C of type INTEGER. Therefore, we should use n_int instead of n. Similar
-C fo m/m_int. 
+C fo m/m_int.
 
 C Write outputs
       plhs(1) = mxCreateDoubleMatrix(n, mwOne, notComplex)
@@ -326,14 +326,14 @@ C Although info and nf are integers logically, they are passed as double
       plhs(3) = mxCreateDoubleScalar(real(info, dp))
       plhs(4) = mxCreateDoubleScalar(real(nf, dp))
       plhs(5) = mxCreateDoubleMatrix(mwOne, nf, notComplex)
-      call mxCopyReal8ToPtr(fhist(1:nf), 
+      call mxCopyReal8ToPtr(fhist(1:nf),
      &     MX_GET_DBLE(plhs(5)), nf)
 C Set conval to the value of con(x)
       plhs(6) = mxCreateDoubleMatrix(m, mwOne, notComplex)
       call mxCopyReal8ToPtr(conval(1:m), MX_GET_DBLE(plhs(6)), m)
       plhs(7) = mxCreateDoubleScalar(resmax)
       plhs(8) = mxCreateDoubleMatrix(mwOne, nf, notComplex)
-      call mxCopyReal8ToPtr(chist(1:nf), 
+      call mxCopyReal8ToPtr(chist(1:nf),
      &     MX_GET_DBLE(plhs(8)), nf)
 
 C     Free memory
@@ -362,7 +362,7 @@ C should be of type INTEGER instead of mwSize
       real(dp), intent(in) :: x(n)
       real(dp), intent(out) :: funval, conval(m)
 
-C function declarations 
+C function declarations
       integer(int4), external :: mexCallMATLAB
 C integer*4 mexCallMATLAB(integer*4 nlhs, mwPointer plhs, integer*4 nrhs, mwPointer prhs, character*(*) functionName)
       mwPointer, external :: mxCreateDoubleMatrix
@@ -373,40 +373,40 @@ C mwPointer mxCreateDoubleScalar(real*8 value)
 C mwPointer MX_GET_DBLE(mwPointer pm)
 
 C intermediate variables
-      mwSize :: n_mw, m_mw 
+      mwSize :: n_mw, m_mw
 C n_mw is the mwSize cast of n: n_mw = int(n, kind(n_mw));
 C used when a variable of type mwSize is needed
       integer :: k
-C k is the index for the constraints; since m is of type INTEGER, 
+C k is the index for the constraints; since m is of type INTEGER,
 C k is of the same type; see the (unique) do lopp below
-      mwPointer :: plhs(1), prhs(2) ! used in mexCallMATLAB 
-      integer(int4), parameter :: intOne=1, intTwo=2 
-      character(5), parameter :: funFeval = 'feval' 
-C intOne, intTwo, and funFeval are used when calling mexCallMATLAB 
+      mwPointer :: plhs(1), prhs(2) ! used in mexCallMATLAB
+      integer(int4), parameter :: intOne=1, intTwo=2
+      character(5), parameter :: funFeval = 'feval'
+C intOne, intTwo, and funFeval are used when calling mexCallMATLAB
       real(dp) :: resmax ! constraint violation
 
-C Start the real business 
+C Start the real business
       n_mw = int(n, kind(n_mw)) ! cast n to type mwSize
       m_mw = int(m, kind(m_mw)) ! cast m to type mwSize
-      if (n .ne. n_mw) then 
+      if (n .ne. n_mw) then
           call mexErrMsgIdAndTxt('fcobyla:IntError',
      &    'fcobyla: n does not equal n_mw.')
       end if
-      if (m .ne. m_mw) then 
+      if (m .ne. m_mw) then
           call mexErrMsgIdAndTxt('fcobyla:IntError',
      &    'fcobyla: m does not equal m_mw.')
       end if
 
 C Evaluate the objective function (fun_ptr) at x
-      plhs(1) = mxCreateDoubleScalar(HUGENUM) 
-C Output of f_value = feval(fun, x); see below 
-      prhs(1) = fun_ptr 
+      plhs(1) = mxCreateDoubleScalar(HUGENUM)
+C Output of f_value = feval(fun, x); see below
+      prhs(1) = fun_ptr
 C First input of f_value = feval(fun, x); see below; fun_ptr is a global variable
-      prhs(2) = mxCreateDoubleMatrix(n_mw, mwOne, notComplex) 
+      prhs(2) = mxCreateDoubleMatrix(n_mw, mwOne, notComplex)
 C Second input of f_value = feval(fun, x); see below
       call mxCopyReal8ToPtr(x(1:n), MX_GET_DBLE(prhs(2)), n_mw)
 C subroutine mxCopyReal8ToPtr(real*8 y(n), mwPointer px, mwSize n)
-      if (0 .ne. mexCallMATLAB(intOne, plhs, 
+      if (0 .ne. mexCallMATLAB(intOne, plhs,
      &   intTwo, prhs, funFeval)) then
 C Execute matlab command: f_value = feval(fun, x)
 C integer*4 mexCallMATLAB(integer*4 nlhs, mwPointer plhs, integer*4 nrhs, mwPointer prhs, character*(*) functionName)
@@ -417,8 +417,8 @@ C integer*4 mexCallMATLAB(integer*4 nlhs, mwPointer plhs, integer*4 nrhs, mwPoin
           call mexErrMsgIdAndTxt('fcobyla:UnsuccessfulCall',
      &    'fcobyla: NULL pointer returned when mex calls fun.')
       else
-          call mxCopyPtrToReal8(MX_GET_DBLE(plhs(1)), 
-     &         funval, mwOne)
+          call mxCopyPtrToReal8(MX_GET_DBLE(plhs(1)),
+     &         [funval], mwOne)
 C subroutine mxCopyPtrToReal8(mwPointer px, real*8 y(n), mwSize n)
       end if
 
@@ -428,24 +428,24 @@ C this subroutine. We are NOT in mexFunction!
 C Not yet to free prhs(2), which will be used when evaluating the constraint
 
 C Evaluate the constraint (con_ptr) at x
-      if (nf .eq. 0) then 
+      if (nf .eq. 0) then
 C The very first iteration needs con(x0), which was already evaluated in
 C the matlab code (to get the value of m) and saved in fcobyla.mod as
-C conval_x0. Copy the value directly without calling con. 
+C conval_x0. Copy the value directly without calling con.
           conval(1:m) = conval_x0(1:m)
       else
-          plhs(1) = mxCreateDoubleMatrix(m_mw, mwOne, notComplex) 
+          plhs(1) = mxCreateDoubleMatrix(m_mw, mwOne, notComplex)
 C Output of c_value = feval(con, x); see below
-          prhs(1) = con_ptr 
+          prhs(1) = con_ptr
 C First input of c_value = feval(con, x); see below; con_ptr is a global variable
 C prhs(2) was already set to x when evaluating fun
-          if (0 .ne. mexCallMATLAB(intOne, plhs, intTwo, 
+          if (0 .ne. mexCallMATLAB(intOne, plhs, intTwo,
      &        prhs, funFeval)) then
 C Execute matlab command: c_value = feval(con, x)
               call mexErrMsgIdAndTxt('fcobyla:UnsuccessfulCall',
      &        'fcobyla: mex fails to call con.')
           end if
-          if (plhs(1) .eq. 0 .or. (m .gt. 0 .and. 
+          if (plhs(1) .eq. 0 .or. (m .gt. 0 .and.
      &        MX_GET_DBLE(plhs(1)) .eq. 0)) then
               call mexErrMsgIdAndTxt('fcobyla:UnsuccessfulCall',
      &        'fcobyla: NULL pointer returned when mex calls con.')
@@ -473,7 +473,7 @@ C this subroutine. We are NOT in mexFunction!
       call mxDestroyArray(prhs(2))
 
 C Update global variables
-      nf = nf + int(1, kind(nf)) 
+      nf = nf + int(1, kind(nf))
 C Some compiler (e.g., g95) may complain about implicit conversion if
 C written as nf = nf+1
       fhist(nf) = funval
