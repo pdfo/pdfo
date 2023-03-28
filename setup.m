@@ -165,7 +165,8 @@ else
 end
 
 % Set MEX options.
-if debug_flag
+verbose = (isfield(options, 'verbose') && options.verbose);  % Be verbose or not; default is false
+if verbose
     mex_options = [{opt_option}, {ad_option}, '-v'];  % Verbose
 else
     mex_options = [{opt_option}, {ad_option}, '-silent'];  % Silent
@@ -219,7 +220,7 @@ try
 % case of an error.
 
     % Compilation of function gethuge
-    if debug_flag
+    if verbose
         mex(mex_options{:}, '-output', 'gethuge', fullfile(fsrc, 'pdfoconst.F'), fullfile(gateways, 'gethuge.F'));
     else
         % With `evalc`, no warning will be emitted; if warnings are desirable, set options.debug to true
@@ -236,7 +237,7 @@ try
         cellfun(@(filename) delete(filename), modo_files);
         % Compile
         src_files = files_with_wildcard(fullfile(fsrc, solver), '*.f');
-        if debug_flag
+        if verbose
             mex(mex_options{:}, '-output', ['f', solver], fullfile(fsrc, 'pdfoconst.F'), src_files{:}, fullfile(gateways, [solver, '-interface.F']));
         else
             % With `evalc`, no warning will be emitted; if warnings are desirable, set options.debug to true
@@ -249,7 +250,7 @@ try
         cellfun(@(filename) delete(filename), modo_files);
         % Compile
         src_files = files_with_wildcard(fullfile(fsrc_classical, solver), '*.f');
-        if debug_flag
+        if verbose
             mex(mex_options{:}, '-output', ['f', solver, '_classical'], fullfile(fsrc, 'pdfoconst.F'), src_files{:}, fullfile(gateways_classical, [solver, '-interface.F']));
         else
             % With `evalc`, no warning will be emitted; if warnings are desirable, set options.debug to true
