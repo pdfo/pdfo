@@ -166,9 +166,9 @@ end
 
 % Set MEX options.
 if debug_flag
-    mex_options = [{opt_option}, {ad_option}, '-v'];
+    mex_options = [{opt_option}, {ad_option}, '-v'];  % Verbose
 else
-    mex_options = [{opt_option}, {ad_option}, '-silent'];
+    mex_options = [{opt_option}, {ad_option}, '-silent'];  % Silent
 end
 
 % Check whether MEX is properly configured.
@@ -234,6 +234,7 @@ try
         if debug_flag
             mex(mex_options{:}, '-output', ['f', solver], fullfile(fsrc, 'pdfoconst.F'), src_files{:}, fullfile(gateways, [solver, '-interface.F']));
         else
+            % With `evalc`, no warning will be emitted; if warnings are desirable, set options.debug to true
             evalc('mex(mex_options{:}, ''-output'', [''f'', solver], fullfile(fsrc, ''pdfoconst.F''), src_files{:}, fullfile(gateways, [solver, ''-interface.F'']))');
         end
 
@@ -246,6 +247,7 @@ try
         if debug_flag
             mex(mex_options{:}, '-output', ['f', solver, '_classical'], fullfile(fsrc, 'pdfoconst.F'), src_files{:}, fullfile(gateways_classical, [solver, '-interface.F']));
         else
+            % With `evalc`, no warning will be emitted; if warnings are desirable, set options.debug to true
             evalc('mex(mex_options{:}, ''-output'', [''f'', solver, ''_classical''], fullfile(fsrc, ''pdfoconst.F''), src_files{:}, fullfile(gateways_classical, [solver, ''-interface.F'']))');
         end
 
