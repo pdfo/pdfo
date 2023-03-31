@@ -21,16 +21,17 @@ Install [pip](https://pip.pypa.io/en/stable/installing/) in your system if
 you Python version does not incude it. Then execute
 
 ```bash
-python -m pip install pdfo
+python3 -m pip install pdfo
 ```
 
 in a command shell (e.g., the terminal for Linux and macOS, or the Command
-Shell for Windows). If your Python launcher is not python, adapt the command
-accordingly. If this command runs successfully, PDFO is installed. You may
-verify the installation by
+Shell for Windows). If your Python 3 launcher is not `python3`, adapt the
+command accordingly (it may be `python` on Windows for example). If this
+command runs successfully, PDFO is installed. You may verify the
+installation by
 
 ```bash
-python -m unittest pdfo.testpdfo
+python3 -m unittest pdfo.testpdfo
 ```
 
 If you are an Anaconda user, PDFO is also available through the conda installer
@@ -47,7 +48,7 @@ you will obtain a folder containing `setup.py`; in a command shell, change your
 directory to this folder; then install PDFO by executing
 
 ```bash
-python -m pip install ./
+python3 -m pip install .
 ```
 
 ## Usage
