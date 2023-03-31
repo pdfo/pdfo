@@ -81,7 +81,7 @@ will tell you how to use `pdfo`.
 PDFO can be uninstalled by executing the following command in a command shell:
 
 ```bash
-python -m pip uninstall pdfo
+python3 -m pip uninstall pdfo
 ```
 
 ## References
