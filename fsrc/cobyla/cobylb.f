@@ -956,7 +956,7 @@ C vectors, while XSAV(:, NSAV+1:NSMAX) and DATSAV(:, NSAV+1:NSMAX) are
 C not initialized yet.
 C
 C Note: X dominates Y if and only if the function/constraint of X is
-C better than the function/constraint of Y accoring to the ISBETTER
+C better than the function/constraint of Y according to the ISBETTER
 C subroutine with PARMU = -1.0D0. Indeed, PARMU can be any negative
 C number. This is because, due to the implementation of ISBETTER,
 C X dominates Y (i.e., X is better than Y with PARMU < 0)

@@ -2585,7 +2585,7 @@ def _solver_selection(invoker, method, options, prob_info, list_warnings):
         options['rhoend'] = max(eps, min(0.1 * options['rhobeg'], options['rhoend']))
         if 'rhobeg' in prob_info['user_options_fields'] or 'rhoend' in prob_info['user_options_fields']:
             warn_message = \
-                '{}: rhobeg is set to {} and rhoend to {} acccording to the selected solver bobyqa, which requires ' \
+                '{}: rhobeg is set to {} and rhoend to {} according to the selected solver bobyqa, which requires ' \
                 'rhoend <= rhobeg <= min(ub-lb)/2.'.format(invoker, options['rhobeg'], options['rhoend'])
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)

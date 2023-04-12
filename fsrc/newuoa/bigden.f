@@ -73,10 +73,10 @@ C
           SS=SS+S(I)**2
           XOPTSQ=XOPTSQ+XOPT(I)**2
       END DO
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC 
-C Zaikun 2019-08-29: With the original code, if DS, DD, or SS is 
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+C Zaikun 2019-08-29: With the original code, if DS, DD, or SS is
 C NaN, KSAV will not get a value. This may cause Segmentation Fault
-C because XPT(KSAV, :) will later be accessed. 
+C because XPT(KSAV, :) will later be accessed.
 C      IF (DS*DS .GT. 0.99D0*DD*SS) THEN
       IF (.NOT. (DS*DS <= 0.99D0*DD*SS)) THEN
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -163,7 +163,7 @@ C
           WVEC(IP,5)=ZERO
       END DO
 C
-C     Put the coefficents of THETA*Wcheck in PROD.
+C     Put the coefficients of THETA*Wcheck in PROD.
 C
       DO JC=1,5
           NW=NPT

@@ -32,10 +32,10 @@ function [x, fx, exitflag, output] = cobyla(varargin)
 %       there is no objective function (i.e., we have a feasibility problem),
 %       then set fun = []
 %   *** x0 is the starting point; x0 CANNOT be []
-%   *** Aineq and bineq are the coeffcient matrix and right-hand side of
+%   *** Aineq and bineq are the coefficient matrix and right-hand side of
 %       the linear inequality constraint Aineq * x <= bineq; if there is
 %       no such constraint, set Aineq = [], bineq = []
-%   *** Aeq and beq are the coeffcient matrix and right-hand side of the
+%   *** Aeq and beq are the coefficient matrix and right-hand side of the
 %       linear equality constraint Aeq * x = beq; if there is no such
 %       constraint, set Aeq = [], beq = []
 %   *** lb and ub, which are vectors of the same length as x, are the
