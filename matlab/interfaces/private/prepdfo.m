@@ -332,7 +332,7 @@ funname = callstack(1).name; % Name of the current function
 if ~ismember(invoker, invoker_list)
     % invoker affects the behavior of this function, so we check invoker
     % again, even though it should have been checked in function prepdfo
-    % Private/unexpcted error
+    % Private/unexpected error
     error(sprintf('%s:InvalidInvoker', funname), ...
     '%s: UNEXPECTED ERROR: %s serves only %s.', funname, funname, mystrjoin(invoker_list, ', '));
 end
@@ -786,7 +786,7 @@ funname = callstack(1).name;
 % invoker affects the behavior of this function, so we check invoker
 % again, even though it should have been checked in function prepdfo
 if ~ismember(invoker, invoker_list)
-    % Private/unexpcted error
+    % Private/unexpected error
     error(sprintf('%s:InvalidInvoker', funname), ...
     '%s: UNEXPECTED ERROR: %s serves only %s.', funname, funname, mystrjoin(invoker_list, ', '));
 end
@@ -1281,7 +1281,7 @@ substantially_scaled_threshold = 2;
 %shift(~index_lub) = x0(~index_lub); % Shift x0 to 0 unless both lower and upper bounds are present
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if max(ub-lb) >= inf  % At least one of [-lb; ub] is infinity
-    % Private/unexpcted error
+    % Private/unexpected error
     error(sprintf('%s:InvalidScaling', funname), '%s: UNEXPECTED ERROR: at least one of [-lb; ub] is infinity. Scaling should not be performed.', funname);
 end
 
@@ -1330,7 +1330,7 @@ if max([1; scaling_factor])/min([1; scaling_factor]) > substantially_scaled_thre
 end
 
 if min(scaling_factor) < eps
-    % Private/unexpcted error
+    % Private/unexpected error
     error(sprintf('%s:InvalidScaling', funname), '%s: UNEXPECTED ERROR: invalid scaling factor returned when called by %s.', funname, invoker);
 end
 return
@@ -1542,7 +1542,7 @@ funname = callstack(1).name; % Name of the current function
 solver_list = {'bobyqa'}; % Only BOBYQA needs pre_rhobeg_x0. May have others in the future.
 
 if ~ismember(lower(options.solver), solver_list)
-    % Private/unexpcted error
+    % Private/unexpected error
     error(sprintf('%s:InvalidSolver', funname), '%s: UNEXPECTED ERROR: %s serves only %s.', funname, funname, mystrjoin(solver_list, ', '));
 end
 

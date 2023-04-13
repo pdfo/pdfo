@@ -333,7 +333,7 @@ else % The problem turns out 'normal' during prepdfo
     maxint = floor(0.99*min([gethuge('integer'), gethuge('mwSize'), gethuge('mwIndex')]));
     m = length(b_aug); % Linear constraints: (A_aug)'*x <= b_aug;
     minnw = m*(2+n)+(n+2)*(2*n+6)+n*(9+3*n)+max([m+3*n, 2*m+n, 2*n+4]);
-    % minnw is the smallest possible velue of nw, i.e., nw with the smallest npt, i.e., npt=n+2
+    % minnw is the smallest possible value of nw, i.e., nw with the smallest npt, i.e., npt=n+2
     if minnw >= maxint
         % nw would suffer from overflow in the Fortran code; exit immediately
         % Public/normal error

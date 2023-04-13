@@ -25,14 +25,14 @@ If this completes successfully, then your MEX is ready. Otherwise, it is not.
 To configure MEX for compiling Fortran, see the
 [official documentation](https://www.mathworks.com/help/matlab/ref/mex.html).
 It will require you to install a
-[supported Fortran compiler](https://www.mathworks.com/support/requirements/previous-releases.html) 
+[supported Fortran compiler](https://www.mathworks.com/support/requirements/previous-releases.html)
 on your system.  Note that MathWorks (rather than PDFO) is quite rigid
 concerning the version of your compiler, which has to be compatible with the
 release of your MATLAB; the latest compiler is NOT necessarily supported by your
 MATLAB. On Windows,  in addition to the Fortran compiler, MathWorks needs you to
-install the [Microsoft Visual Studio](http://en.wikipedia.org/wiki/Microsoft_Visual_Studio) 
+install the [Microsoft Visual Studio](http://en.wikipedia.org/wiki/Microsoft_Visual_Studio)
 and the [Microsoft Windows SDK](http://en.wikipedia.org/wiki/Microsoft_Windows_SDK).
-Follow the [official documentation](https://www.mathworks.com/support/requirements/previous-releases.html) 
+Follow the [official documentation](https://www.mathworks.com/support/requirements/previous-releases.html)
 of MathWorks closely.
 
 ## Installation
@@ -84,7 +84,7 @@ PDFO can be uninstalled using the setup.m script by executing the following
 command in MATLAB:
 
 ```matlab
-setup unistall
+setup uninstall
 ```
 
 ## References

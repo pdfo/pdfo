@@ -15,9 +15,9 @@ function [x, fx, exitflag, output] = postpdfo(probinfo, output)
 % Attribute: private (not supposed to be called by users)
 %
 % Remarks
-% 1. All errors in this function are unexpcted errors, which means they
+% 1. All errors in this function are unexpected errors, which means they
 % should not occur unless there is a bug in the code.
-% 2. Some unexpcted errors are external.
+% 2. Some unexpected errors are external.
 %
 % TODO: None
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -53,7 +53,7 @@ invoker_list = ['pdfo', solver_list];
 callstack = dbstack;
 funname = callstack(1).name; % Name of the current function
 if (length(callstack) == 1) || ~ismember(callstack(2).name, invoker_list)
-    % Private/unexpcted error
+    % Private/unexpected error
     error(sprintf('%s:InvalidInvoker', funname), ...
     '%s: UNEXPECTED ERROR: %s should only be called by %s.', funname, funname, mystrjoin(invoker_list, ', '));
 else
@@ -120,7 +120,7 @@ end
 
 % Verify output
 if ~isa(output, 'struct')
-    % Public/unexpcted error
+    % Public/unexpected error
     error(sprintf('%s:InvalidOutput', invoker), ...
         '%s: UNEXPECTED ERROR: %s returns an output that is not a structure', invoker, solver);
 end
@@ -177,34 +177,34 @@ end
 
 % Verify x
 if ~isnumeric(x) || ~isreal(x) || ~isvector(x) || size(x,2)~=1
-    % Public/unexpcted error
+    % Public/unexpected error
     error(sprintf('%s:InvalidX', invoker), ...
         '%s: UNEXPECTED ERROR: %s returns an x that is not a real column or scalar.', invoker, solver);
 end
 
 % Verify fx
 if ~isnumeric(fx) || ~isreal(fx) || ~isscalar(fx)
-    % Public/unexpcted error
+    % Public/unexpected error
     error(sprintf('%s:InvalidFx', invoker), ...
         '%s: UNEXPECTED ERROR: %s returns an fx that is not a real number.', invoker, solver);
 end
 
 % Verify exitflag
 if ~isnumeric(exitflag) || ~isscalar(exitflag) || ~isreal(exitflag) || rem(exitflag, 1)~=0
-    % Public/unexpcted error
+    % Public/unexpected error
     error(sprintf('%s:InvalidExitFlag', invoker), ...
         '%s: UNEXPECTED ERROR: %s returns an exitflag that is not an integer', invoker, solver);
 end
 
 % Verify nf
 if ~isnumeric(nf) || ~isscalar(nf) || ~isreal(nf) || rem(nf, 1)~=0 || nf < 0
-    % Public/unexpcted error
+    % Public/unexpected error
     error(sprintf('%s:InvalidNF', invoker), ...
         '%s: UNEXPECTED ERROR: %s returns an nf that is not a nonnegative integer.', invoker, solver);
 end
 if nf <= 0
     % If prepdfo works properly, then nf<=0 should never happen.
-    % Public/unexpcted error
+    % Public/unexpected error
     error(sprintf('%s:InvalidNF', invoker), ...
     '%s: UNEXPECTED ERROR: %s returns nf=0 unexpectedly with exitflag %d.', invoker, solver, exitflag);
 end
@@ -411,7 +411,7 @@ if ~strcmp(probinfo.raw_type, 'nonlinearly-constrained')
     end
 end
 
-% Record the retrun message in output.message according to exitflag
+% Record the return message in output.message according to exitflag
 switch exitflag % If prepdfo works properly, then 5, 6, 10, 11, 12 should never happen
 case 0
     output.message = sprintf('Return from %s because the trust region radius reaches its lower bound.', solver);
