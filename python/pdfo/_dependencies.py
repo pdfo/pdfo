@@ -1814,7 +1814,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
         options['maxfev'] = np.int32(options['maxfev'])
 
     # Validate options['rhobeg'].
-    # NOTE: if the problem is to be scaled, then options['rhobeg'] and options['rhoend'] will be used as the intial and
+    # NOTE: if the problem is to be scaled, then options['rhobeg'] and options['rhoend'] will be used as the initial and
     # final trust-region radii for the scaled problem.
     validated = False
     if 'rhobeg' in option_fields:

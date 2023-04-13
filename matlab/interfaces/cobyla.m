@@ -9,7 +9,7 @@ function [x, fx, exitflag, output] = cobyla(varargin)
 %               cineq(x) <= 0,
 %               ceq(x) = 0.
 %
-%   In the backend, COBYLA calls the late Professor M.J.D. Powell's Fotran code
+%   In the backend, COBYLA calls the late Professor M.J.D. Powell's Fortran code
 %   with the same name. The algorithm is described in [M. J. D. Powell,
 %   A direct search optimization method that models the objective and
 %   constraint functions by linear interpolation, In Advances in Optimization
@@ -300,7 +300,7 @@ elseif ~strcmp(invoker, 'pdfo') && probinfo.nofreex % x was fixed by the bound c
 elseif ~strcmp(invoker, 'pdfo') && probinfo.feasibility_problem && ~strcmp(probinfo.refined_type, 'nonlinearly-constrained')
     output.x = x0;  % prepdfo has tried to set x0 to a feasible point (but may have failed)
     % We could set fx=[], funcCount=0, and fhist=[] since no function evaluation 
-    % occured. But then we will have to modify the validation of fx, funcCount, 
+    % occurred. But then we will have to modify the validation of fx, funcCount, 
     % and fhist in postpdfo. To avoid such a modification, we set fx, funcCount, 
     % and fhist as below and then revise them in postpdfo.
     output.fx = fun(output.x);  % prepdfo has defined a fake objective function

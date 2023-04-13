@@ -4,7 +4,7 @@ function [x, fx, exitflag, output] = uobyqa(varargin)
 %
 %   minimize    fun(x).
 %
-%   In the backend, UOBYQA calls the late Professor M.J.D. Powell's Fotran code 
+%   In the backend, UOBYQA calls the late Professor M.J.D. Powell's Fortran code 
 %   with the same name. The algorithm is described in [M. J. D. Powell,
 %   UOBYQA: unconstrained optimization by quadratic approximation. Math.
 %   Program., 92(B):555--582, 2002].
@@ -207,7 +207,7 @@ if ~strcmp(invoker, 'pdfo') && probinfo.feasibility_problem
     % An "unconstrained feasibility problem" is rediculous, yet nothing wrong mathematically.
     output.x = x0;
     % We could set fx=[], funcCount=0, and fhist=[] since no function evaluation 
-    % occured. But then we will have to modify the validation of fx, funcCount, 
+    % occurred. But then we will have to modify the validation of fx, funcCount, 
     % and fhist in postpdfo. To avoid such a modification, we set fx, funcCount, 
     % and fhist as below and then revise them in postpdfo.
     output.fx = fun(output.x);  % prepdfo has defined a fake objective function

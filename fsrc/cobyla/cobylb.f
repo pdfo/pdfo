@@ -948,7 +948,7 @@ C If XDROP does not dominate any of XSAV(:, 1:NSAV) but NSAV=NSMAX,
 C then we remove XSAV(:,1), which is the oldest vector in XSAV(:, 1:NSAV).
 C
 C When COBYLA calls this subroutine, XDROP is a vector to be "dropped",
-C and  DATDROP contains its function/constraint inforation (in particular,
+C and  DATDROP contains its function/constraint information (in particular,
 C DATDROP(MP) = F(XDROP), and DATDROP(MPP) = RESMAX(X)). XSAV and DATSAV
 C save at most NSMAX vectors "dropped" by COBYLB and their function/constraint
 C information. Only XSAV(:, 1:NSAV) and DATSAV(:, 1:NSAV) contains such
@@ -992,7 +992,7 @@ C incremented by 1 latter, and then IREMOVE(NSAV+1) will be accessed.
       NREMOVE = 0
       DO I = 1, NSAV
 C If XDROP is dominated by XSAV(:, I), then return immediately,
-C because XDROP should not be inluded into XSAV.
+C because XDROP should not be included into XSAV.
           CALL ISBETTER (DATDROP(MP), DATDROP(MPP), DATSAV(MP, I),
      1         DATSAV(MPP, I), PARMU, CTOL, BETTER)
           IF (BETTER) RETURN
@@ -1041,10 +1041,10 @@ C Set the number of vectors in the new XSAV
 
 C Save XDROP in XSAV(:, NSAV) (with NSAV updated as above)
       IF (NSAV >= 1 .AND. NSAV <= NSMAX) THEN
-          ! This inequlity is not guaranteed if NSMAX=0, where NSAV will
+          ! This inequality is not guaranteed if NSMAX=0, where NSAV will
           ! be 0 and hence a Segmentation Fault when accessing
           ! XSAV(:, NSAV). Although we return immediately if NSMAX=0,
-          ! we still check this inequlity to be safe.
+          ! we still check this inequality to be safe.
           DO L = 1, N
               XSAV(L, NSAV) = XDROP(L)
           END DO
@@ -1086,7 +1086,7 @@ C values (they are equally bad).
 
 C When PARMU >= 0 and F + PARMU*R < F0 + PARMU*R0 and R < CTOL (feasible),
 C then (F, R) is better than (F0, R0).
-C Note that we should not set BETTER=FALSE even if this inequlity does not
+C Note that we should not set BETTER=FALSE even if this inequality does not
 C hold, because one or both of the two sides may be NaN.
       IF (PARMU >= 0.0D0 .AND. F + PARMU*R < F0 + PARMU*R0
      1    .AND. R < CTOL) THEN
@@ -1096,7 +1096,7 @@ C hold, because one or both of the two sides may be NaN.
 C If R < CTOL and F is not Inf or NaN while (R0 < CTOL) is false (may
 C be because R0 is NaN), then (F, R) is better than (F0, R0). We prefer
 C feasible points (i.e., constraint violation is less than CTOL) to
-C insfeasible ones.
+C infeasible ones.
       IF (R < CTOL .AND. .NOT.(R0 < CTOL) .AND. .NOT.FINFNAN) THEN
           BETTER = .TRUE.
       END IF

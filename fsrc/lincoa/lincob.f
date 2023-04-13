@@ -224,7 +224,7 @@ C
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C Zaikun 21-03-2020
-C Exit if BMAT or ZMAT contians NaN
+C Exit if BMAT or ZMAT contains NaN
       DO J = 1,N
           DO I = 1,NDIM
               IF (BMAT(I,J) /= BMAT(I,J)) THEN
@@ -257,7 +257,7 @@ C of TRSTEP or QMSTEP is not predictable, and Segmentation Fault or
 C infinite cycling may happen. This is because any equality/inequality
 C comparison involving NaN returns FALSE, which can lead to unintended
 C behavior of the code, including uninitialized indices, which can lead
-C to segmentation faults. 
+C to segmentation faults.
       DO J = 1,N
           IF (GOPT(J) /= GOPT(J)) THEN
               INFO = -3
@@ -585,7 +585,7 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C Zaikun 19-03-2020
-C Exit if BMAT or ZMAT contians NaN
+C Exit if BMAT or ZMAT contains NaN
       DO J = 1,N
           DO I = 1,NDIM
               IF (BMAT(I,J) /= BMAT(I,J)) THEN

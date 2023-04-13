@@ -121,11 +121,11 @@ C
           KOPT=1
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C     By Zaikun (commented on 02-06-2019; implemented in 2016):
-C     The following line is to make sure that XOPT is always 
-C     up to date even if the first model has not been built yet 
+C     The following line is to make sure that XOPT is always
+C     up to date even if the first model has not been built yet
 C     (i.e., NF<NPT). This is necessary because the code may exit before
 C     the first model is built due to an NaN or nearly infinity value of
-C     F occurs. 
+C     F occurs.
           DO I = 1, N
               XOPT(I)=XPT(1, I)
           END DO
@@ -135,8 +135,8 @@ C     F occurs.
           KOPT=NF
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C     By Zaikun (commented on 02-06-2019; implemented in 2016):
-C     The following line is to make sure that XOPT is always 
-C     up to date even if the first model has not been built yet 
+C     The following line is to make sure that XOPT is always
+C     up to date even if the first model has not been built yet
 C     (i.e., NF<NPT). This is necessary because the code may exit before
 C     the first model is built due to an NaN or nearly infinity value of
           DO I = 1, N
@@ -205,7 +205,7 @@ C
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C Zaikun 2019-08-29: For ill-conditioned problems, NaN may occur in the
 C models. In such a case, we terminate the code. Otherwise, the behavior
-C of TRSAPP, BIGDEN, or BIGLAG is not predictable, and Segmentation Fault 
+C of TRSAPP, BIGDEN, or BIGLAG is not predictable, and Segmentation Fault
 C or infinite cycling may happen. This is because any equality/inequality
 C comparison involving NaN returns FALSE, which can lead to unintended
 C behavior of the code, including uninitialized indices.
@@ -213,14 +213,14 @@ C behavior of the code, including uninitialized indices.
           IF (GQ(I) /= GQ(I)) THEN
               INFO = -3
               GOTO 530
-          END IF 
+          END IF
       END DO
       DO I = 1, NH
           IF (HQ(I) /= HQ(I)) THEN
               INFO = -3
               GOTO 530
-          END IF 
-      END DO 
+          END IF
+      END DO
       DO I = 1, NPT
           IF (PQ(I) /= PQ(I)) THEN
               INFO = -3
@@ -435,10 +435,10 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C     By Zaikun (commented on 02-06-2019; implemented in 2016):
-C     Exit if an NaN occurs in X. 
+C     Exit if an NaN occurs in X.
 C     It is necessary to set F to NaN, so that GOTO 530 will lead the
-C     code to 540 (i.e., update X and F).  
-C     If this happends at the very first function evaluation (i.e.,
+C     code to 540 (i.e., update X and F).
+C     If this happens at the very first function evaluation (i.e.,
 C     NF=1), then it is necessary to set FOPT and XOPT before going to
 C     530, because these two variables have not been set yet (line 70
 C     will not be reached.
@@ -462,7 +462,7 @@ C     will not be reached.
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C     By Zaikun (commented on 02-06-2019; implemented in 2016):
 C     Exit if F has an NaN or almost infinite value.
-C     If this happends at the very first function evaluation (i.e.,
+C     If this happens at the very first function evaluation (i.e.,
 C     NF=1), then it is necessary to set FOPT and XOPT before going to
 C     530, because these two variables have not been set yet (line 70
 C     will not be reached.
@@ -759,7 +759,7 @@ C  530 IF (FOPT .LE. F) THEN
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C      IF (IPRINT .GE. 1) THEN
   546 IF (IPRINT >= 1) THEN
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           PRINT 550, NF
   550     FORMAT (/4X,'At the return from NEWUOA',5X,
      1      'Number of function values =',I6)

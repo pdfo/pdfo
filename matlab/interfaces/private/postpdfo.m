@@ -144,7 +144,7 @@ if ~isempty(missing_fields)
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% If the invoker is a solver called by pdfo, then let pdfo do the postprecessing
+% If the invoker is a solver called by pdfo, then let pdfo do the postprocessing
 % Put this after verifying output, because we will use the information in it.
 if (length(callstack) >= 3) && strcmp(callstack(3).name, 'pdfo')
     x = output.x;
@@ -459,7 +459,7 @@ case -4
     % Record indices of infeasible constraints
     if any(probinfo.infeasible_lineq)
         output.InfeasibleLinearIneq = find(probinfo.infeasible_lineq)';
-        % 'find' changes an vector of true/false to a vector containing the indixes of the true values
+        % 'find' changes an vector of true/false to a vector containing the indices of the true values
     end
     if any(probinfo.infeasible_leq)
         output.InfeasibleLinearEq = find(probinfo.infeasible_leq)';

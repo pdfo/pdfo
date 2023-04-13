@@ -28,7 +28,7 @@ C     N must be set to the number of variables and must be at least two.
 C     NPT must be set to the number of interpolation conditions, which is
 C       required to be in the interval [N+2,(N+1)(N+2)/2]. Typical choices
 C       of the author are NPT=N+6 and NPT=2*N+1. Larger values tend to be
-C       highly inefficent when the number of variables is substantial, due
+C       highly inefficient when the number of variables is substantial, due
 C       to the amount of work and extra difficulty of adjusting more points.
 C     M must be set to the number of linear inequality constraints.
 C     A is a matrix whose columns are the constraint gradients, which are
@@ -187,11 +187,11 @@ C     The above settings provide a partition of W for subroutine LINCOB.
 C
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C Zaikun, 2020-05-05
-C When the data is passed from the interfaces to the Fortran code, RHOBEG, 
+C When the data is passed from the interfaces to the Fortran code, RHOBEG,
 C and RHOEND may change a bit (due to rounding ???). It was oberved in
 C a MATLAB test that MEX passed 1 to Fortran as 0.99999999999999978.
 C If we set RHOEND = RHOBEG in the interfaces, then it may happen
-C that RHOEND > RHOBEG. That is why we do the following. 
+C that RHOEND > RHOBEG. That is why we do the following.
       RHOEND = MIN(RHOBEG, RHOEND)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       CALL LINCOB (N,NPT,M,W(IAMAT),W(IB),X,RHOBEG,RHOEND,IPRINT,

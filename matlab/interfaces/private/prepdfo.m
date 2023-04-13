@@ -89,7 +89,7 @@ end
 % 16. raw_type: problem type before reduction
 % 17. raw_dim: problem dimension before reduction
 % 18. refined_type: problem type after reduction
-% 19. refiend_dim: problem dimension after reduction
+% 19. refined_dim: problem dimension after reduction
 % 20. feasibility_problem: whether the problem is a feasibility problem
 % 21. user_options_fields: the fields in the user-specified options
 % 22. options: (refined) options for calling the solvers
@@ -444,7 +444,7 @@ if isempty(fun)
     warnings = [warnings, wmessage];
 elseif isa(fun, 'char') || isa(fun, 'string')
     fun = str2func(fun);
-    % Work with function handles instread of function names to avoid using 'feval'
+    % Work with function handles instead of function names to avoid using 'feval'
 end
 if ~exist('OCTAVE_VERSION', 'builtin')
     % Check whether fun has at least 1 output.
@@ -495,7 +495,7 @@ abnormal_x0 = isnan(x0) | (abs(x0) >= inf);
 if any(abnormal_x0)
     x0(abnormal_x0) = 0;
     wid = sprintf('%s:AbnormalX0', invoker);
-    wmessage = sprintf('%s: X0 contains NaN or inifinite values; they are replaced by 0.', invoker);
+    wmessage = sprintf('%s: X0 contains NaN or infinite values; they are replaced by 0.', invoker);
     warning(wid, '%s', wmessage);
     warnings = [warnings, wmessage];
 end
@@ -815,7 +815,7 @@ end
 options = rmempty(options); % Remove empty fields
 options_fields = fieldnames(options);
 % The list of fields in options  will be returned and used elsewhere. We
-% save it right now in case we "intellegently" change options_fields
+% save it right now in case we "intelligently" change options_fields
 % after this line in future versions.
 user_options_fields = options_fields;
 
@@ -1006,7 +1006,7 @@ options.npt = double(options.npt);
 % Although npt and maxfun are integers logically, they have to be
 % passed to the mexified code as double variables. In mex, data is
 % passed by pointers, but there are only very limited functions that
-% can read an integer value from a pointer or write an interger
+% can read an integer value from a pointer or write an integer
 % value to a pointer (mxCopyPtrToInteger1, mxCopyInteger1ToPtr,
 % mxCopyPtrToInteger2, mxCopyInteger2ToPtr, mxCopyPtrToInteger4,
 % mxCopyInteger4ToPtr; no function for integer*8). This makes it
@@ -1061,7 +1061,7 @@ options.maxfun = double(options.maxfun); % maxfun will be passed as a double
 
 % Validate options.rhobeg
 % NOTE: if the problem is to be scaled, then options.rhobeg and options.rhoend
-% will be used as the intial and final trust-region radii for the scaled problem.
+% will be used as the initial and final trust-region radii for the scaled problem.
 validated = false;
 if isfield(options, 'rhobeg')
     if ~isrealscalar(options.rhobeg) || options.rhobeg <= 0 || isnan(options.rhobeg) || options.rhobeg == inf
@@ -1304,7 +1304,7 @@ end
 if ~isempty(lb)
 % lb < x_before_scaling < ub
 % <==> lb < scaling_factor.*x_after_scaling + shift < ub
-% <==> (lb-shift)./scaling_factor < x_after_scaling < (ub-shift)./scaling_facor
+% <==> (lb-shift)./scaling_factor < x_after_scaling < (ub-shift)./scaling_factor
     lb = (lb-shift)./scaling_factor;
 end
 if ~isempty(ub)
@@ -1546,7 +1546,7 @@ if ~ismember(lower(options.solver), solver_list)
     error(sprintf('%s:InvalidSolver', funname), '%s: UNEXPECTED ERROR: %s serves only %s.', funname, funname, mystrjoin(solver_list, ', '));
 end
 
-if isfield(options, 'honour_x0') && options.honour_x0  % In this case, we respect the user-defiend x0 and revise rhobeg
+if isfield(options, 'honour_x0') && options.honour_x0  % In this case, we respect the user-defined x0 and revise rhobeg
     rhobeg_old = options.rhobeg;
     lbx = (lb > -inf & x0 - lb <= eps*max(abs(lb), 1));  % x0 essentially equals lb
     ubx = (ub < inf & x0 - ub >= - eps*max(abs(ub), 1));  % x0 essentially equals ub

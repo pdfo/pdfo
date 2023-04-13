@@ -155,7 +155,7 @@ end
 % Detect whether we are running a 32-bit MATLAB, where maxArrayDim = 2^31-1,
 % and then set ad_option accordingly. On a 64-bit MATLAB, maxArrayDim = 2^48-1
 % according to the document of MATLAB R2019a.
-% !!! Make sure that eveything is compiled with the SAME ad_option !!!
+% !!! Make sure that everything is compiled with the SAME ad_option !!!
 % !!! Otherwise, Segmentation Fault may occur !!!
 [Architecture, maxArrayDim] = computer;
 if any(strfind(Architecture, '64')) && log2(maxArrayDim) > 31

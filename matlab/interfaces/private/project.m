@@ -24,8 +24,8 @@ function [x, fx, exitflag, output] = project (Ai, bi, Ae, be, lb, ub, x0, option
 %
 % Remarks
 %
-% 1. Critial issues:
-% 1.1. How to define sigma (intial value, maximal value, update)
+% 1. Crucial issues:
+% 1.1. How to define sigma (initial value, maximal value, update)
 % 1.2. The Semismooth-Newton method may have difficulty when the Jacobin
 % is badly conditioned, which will happen when sigma is large.
 %
@@ -60,7 +60,7 @@ function [x, fx, exitflag, output] = project (Ai, bi, Ae, be, lb, ub, x0, option
 % solve the problem. Be realistic. Our objective here is more to solve the
 % problem than to develope a new algorithm!
 %
-% TODO: Better algorithm/implemention for solving this projection problem
+% TODO: Better algorithm/implementation for solving this projection problem
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % project starts

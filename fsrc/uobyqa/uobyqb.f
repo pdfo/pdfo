@@ -44,9 +44,9 @@ C
       NNP=N+N+1
       NPTM=NPT-1
       NFTEST=MAX0(MAXFUN,1)
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       ALMOST_INFINITY=HUGE(0.0D0)/2.0D0
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 C
 C     Initialization. NF is the number of function calculations so far.
 C
@@ -77,11 +77,11 @@ C
    50 IF (NF == 1) THEN
           FOPT=F
           KOPT=NF
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
           DO I = 1, N
               XOPT(I) = XPT(1, I)
           END DO
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           FBASE=F
           J=0
           JSWITCH=-1
@@ -90,11 +90,11 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
           IF (F < FOPT) THEN
               FOPT=F
               KOPT=NF
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
               DO I = 1, N
                   XOPT(I) = XPT(NF, I)
               END DO
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           END IF
       END IF
 C
@@ -201,7 +201,7 @@ C
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C Zaikun 2019-08-29: For ill-conditioned problems, NaN may occur in the
 C models. In such a case, we terminate the code. Otherwise, the behavior
-C of TRSTEM or LAGMAX is not predictable, and Segmentation Fault or 
+C of TRSTEM or LAGMAX is not predictable, and Segmentation Fault or
 C infinite cycling may happen. This is because any equality/inequality
 C comparison involving NaN returns FALSE, which can lead to unintended
 C behavior of the code, including uninitialized indices.
@@ -250,14 +250,14 @@ C
           IF (IPRINT > 0) PRINT 130
   130     FORMAT (/4X,'Return from UOBYQA because CALFUN has been',
      1      ' called MAXFUN times')
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
           INFO=3
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           GOTO 420
       END IF
       NF=NF+1
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       DO I=1,N
           IF (X(I) /= X(I)) THEN
               F=X(I) ! Set F to NaN
@@ -271,14 +271,14 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
               GOTO 420
           END IF
       END DO
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
       CALL CALFUN (N,X,F)
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C     By Zaikun (commented on 02-06-2019; implemented in 2016):
 C     Exit if F has an NaN or almost infinite value.
-C     If this happends at the very first function evaluation (i.e.,
+C     If this happens at the very first function evaluation (i.e.,
 C     NF=1), then it is necessary to set FOPT and XOPT before going to
 C     530, because these two variables have not been set yet.
       IF (F /= F .OR. F > ALMOST_INFINITY) THEN
@@ -297,7 +297,7 @@ C     Exit if F .LE. FTARGET.
           INFO=1
           GOTO 436
       END IF
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
       IF (IPRINT == 3) THEN
           PRINT 140, NF,F,(X(I),I=1,N)
@@ -305,13 +305,13 @@ C     Exit if F .LE. FTARGET.
      1       '    The corresponding X is:'/(2X,5D15.6))
       END IF
       IF (NF <= NPT) GOTO 50
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C      IF (KNEW .EQ. -1) GOTO 420
       IF (KNEW == -1) THEN
           INFO=0
           GOTO 420
       END IF
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 C
 C     Use the quadratic model to predict the change in F due to the step D,
 C     and find the values of the Lagrange functions at the new point.

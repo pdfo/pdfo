@@ -165,7 +165,7 @@ C Although input 5 (maxfun) is an integer logically,
 C it has to be passed to the mexified code as a double variable. In
 C mex, data is passed by pointers, but there are only very limited
 C functions that can read an integer value from a pointer or write
-C an interger value to a pointer (mxCopyPtrToInteger1,
+C an integer value to a pointer (mxCopyPtrToInteger1,
 C mxCopyInteger1ToPtr, mxCopyPtrToInteger2, mxCopyInteger2ToPtr,
 C mxCopyPtrToInteger4, mxCopyInteger4ToPtr; no function for
 C INTEGER*8). This makes it impossible to pass integer data properly
