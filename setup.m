@@ -465,11 +465,11 @@ cellfun(@(filename) delete(filename), trash_files);
 warning(orig_warning_state); % Restore the behavior of displaying warnings
 return
 
-%%%%%%%%%%%%% Function for removing the compliled MEX files  %%%%%%%%%%%%
+%%%%%%%%%%%%% Function for removing the compiled MEX files  %%%%%%%%%%%%
 function clean_mex
-%CLEAN_MEX removes the compliled MEX files.
+%CLEAN_MEX removes the compiled MEX files.
 
-fprintf('\nRemoving the compliled MEX files (if any) ... ');
+fprintf('\nRemoving the compiled MEX files (if any) ... ');
 % The full path of several directories.
 cpwd = fileparts(mfilename('fullpath')); % Current directory
 matd = fullfile(cpwd, 'matlab'); % Matlab directory

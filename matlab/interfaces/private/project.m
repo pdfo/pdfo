@@ -46,7 +46,7 @@ function [x, fx, exitflag, output] = project (Ai, bi, Ae, be, lb, ub, x0, option
 % 4. Testing results (without using 'quadprog' or 'fmincon'):
 % For all the 235 bound/linearly constrained CUTEst problems with at
 % most 5,000 variables and 50,000 linear constraints, the code can find a
-% point with relative constration violation (RCV) at most 10^(-6) except the
+% point with relative constraint violation (RCV) at most 10^(-6) except the
 % following problems:
 % a. BLOWEYA, BLOWEYB: final RCV between 10^(-5) and 10^(-6);
 % b. DTOC3: final RCV between 10^(-5) and 10^(-4);

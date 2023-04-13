@@ -10,7 +10,7 @@ C     1  CON,SIM,SIMI,DATMAT,A,VSIG,VETA,SIGBAR,DX,W,IACT)
 C NSMAX is the maximal number of "dropped X" to save (see comments below
 C line number 480)
       PARAMETER (CTOL = EPSILON(1.0D0))
-C CTOL is the tolerance for consraint violation. A point X is considered
+C CTOL is the tolerance for constraint violation. A point X is considered
 C to be feasible if its constraint violation (RESMAX) is less than CTOL.
 C EPSILON(1.0D0) returns the machine epsilon corresponding to 1.0D0,
 C which is expected to be about 2.0D-16.
@@ -129,7 +129,7 @@ C   60     RESMAX=AMAX1(RESMAX,-CON(K))
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C By Zaikun 20190819:
-C CONSAV always containts the constraint value of the current x.
+C CONSAV always contains the constraint value of the current x.
 C CON, however, will be changed during the calculation (see the lines
 C above line number 220).
       DO K = 1, MPP
@@ -139,7 +139,7 @@ C above line number 220).
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C     By Tom/Zaikun (on 04-06-2019/10-06-2019):
-C     CSUM containts the sum of the absolute value of the constraints to
+C     CSUM contains the sum of the absolute value of the constraints to
 C     check whether it contains a NaN value.
       CSUM=0.0D0
       DO K=1,M
