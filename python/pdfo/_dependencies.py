@@ -644,7 +644,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     prob_info['fixedx_value'] = fixed_values
 
     # Since fixedx_value may be revised in _constraints_validation, we will record it in prob_info only after that. We
-    # save its current value in fixedx_value_save, which will be used when calculating the constriant violation at x0.
+    # save its current value in fixedx_value_save, which will be used when calculating the constraint violation at x0.
     fixed_values_save = fixed_values.copy()
 
     # Validate the linear and nonlinear constraint, and define its feasibility.

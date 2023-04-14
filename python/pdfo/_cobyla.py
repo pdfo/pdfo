@@ -76,7 +76,7 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
                 Debugging flag. By default, it is False.
             chkfunval: bool, optional
                 Flag used when debugging. If both `options['debug']` and `options['chkfunval']` are True, an extra 
-                function/constriant evaluation would be performed to check whether the returned values of the objective 
+                function/constraint evaluation would be performed to check whether the returned values of the objective 
                 function and the constraint match the returned x. By default, it is False.
 
     Returns
