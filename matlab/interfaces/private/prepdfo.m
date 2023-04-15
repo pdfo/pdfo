@@ -386,7 +386,7 @@ if ~isempty(unknown_fields)
     warnings = [warnings, wmessage];
 end
 
-% Read the fields of problem. They will be validated in function predfo
+% Read the fields of problem. They will be validated in function prepdfo.
 Aineq = [];
 bineq = [];
 Aeq = [];
