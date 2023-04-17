@@ -1,7 +1,7 @@
 C The mex gateway for NEWUOA
 C
 C **********************************************************************
-C   Authors:    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+C   Authors:    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
 C               and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
 C               Department of Applied Mathematics,
 C               The Hong Kong Polytechnic University

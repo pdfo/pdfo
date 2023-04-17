@@ -85,7 +85,7 @@ class OptimizeResult(dict):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -173,7 +173,7 @@ class Bounds:
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -244,7 +244,7 @@ class LinearConstraint:
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -335,7 +335,7 @@ class NonlinearConstraint:
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -505,7 +505,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -886,7 +886,7 @@ def _bounds_validation(invoker, bounds, lenx0):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -983,7 +983,7 @@ def _constraints_validation(invoker, constraints, lenx0, fixed_indices, fixed_va
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -1358,7 +1358,7 @@ def _eliminate_linear_equalities(invoker, constraints, x0, lb, ub, prob_info, li
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -1600,7 +1600,7 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -2031,7 +2031,7 @@ def _constr_violation(invoker, x, lb, ub, constraints, prob_info):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -2123,7 +2123,7 @@ def _problem_type(lb, ub, constraints):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -2176,7 +2176,7 @@ def _linear_constraints_constr(linear_constraint):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -2232,7 +2232,7 @@ def _fullx(freex_value, fixedx_value, freex, fixedx):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -2277,7 +2277,7 @@ def _prob_solv_match(problem_type, solver):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -2354,7 +2354,7 @@ def _scale_problem(fun, x0, lb, ub, constraints, list_warnings):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -2481,7 +2481,7 @@ def _solver_selection(invoker, method, options, prob_info, list_warnings):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -2710,7 +2710,7 @@ def _project(x0, lb, ub, constraints, options=None):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -2883,7 +2883,7 @@ def _augmented_linear_constraint(n, bounds, constraints):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -2981,7 +2981,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.
@@ -3613,7 +3613,7 @@ def import_error_so(missing_file=None):
 
     Authors
     -------
-    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
     and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
     Department of Applied Mathematics,
     The Hong Kong Polytechnic University.

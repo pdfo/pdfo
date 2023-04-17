@@ -3,7 +3,7 @@ identical to the original code except that it includes a few new inputs to
 fit the interface of PDFO. For original code, see pdfo/fsrc/original/uobyqa.
 
 ***********************************************************************
-Modified by:Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+Modified by:Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
             and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
             Department of Applied Mathematics,
             The Hong Kong Polytechnic University

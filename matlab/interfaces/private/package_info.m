@@ -2,7 +2,7 @@ function information = package_info(request)
 %PACKAGE_INFO returns information about the package.
 %
 %   ***********************************************************************
-%   Authors:    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+%   Authors:    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
 %               and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
 %               Department of Applied Mathematics,
 %               The Hong Kong Polytechnic University
@@ -34,7 +34,7 @@ about = 'PDFO (Powell''s Derivative-Free Optimization solvers) is a cross-platfo
 
 author = 'Tom M. Ragonneau and Zaikun Zhang';
 
-email= 'tom.ragonneau@connect.polyu.hk and zaikun.zhang@polyu.edu.hk';
+email= 'tom.ragonneau@polyu.edu.hk and zaikun.zhang@polyu.edu.hk';
 
 url = 'www.pdfo.net';
 

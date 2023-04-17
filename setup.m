@@ -40,7 +40,7 @@ function setup(varargin)
 %   the package but only add it into the search path.
 %
 %   ***********************************************************************
-%   Authors:    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+%   Authors:    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
 %               and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
 %               Department of Applied Mathematics,
 %               The Hong Kong Polytechnic University.

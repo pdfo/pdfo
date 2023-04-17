@@ -2,7 +2,7 @@ This folder contains a modified version of Powell's COBYLA code. For the
 original code, see pdfo/fsrc/original/cobyla.
 
 ***********************************************************************
-Modified by:Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+Modified by:Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
             and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
             Department of Applied Mathematics,
             The Hong Kong Polytechnic University

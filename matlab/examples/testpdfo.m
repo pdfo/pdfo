@@ -6,7 +6,7 @@ function testpdfo(release, precision, nrun)
 %   rosenbrock_example.m for an illustration about how to use pdfo.
 %
 %   ***********************************************************************
-%   Authors:    Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+%   Authors:    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
 %               and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
 %               Department of Applied Mathematics,
 %               The Hong Kong Polytechnic University
