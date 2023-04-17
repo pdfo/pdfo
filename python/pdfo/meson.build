@@ -4,7 +4,6 @@ incdir_numpy = run_command(py3, [
     'import os; import numpy; print(os.path.relpath(numpy.get_include()))',
 ], check: true).stdout().strip()
 inc_np = include_directories(incdir_numpy)
-# np_dep = declare_dependency(include_directories: inc_np)
 incdir_f2py = run_command(py3, [
     '-c',
     'import os; import numpy.f2py; print(os.path.relpath(numpy.f2py.get_include()))',
@@ -16,7 +15,6 @@ fortranobject_c = incdir_f2py / 'fortranobject.c'
 numpy_nodepr_api = '-DNPY_NO_DEPRECATED_API=NPY_1_9_API_VERSION'
 
 # Dependencies for Fortran
-# fortran_compiler = meson.get_compiler('fortran')
 fortranobject_lib = static_library(
     '_fortranobject',
     fortranobject_c,
@@ -29,22 +27,7 @@ fortranobject_dep = declare_dependency(
     include_directories: [inc_np, inc_f2py],
 )
 
-pdfoconst_module = custom_target(
-    'pdfoconstmodule',
-    output : 'pdfoconstmodule.c',
-    input : '../py_gateways/pdfoconst-interface.pyf',
-    command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
-)
-pdfoconst = py3.extension_module(
-    'pdfoconst',
-    [pdfoconst_module, '../../fsrc/pdfoconst.F'],
-    c_args: numpy_nodepr_api,
-    dependencies: fortranobject_dep,
-    install : true,
-    link_language: 'fortran',
-    subdir: 'pdfo',
-)
-
+# The gethuge module is used by the Fortran solvers but also the Python interface
 gethuge_module = custom_target(
     'gethugemodule',
     output : 'gethugemodule.c',
@@ -61,85 +44,57 @@ gethuge = py3.extension_module(
     subdir: 'pdfo',
 )
 
-uobyqa_module = custom_target(
-    'fuobyqamodule',
-    output : ['fuobyqamodule.c', 'fuobyqa-f2pywrappers2.f90'],
-    input : '../py_gateways/uobyqa-interface.pyf',
-    command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
-)
-uobyqa = py3.extension_module(
-    'fuobyqa',
-    [uobyqa_module, '../py_gateways/uobyqa.f90', '../../fsrc/uobyqa/uobyqa.f', '../../fsrc/uobyqa/uobyqb.f', '../../fsrc/uobyqa/trstep.f', '../../fsrc/uobyqa/lagmax.f', '../../fsrc/pdfoconst.F'],
-    c_args: numpy_nodepr_api,
-    dependencies: fortranobject_dep,
-    install : true,
-    link_language: 'fortran',
-    subdir: 'pdfo',
-)
+# Names of the Fortran source files for each solver
+f77_sources = {
+    'uobyqa': ['uobyqa.f', 'uobyqb.f', 'trstep.f', 'lagmax.f'],
+    'newuoa': ['newuoa.f', 'newuob.f', 'update.f', 'trsapp.f', 'biglag.f', 'bigden.f'],
+    'bobyqa': ['bobyqa.f', 'bobyqb.f', 'prelim.f', 'update.f', 'rescue.f', 'trsbox.f', 'altmov.f'],
+    'lincoa': ['lincoa.f', 'lincob.f', 'prelim.f', 'update.f', 'trstep.f', 'getact.f', 'qmstep.f'],
+    'cobyla': ['cobyla.f', 'cobylb.f', 'trstlp.f'],
+}
 
-newuoa_module = custom_target(
-    'fnewuoamodule',
-    output : ['fnewuoamodule.c', 'fnewuoa-f2pywrappers2.f90'],
-    input : '../py_gateways/newuoa-interface.pyf',
-    command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
-)
-newuoa = py3.extension_module(
-    'fnewuoa',
-    [newuoa_module, '../py_gateways/newuoa.f90', '../../fsrc/newuoa/newuoa.f', '../../fsrc/newuoa/newuob.f', '../../fsrc/newuoa/update.f', '../../fsrc/newuoa/trsapp.f', '../../fsrc/newuoa/biglag.f', '../../fsrc/newuoa/bigden.f', '../../fsrc/pdfoconst.F'],
-    c_args: numpy_nodepr_api,
-    dependencies: fortranobject_dep,
-    install : true,
-    link_language: 'fortran',
-    subdir: 'pdfo',
-)
+foreach classical : [false, true]
+    # Paths to the source and signature files
+    if classical
+        source_path = '../../fsrc/classical/'
+        sig_path = '../py_gateways/classical/'
+    else
+        source_path = '../../fsrc/'
+        sig_path = '../py_gateways/'
+    endif
 
-bobyqa_module = custom_target(
-    'fbobyqamodule',
-    output : ['fbobyqamodule.c', 'fbobyqa-f2pywrappers2.f90'],
-    input : '../py_gateways/bobyqa-interface.pyf',
-    command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
-)
-bobyqa = py3.extension_module(
-    'fbobyqa',
-    [bobyqa_module, '../py_gateways/bobyqa.f90', '../../fsrc/bobyqa/bobyqa.f', '../../fsrc/bobyqa/bobyqb.f', '../../fsrc/bobyqa/update.f', '../../fsrc/bobyqa/trsbox.f', '../../fsrc/bobyqa/rescue.f', '../../fsrc/bobyqa/prelim.f', '../../fsrc/bobyqa/altmov.f', '../../fsrc/pdfoconst.F'],
-    c_args: numpy_nodepr_api,
-    dependencies: fortranobject_dep,
-    install : true,
-    link_language: 'fortran',
-    subdir: 'pdfo',
-)
+    foreach solver, source_filenames : f77_sources
+        # Generate the F2PY module for the solver
+        if classical
+            f_name = 'f' + solver + '_classical'
+        else
+            f_name = 'f' + solver
+        endif
+        solver_module = custom_target(
+            f_name + 'module',
+            output : [f_name + 'module.c', f_name + '-f2pywrappers2.f90'],
+            input : sig_path + solver + '-interface.pyf',
+            command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
+        )
 
-lincoa_module = custom_target(
-    'flincoamodule',
-    output : ['flincoamodule.c', 'flincoa-f2pywrappers2.f90'],
-    input : '../py_gateways/lincoa-interface.pyf',
-    command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
-)
-lincoa = py3.extension_module(
-    'flincoa',
-    [lincoa_module, '../py_gateways/lincoa.f90', '../../fsrc/lincoa/lincoa.f', '../../fsrc/lincoa/lincob.f', '../../fsrc/lincoa/update.f', '../../fsrc/lincoa/trstep.f', '../../fsrc/lincoa/prelim.f', '../../fsrc/lincoa/getact.f', '../../fsrc/lincoa/qmstep.f', '../../fsrc/pdfoconst.F'],
-    c_args: numpy_nodepr_api,
-    dependencies: fortranobject_dep,
-    install : true,
-    link_language: 'fortran',
-    subdir: 'pdfo',
-)
+        # Set the sources for the solver
+        sources = [solver_module, sig_path + solver + '.f90', '../../fsrc/pdfoconst.F']
+        foreach filename : source_filenames
+            sources += source_path + solver + '/' + filename
+        endforeach
 
-cobyla_module = custom_target(
-    'fcobylamodule',
-    output : ['fcobylamodule.c', 'fcobyla-f2pywrappers2.f90'],
-    input : '../py_gateways/cobyla-interface.pyf',
-    command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
-)
-cobyla = py3.extension_module(
-    'fcobyla',
-    [cobyla_module, '../py_gateways/cobyla.f90', '../../fsrc/cobyla/cobyla.f', '../../fsrc/cobyla/cobylb.f', '../../fsrc/cobyla/trstlp.f', '../../fsrc/pdfoconst.F'],
-    c_args: numpy_nodepr_api,
-    dependencies: fortranobject_dep,
-    install : true,
-    link_language: 'fortran',
-    subdir: 'pdfo',
-)
+        # Build the Fortran module
+        py3.extension_module(
+            f_name,
+            sources,
+            c_args: numpy_nodepr_api,
+            dependencies: fortranobject_dep,
+            install : true,
+            link_language: 'fortran',
+            subdir: 'pdfo',
+        )
+    endforeach
+endforeach
 
 py3.install_sources([
     '__init__.py',
