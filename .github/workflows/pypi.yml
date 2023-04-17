@@ -33,7 +33,7 @@ jobs:
           PDFO_VERSION: ${{ github.event.inputs.version }}
 
       - name: Publish to TestPyPI
-        uses: pypa/gh-action-pypi-publish@v1.8.1
+        uses: pypa/gh-action-pypi-publish@v1
         if: ${{ github.event.inputs.pypi_repo == 'testpypi' }}
         with:
           user: __token__
@@ -41,7 +41,7 @@ jobs:
           repository_url: https://test.pypi.org/legacy/
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.8.1
+        uses: pypa/gh-action-pypi-publish@v1
         if: ${{ github.event.inputs.pypi_repo == 'pypi' }}
         with:
           user: __token__
