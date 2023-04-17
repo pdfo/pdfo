@@ -29,6 +29,22 @@ fortranobject_dep = declare_dependency(
     include_directories: [inc_np, inc_f2py],
 )
 
+pdfoconst_module = custom_target(
+    'pdfoconstmodule',
+    output : 'pdfoconstmodule.c',
+    input : '../py_gateways/pdfoconst-interface.pyf',
+    command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
+)
+pdfoconst = py3.extension_module(
+    'pdfoconst',
+    [pdfoconst_module, '../../fsrc/pdfoconst.F'],
+    c_args: numpy_nodepr_api,
+    dependencies: fortranobject_dep,
+    install : true,
+    link_language: 'fortran',
+    subdir: 'pdfo',
+)
+
 gethuge_module = custom_target(
     'gethugemodule',
     output : 'gethugemodule.c',
@@ -47,7 +63,7 @@ gethuge = py3.extension_module(
 
 uobyqa_module = custom_target(
     'fuobyqamodule',
-    output : 'fuobyqamodule.c',
+    output : ['fuobyqamodule.c', 'fuobyqa-f2pywrappers2.f90'],
     input : '../py_gateways/uobyqa-interface.pyf',
     command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
 )
@@ -63,7 +79,7 @@ uobyqa = py3.extension_module(
 
 newuoa_module = custom_target(
     'fnewuoamodule',
-    output : 'fnewuoamodule.c',
+    output : ['fnewuoamodule.c', 'fnewuoa-f2pywrappers2.f90'],
     input : '../py_gateways/newuoa-interface.pyf',
     command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
 )
@@ -79,7 +95,7 @@ newuoa = py3.extension_module(
 
 bobyqa_module = custom_target(
     'fbobyqamodule',
-    output : 'fbobyqamodule.c',
+    output : ['fbobyqamodule.c', 'fbobyqa-f2pywrappers2.f90'],
     input : '../py_gateways/bobyqa-interface.pyf',
     command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
 )
@@ -95,7 +111,7 @@ bobyqa = py3.extension_module(
 
 lincoa_module = custom_target(
     'flincoamodule',
-    output : 'flincoamodule.c',
+    output : ['flincoamodule.c', 'flincoa-f2pywrappers2.f90'],
     input : '../py_gateways/lincoa-interface.pyf',
     command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
 )
@@ -111,7 +127,7 @@ lincoa = py3.extension_module(
 
 cobyla_module = custom_target(
     'fcobylamodule',
-    output : 'fcobylamodule.c',
+    output : ['fcobylamodule.c', 'fcobyla-f2pywrappers2.f90'],
     input : '../py_gateways/cobyla-interface.pyf',
     command: [py3, '-m', 'numpy.f2py', '@INPUT@', '--build-dir', '@OUTDIR@']
 )
