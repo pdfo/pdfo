@@ -1,0 +1,70 @@
+# .github/workflows/wheels.yml
+# GitHub Actions configuration file for building wheels
+# See https://github.com/pypa/cibuildwheel for details
+
+name: wheels
+
+on:
+  push:
+    branches: [python/dev]
+  pull_request:
+    branches: [python/dev]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build_wheels:
+    name: Build wheel for cp${{ matrix.python }}-${{ matrix.platform }}-${{ matrix.manylinux_image }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # 64-bit Linux manylinux2014
+          - os: ubuntu-20.04
+            python: 37
+            platform: manylinux_x86_64
+            manylinux_image: manylinux2014
+          - os: ubuntu-20.04
+            python: 38
+            platform: manylinux_x86_64
+            manylinux_image: manylinux2014
+          - os: ubuntu-20.04
+            python: 39
+            platform: manylinux_x86_64
+            manylinux_image: manylinux2014
+          - os: ubuntu-20.04
+            python: 310
+            platform: manylinux_x86_64
+            manylinux_image: manylinux2014
+          - os: ubuntu-20.04
+            python: 311
+            platform: manylinux_x86_64
+            manylinux_image: manylinux2014
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Build and test wheels
+        env:
+          CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
+          CIBW_BUILD_VERBOSITY: 1
+          CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.manylinux_image }}
+          CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.manylinux_image }}
+          CIBW_TEST_COMMAND: bash {project}/tools/github/test_wheels.sh
+        run: bash tools/github/build_wheels.sh
+
+      - name: Store artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: python/wheelhouse/*.whl
