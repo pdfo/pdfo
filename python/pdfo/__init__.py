@@ -3,7 +3,7 @@
 
 Authors
 -------
-Tom M. RAGONNEAU (tom.ragonneau@connect.polyu.hk)
+Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
 and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
 Department of Applied Mathematics,
 The Hong Kong Polytechnic University.
@@ -27,10 +27,10 @@ __copyright__ = f'Copyright 2020--{datetime.now().year}, ' \
                 f'Tom M. Ragonneau and Zaikun Zhang'
 __credits__ = ['Tom M. Ragonneau', 'Zaikun Zhang', 'Antoine Dechaume']
 __license__ = '3-Clause BSD'
-__version__ = '1.2'
-__date__ = 'October, 2021'
+__version__ = '1.2.2'
+__date__ = 'April, 2023'
 __maintainer__ = 'Tom M. Ragonneau and Zaikun Zhang'
-__email__ = 'tom.ragonneau@connect.polyu.hk and zaikun.zhang@polyu.edu.hk'
+__email__ = 'tom.ragonneau@polyu.edu.hk and zaikun.zhang@polyu.edu.hk'
 __status__ = 'Production'
 
 if not __PDFO_SETUP__:

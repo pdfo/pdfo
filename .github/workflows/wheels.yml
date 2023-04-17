@@ -183,10 +183,10 @@ jobs:
           python-version: '3.x'
 
       - name: Build source distribution
-        run: bash build_tools/github/build_source.sh
+        run: bash tools/github/build_source.sh
 
       - name: Test source distribution
-        run: bash build_tools/github/test_source.sh
+        run: bash tools/github/test_source.sh
 
       - name: Store artifacts
         uses: actions/upload-artifact@v3
@@ -215,6 +215,6 @@ jobs:
           path: dist
 
       - name: Upload artifacts to Anaconda
-        run: bash build_tools/github/upload_anaconda.sh
+        run: bash tools/github/upload_anaconda.sh
         env:
           ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}

@@ -1,3 +1,0 @@
-[submodule "build_tools/gfortran-install"]
-	path = build_tools/gfortran-install
-	url = https://github.com/MacPython/gfortran-install.git

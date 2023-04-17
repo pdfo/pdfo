@@ -4,13 +4,15 @@ __pycache__/
 *$py.class
 
 # C/Fortran extensions
+*module.c
 fortranobject.c
 fortranobject.h
+*-f2pywrappers.f
 *-f2pywrappers2.f90
-*module.c
 *.so
 *.pyd
 *.mod
+.mesonpy-native-file.ini
 
 # Compiled MEX files
 *.mex*

@@ -1,0 +1,3 @@
+recursive-include fsrc *
+recursive-include python *.f90 *.pyf
+recursive-include python/examples *.py

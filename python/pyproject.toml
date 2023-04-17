@@ -1,0 +1,70 @@
+[build-system]
+build-backend = "mesonpy"
+requires = [
+    "meson-python>=0.12.1",
+    "wheel",
+    "oldest-supported-numpy",
+]
+
+[project]
+name = "pdfo"
+description = "Powell's Derivative-Free Optimization solvers"
+readme = "../README_py.md"
+requires-python = ">=3.7"
+license = {file = "../LICENCE.txt"}
+authors = [
+    {name = "Tom M. Ragonneau", email = "tom.ragonneau@polyu.edu.hk"},
+    {name = "Zaikun Zhang", email = "zaikun.zhang@polyu.edu.hk"},
+]
+maintainers = [
+    {name = "Tom M. Ragonneau", email = "tom.ragonneau@polyu.edu.hk"},
+    {name = "Zaikun Zhang", email = "zaikun.zhang@polyu.edu.hk"},
+]
+keywords = [
+    "blackbox-optimization",
+    "constrained-optimization",
+    "derivative-free-optimization",
+    "hyperparameter-optimization",
+    "nonlinear-optimization",
+    "numerical-optimization",
+    "optimization",
+    "optimization-algorithms",
+    "optimization-methods",
+    "optimization-tools",
+    "simulation-based-optimization",
+    "unconstrained-optimization",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Fortran",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "numpy>=1.17.0",
+    "scipy>=1.1.0",
+]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://www.pdfo.net/"
+documentation = "https://www.pdfo.net/"
+source = "https://github.com/pdfo/pdfo/"
+download = "https://www.pdfo.net/docs.html#releases"
+tracker = "https://github.com/pdfo/pdfo/issues/"
