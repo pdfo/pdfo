@@ -50,19 +50,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
       - name: Build and test wheels
+        uses: pypa/cibuildwheel@v2.12.1
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
           CIBW_BUILD_VERBOSITY: 1
           CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.manylinux_image }}
           CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.manylinux_image }}
           CIBW_TEST_COMMAND: bash {project}/tools/github/test_wheels.sh
-        run: bash tools/github/build_wheels.sh
 
       - name: Store artifacts
         uses: actions/upload-artifact@v3
