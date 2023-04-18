@@ -25,29 +25,29 @@ jobs:
       matrix:
         include:
           # 32-bit Linux manylinux2014
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             python: 37
             platform: manylinux_i686
             manylinux_image: manylinux2014
 
           # 64-bit Linux manylinux2014
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             python: 37
             platform: manylinux_x86_64
             manylinux_image: manylinux2014
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             python: 38
             platform: manylinux_x86_64
             manylinux_image: manylinux2014
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             python: 39
             platform: manylinux_x86_64
             manylinux_image: manylinux2014
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             python: 310
             platform: manylinux_x86_64
             manylinux_image: manylinux2014
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             python: 311
             platform: manylinux_x86_64
             manylinux_image: manylinux2014
@@ -55,19 +55,19 @@ jobs:
           # 64-bit macOS
           - os: macos-latest
             python: 37
-            platform_id: macosx_x86_64
+            platform: macosx_x86_64
           - os: macos-latest
             python: 38
-            platform_id: macosx_universal2
+            platform: macosx_universal2
           - os: macos-latest
             python: 39
-            platform_id: macosx_universal2
+            platform: macosx_universal2
           - os: macos-latest
             python: 310
-            platform_id: macosx_universal2
+            platform: macosx_universal2
           - os: macos-latest
             python: 311
-            platform_id: macosx_universal2
+            platform: macosx_universal2
 
     steps:
       - name: Checkout repository
