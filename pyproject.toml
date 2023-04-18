@@ -75,3 +75,6 @@ test-command = "bash {project}/tools/wheels/cibw_test_command.sh"
 
 [tool.cibuildwheel.macos]
 before-build = "bash {project}/tools/wheels/cibw_before_build_macos.sh"
+
+[tool.cibuildwheel.windows]
+before-build = "bash {project}/tools/wheels/cibw_before_build_windows.sh"
