@@ -8,18 +8,16 @@ PLATFORM=$(PYTHONPATH=tools python -c 'import build_support; print(build_support
 if [[ $PLATFORM == macosx-x86_64 ]]; then
     sudo ln -fs /usr/local/bin/gfortran-12 /usr/local/bin/gfortran
 elif [[ $PLATFORM == macosx-arm64 ]]; then
-    sudo rm -rf /usr/local/gfortran/* /usr/local/bin/gfortran
-    curl -L -O https://github.com/isuruf/gcc/releases/download/gcc-10-arm-20210228/gfortran-darwin-arm64.tar.gz
-    export GFORTRAN_SHA=f26990f6f08e19b2ec150b9da9d59bd0558261dd
-    if [[ "$(shasum gfortran-darwin-arm64.tar.gz)" != "${GFORTRAN_SHA}  gfortran-darwin-arm64.tar.gz" ]]; then
+    curl -L -O https://github.com/isuruf/gcc/releases/download/gcc-11.3.0-2/gfortran-darwin-arm64-cross.tar.gz
+    export GFORTRAN_SHA=527232845abc5af21f21ceacc46fb19c190fe804
+    if [[ "$(shasum gfortran-darwin-arm64-cross.tar.gz)" != "${GFORTRAN_SHA}  gfortran-darwin-arm64-cross.tar.gz" ]]; then
         exit 1
     fi
     sudo mkdir -p /opt/
-    sudo cp "gfortran-darwin-arm64.tar.gz" /opt/gfortran-darwin-arm64.tar.gz
+    sudo cp gfortran-darwin-arm64-cross.tar.gz /opt/gfortran-darwin-arm64-cross.tar.gz
     pushd /opt
-        sudo tar -xvf gfortran-darwin-arm64.tar.gz
-        sudo rm gfortran-darwin-arm64.tar.gz
+        sudo tar -xvf gfortran-darwin-arm64-cross.tar.gz
+        sudo rm gfortran-darwin-arm64-cross.tar.gz
     popd
-    sudo ln -s "$(find /opt/gfortran-darwin-arm64/bin -name "*-gfortran")" /usr/local/bin/gfortran
-    sudo ln -s "$(dirname "$(find /opt/gfortran-darwin-arm64/lib -name libgfortran.dylib)")" /usr/local/gfortran/lib
+    sudo ln -fs /opt/gfortran-darwin-arm64-cross/bin/gfortran /usr/local/bin/gfortran
 fi
