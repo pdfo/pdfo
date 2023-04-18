@@ -34,6 +34,7 @@ parts/
 sdist/
 var/
 wheels/
+!/tools/wheels/
 share/python-wheels/
 *.egg-info/
 .installed.cfg

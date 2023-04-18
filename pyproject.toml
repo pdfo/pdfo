@@ -68,3 +68,10 @@ documentation = "https://www.pdfo.net/"
 source = "https://github.com/pdfo/pdfo/"
 download = "https://www.pdfo.net/docs.html#releases"
 tracker = "https://github.com/pdfo/pdfo/issues/"
+
+[tool.cibuildwheel]
+build-verbosity = "3"
+test-command = "bash {project}/tools/wheels/cibw_test_command.sh"
+
+[tool.cibuildwheel.macos]
+before-build = "bash {project}/tools/wheels/cibw_before_build_macos.sh"
