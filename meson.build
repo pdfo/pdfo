@@ -17,4 +17,4 @@ py3_dep = py3.dependency()
 # Compilers
 add_languages('fortran', native: false)
 
-subdir('pdfo')
+subdir('python/pdfo')

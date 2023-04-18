@@ -9,9 +9,9 @@ requires = [
 [project]
 name = "pdfo"
 description = "Powell's Derivative-Free Optimization solvers"
-readme = "../README_py.md"
+readme = "README_py.md"
 requires-python = ">=3.7"
-license = {file = "../LICENCE.txt"}
+license = {file = "LICENCE.txt"}
 authors = [
     {name = "Tom M. Ragonneau", email = "tom.ragonneau@polyu.edu.hk"},
     {name = "Zaikun Zhang", email = "zaikun.zhang@polyu.edu.hk"},
