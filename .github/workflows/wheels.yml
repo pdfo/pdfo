@@ -67,4 +67,4 @@ jobs:
       - name: Store artifacts
         uses: actions/upload-artifact@v3
         with:
-          path: python/wheelhouse/*.whl
+          path: wheelhouse/*.whl
