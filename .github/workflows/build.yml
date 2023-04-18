@@ -1,4 +1,4 @@
-# .github/workflows/wheels.yml
+# .github/workflows/build.yml
 # GitHub Actions configuration file for building wheels
 # See https://github.com/pypa/cibuildwheel for details
 
@@ -63,3 +63,26 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: wheelhouse/*.whl
+
+  upload_anaconda:
+    name: Upload to Anaconda
+    runs-on: ubuntu-20.04
+    if: ${{ github.event_name != 'pull_request' }}
+    needs: build_wheels
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: dist
+
+      - name: Upload artifacts to Anaconda
+        run: bash tools/github/upload_anaconda.sh
+        env:
+          ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
