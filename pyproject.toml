@@ -74,6 +74,4 @@ build-verbosity = "3"
 test-command = "bash {project}/tools/wheels/cibw_test_command.sh"
 
 [tool.cibuildwheel.macos]
-archs = "x86_64 arm64"
 before-build = "bash {project}/tools/wheels/cibw_before_build_macos.sh"
-test-skip = "*_arm64"

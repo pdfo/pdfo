@@ -58,16 +58,16 @@ jobs:
             platform: macosx_x86_64
           - os: macos-latest
             python: 38
-            platform: macosx_*
+            platform: macosx_x86_64
           - os: macos-latest
             python: 39
-            platform: macosx_*
+            platform: macosx_x86_64
           - os: macos-latest
             python: 310
-            platform: macosx_*
+            platform: macosx_x86_64
           - os: macos-latest
             python: 311
-            platform: macosx_*
+            platform: macosx_x86_64
 
     steps:
       - name: Checkout repository
