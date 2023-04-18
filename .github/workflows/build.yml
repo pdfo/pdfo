@@ -24,6 +24,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # 32-bit Linux manylinux2014
+          - os: ubuntu-20.04
+            python: 37
+            platform: manylinux_i686
+            manylinux_image: manylinux2014
+          - os: ubuntu-20.04
+            python: 38
+            platform: manylinux_i686
+            manylinux_image: manylinux2014
+          - os: ubuntu-20.04
+            python: 39
+            platform: manylinux_i686
+            manylinux_image: manylinux2014
+
           # 64-bit Linux manylinux2014
           - os: ubuntu-20.04
             python: 37
@@ -53,6 +67,7 @@ jobs:
       - name: Build and test wheels
         uses: pypa/cibuildwheel@v2.12.1
         env:
+          CIBW_ARCHS: all
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
           CIBW_BUILD_VERBOSITY: 1
           CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.manylinux_image }}
