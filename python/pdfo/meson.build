@@ -1,6 +1,6 @@
 # NumPy include directories
-# The try-except below is needed because os.path.relpath() fails on Windows
-# when the system is split on several drives (e.g. C: and D:).
+# Note: the try-except below is needed because os.path.relpath() fails on
+# Windows when things are split on several drives.
 incdir_numpy = run_command(py3, [
     '-c',
     '''import os, numpy as np
