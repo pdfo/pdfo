@@ -52,22 +52,22 @@ jobs:
             platform: manylinux_x86_64
             manylinux_image: manylinux2014
 
-          # 64-bit macOS
+          # 64-bit macOS x86_64
           - os: macos-latest
             python: 37
             platform: macosx_x86_64
           - os: macos-latest
             python: 38
-            platform: macosx_universal2
+            platform: macosx_x86_64
           - os: macos-latest
             python: 39
-            platform: macosx_universal2
+            platform: macosx_x86_64
           - os: macos-latest
             python: 310
-            platform: macosx_universal2
+            platform: macosx_x86_64
           - os: macos-latest
             python: 311
-            platform: macosx_universal2
+            platform: macosx_x86_64
 
     steps:
       - name: Checkout repository
