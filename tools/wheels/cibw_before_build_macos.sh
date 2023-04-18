@@ -19,6 +19,6 @@ elif [[ $PLATFORM == macosx-arm64 ]]; then
         sudo tar -xvf gfortran-darwin-arm64.tar.gz
         sudo rm gfortran-darwin-arm64.tar.gz
     popd
-    sudo ln -s "$(find /opt/gfortran-darwin-arm64/bin -name "*-gfortran")" /usr/local/bin/gfortran
-    sudo ln -s "$(dirname "$(find /opt/gfortran-darwin-arm64/lib -name libgfortran.dylib)")" /usr/local/gfortran/lib
+    sudo ln -fs "$(find /opt/gfortran-darwin-arm64/bin -name "*-gfortran")" /usr/local/bin/gfortran
+    sudo ln -fs "$(dirname "$(find /opt/gfortran-darwin-arm64/lib -name libgfortran.dylib)")" /usr/local/gfortran/lib
 fi
