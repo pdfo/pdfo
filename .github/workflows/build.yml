@@ -87,6 +87,9 @@ jobs:
       - name: Provide gfortran on Windows
         if: ${{ runner.os == 'Windows' }}
         uses: msys2/setup-msys2@v2
+
+      - name: Use mingw32 on Windows
+        if: ${{ runner.os == 'Windows' }}
         run: echo "[build]`ncompiler=mingw32" | Out-File -Encoding ASCII ~/pydistutils.cfg
 
       - name: Build and test wheels
