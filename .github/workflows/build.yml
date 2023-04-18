@@ -2,7 +2,7 @@
 # GitHub Actions configuration file for building wheels
 # See https://github.com/pypa/cibuildwheel for details
 
-name: wheels
+name: build
 
 on:
   push:
