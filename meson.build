@@ -1,7 +1,7 @@
 project(
     'pdfo',
     'c',
-    version: '1.2.2',
+    version: '1.2.1',
     license: 'BSD-3',
     meson_version: '>= 0.64.0',
 )

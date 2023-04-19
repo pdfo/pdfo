@@ -71,11 +71,14 @@ tracker = "https://github.com/pdfo/pdfo/issues/"
 
 [tool.cibuildwheel]
 build-verbosity = "3"
-test-command = "bash {project}/tools/wheels/cibw_test_command.sh"
+test-command = "bash {project}/tools/github/cibw_test_command.sh"
 
 [tool.cibuildwheel.linux]
 manylinux-i686-image = "manylinux2014"
 manylinux-x86_64-image = "manylinux2014"
 
 [tool.cibuildwheel.macos]
-before-build = "bash {project}/tools/wheels/cibw_before_build_macos.sh"
+before-build = "bash {project}/tools/github/cibw_before_build_macos.sh"
+
+[tool.cibuildwheel.windows]
+before-build = "bash {project}/tools/github/cibw_before_build_windows.sh"
