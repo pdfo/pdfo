@@ -4,6 +4,7 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![pypi](https://img.shields.io/pypi/v/pdfo)](https://pypi.org/project/pdfo/)
 [![download](https://img.shields.io/pypi/dm/pdfo?label=pypi%20downloads)](https://pypi.org/project/pdfo/)
+[![View PDFO: Powell's Derivative-Free Optimization solvers on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/75195-pdfo-powell-s-derivative-free-optimization-solvers)
 
 Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
 FRS (1936&ndash;2015).
