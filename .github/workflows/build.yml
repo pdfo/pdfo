@@ -94,6 +94,11 @@ jobs:
             mingw-w64-x86_64-gcc-fortran
             msys2-runtime-devel
 
+      - name: Check headers
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          ls -l /usr/include/
+
       - name: Build and test wheels
         uses: pypa/cibuildwheel@v2.12.1
         env:
