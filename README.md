@@ -1,10 +1,10 @@
 # PDFO: Powell's Derivative-Free Optimization solvers
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/pdfo/pdfo/build.yml?logo=github&style=for-the-badge)
-![GitHub](https://img.shields.io/github/license/pdfo/pdfo?logo=github&style=for-the-badge)
-![PyPI](https://img.shields.io/pypi/v/pdfo?logo=pypi&style=for-the-badge)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pdfo?logo=pypi&style=for-the-badge)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/pdfo?logo=pypi&style=for-the-badge)
+[![wheels](https://github.com/pdfo/pdfo/actions/workflows/wheels.yml/badge.svg)](https://github.com/pdfo/pdfo/actions/workflows/wheels.yml)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![pypi](https://img.shields.io/pypi/v/pdfo)](https://pypi.org/project/pdfo/)
+[![download](https://img.shields.io/pypi/dm/pdfo?label=pypi%20downloads)](https://pypi.org/project/pdfo/)
+[![View PDFO: Powell's Derivative-Free Optimization solvers on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/75195-pdfo-powell-s-derivative-free-optimization-solvers)
 
 Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
 FRS (1936&ndash;2015).

@@ -81,5 +81,4 @@ manylinux-x86_64-image = "manylinux2014"
 before-build = "bash {project}/tools/github/cibw_before_build_macos.sh"
 
 [tool.cibuildwheel.windows]
-before-build = "bash {project}/tools/github/cibw_before_build_windows.sh"
 repair-wheel-command = "bash tools/github/cibw_repair_wheel_command_windows.sh {wheel} {dest_dir}"
