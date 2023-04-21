@@ -25,41 +25,41 @@ jobs:
       matrix:
         include:
           # 32-bit Linux
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             python: 37
             platform: manylinux_i686
 
           # 64-bit Linux
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             python: 37
             platform: manylinux_x86_64
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             python: 38
             platform: manylinux_x86_64
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             python: 39
             platform: manylinux_x86_64
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             python: 310
             platform: manylinux_x86_64
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             python: 311
             platform: manylinux_x86_64
 
           # 64-bit macOS
-          - os: macos-latest
+          - os: macos-12
             python: 37
             platform: macosx_x86_64
-          - os: macos-latest
+          - os: macos-12
             python: 38
             platform: macosx_x86_64
-          - os: macos-latest
+          - os: macos-12
             python: 39
             platform: macosx_x86_64
-          - os: macos-latest
+          - os: macos-12
             python: 310
             platform: macosx_x86_64
-          - os: macos-latest
+          - os: macos-12
             python: 311
             platform: macosx_x86_64
 
@@ -67,27 +67,22 @@ jobs:
           - os: windows-2019
             python: 37
             platform: win_amd64
-          - os: windows-latest
+          - os: windows-2019
             python: 38
             platform: win_amd64
-          - os: windows-latest
+          - os: windows-2019
             python: 39
             platform: win_amd64
-          - os: windows-latest
+          - os: windows-2019
             python: 310
             platform: win_amd64
-          - os: windows-latest
+          - os: windows-2019
             python: 311
             platform: win_amd64
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-#      - name: Setup Python
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: 3.9
 
       - name: Install mingw-w64 on Windows
         if: ${{ runner.os == 'Windows' }}
