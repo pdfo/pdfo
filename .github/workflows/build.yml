@@ -92,7 +92,7 @@ jobs:
           path-type: inherit
           install: |
             mingw-w64-x86_64-gcc-fortran
-            mingw-w64-x86_64-glib2
+            msys2-runtime-devel
 
       - name: Build and test wheels
         uses: pypa/cibuildwheel@v2.12.1
