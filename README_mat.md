@@ -20,16 +20,23 @@ To see whether your MEX is ready, run the following code in MATLAB:
 mex('-setup', '-v', 'FORTRAN'); mex('-v', fullfile(matlabroot, 'extern', 'examples', 'refbook', 'timestwo.F'));
 ```
 
-If this completes successfully, then your MEX is ready. Otherwise, it is not.
-
-To configure MEX for compiling Fortran, see the
-[official documentation](https://www.mathworks.com/help/matlab/ref/mex.html).
+If this completes successfully, then your MEX is ready. Otherwise, it is not, and
+you may refer to the [`setup_mex` package](https://github.com/equipez/setup_mex) at
+```bash
+https://github.com/equipez/setup_mex
+```
+which will help you to set MEX up on Windows or macOS (the setup of MEX is trivial on Linux).
+In case `setup_mex` does not work, then please check the
+[official documentation of MEX](https://www.mathworks.com/help/matlab/ref/mex.html).
 It will require you to install a
 [supported Fortran compiler](https://www.mathworks.com/support/requirements/previous-releases.html)
-on your system.  Note that MathWorks (rather than PDFO) is quite rigid
-concerning the version of your compiler, which has to be compatible with the
-release of your MATLAB; the latest compiler is NOT necessarily supported by your
-MATLAB. On Windows,  in addition to the Fortran compiler, MathWorks needs you to
+on your system. Note that MathWorks (rather than PDFO) is quite rigid concerning the version
+of your compiler, which has to be compatible with the release of your MATLAB;
+the latest compiler is NOT necessarily supported by your MATLAB. On Windows,
+in addition to the Fortran compiler, MathWorks needs you to install the
+Microsoft Visual Studio with the "Desktop development with C++" workload and the
+Microsoft Windows SDK. Follow the official documentation of MathWorks closely.
+On Windows,  in addition to the Fortran compiler, MathWorks needs you to
 install the [Microsoft Visual Studio](http://en.wikipedia.org/wiki/Microsoft_Visual_Studio)
 and the [Microsoft Windows SDK](http://en.wikipedia.org/wiki/Microsoft_Windows_SDK).
 Follow the [official documentation](https://www.mathworks.com/support/requirements/previous-releases.html)
