@@ -21,12 +21,12 @@ mex('-setup', '-v', 'FORTRAN'); mex('-v', fullfile(matlabroot, 'extern', 'exampl
 ```
 
 If this completes successfully, then your MEX is ready. Otherwise, it is not, and
-you may refer to the [`setup_mex` package](https://github.com/equipez/setup_mex) at
+you may refer to the [setup_mex package](https://github.com/equipez/setup_mex) at
 ```bash
 https://github.com/equipez/setup_mex
 ```
 which will help you to set MEX up on Windows or macOS (the setup of MEX is trivial on Linux).
-In case `setup_mex` does not work, then please check the
+In case setup_mex does not work, then please check the
 [official documentation of MEX](https://www.mathworks.com/help/matlab/ref/mex.html).
 It will require you to install a
 [supported Fortran compiler](https://www.mathworks.com/support/requirements/previous-releases.html)
