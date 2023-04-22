@@ -25,7 +25,7 @@ you may try the [`setup_mex` package](https://github.com/equipez/setup_mex) at
 ```bash
 https://github.com/equipez/setup_mex
 ```
-which will help you to set MEX up on Windows or macOS (the setup of MEX is trivial on Linux).
+It will help you to set MEX up on Windows or macOS (the setup of MEX is trivial on Linux).
 In case `setup_mex` does not work, you need to consult a local MATLAB expert or the technical support of
 MathWorks about "[how to set up MEX](https://www.mathworks.com/help/matlab/ref/mex.html)", which is
 **not** part of PDFO.
