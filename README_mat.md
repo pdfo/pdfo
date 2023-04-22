@@ -21,7 +21,7 @@ mex('-setup', '-v', 'FORTRAN'); mex('-v', fullfile(matlabroot, 'extern', 'exampl
 ```
 
 If this completes successfully, then your MEX is ready. Otherwise, it is not, and
-you may refer to the [setup_mex package](https://github.com/equipez/setup_mex) at
+you may try the [setup_mex package](https://github.com/equipez/setup_mex) at
 ```bash
 https://github.com/equipez/setup_mex
 ```
