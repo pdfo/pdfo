@@ -34,7 +34,6 @@ MathWorks about "[how to set up MEX](https://www.mathworks.com/help/matlab/ref/m
 ## Installation
 
 Download and decompress the [source code package](https://www.pdfo.net/docs.html#download),
-
 or clone it from [GitHub](https://github.com/pdfo/pdfo) or [Gitee](https://gitee.com/pdfo/pdfo).
 You will obtain a folder containing `setup.m`. Place this folder at the location
 where you  want PDFO to be installed. In MATLAB, change the directory to this
@@ -84,7 +83,6 @@ command in MATLAB:
 ```matlab
 setup uninstall
 ```
-
 
 ## References
 
