@@ -102,11 +102,35 @@ jobs:
         with:
           path: wheelhouse/*.whl
 
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Build source distribution
+        run: bash tools/github/build_sdist.sh
+
+      - name: Test source distribution
+        run: bash tools/github/test_sdist.sh
+
+      - name: Store artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: dist/*.tar.gz
+
   upload_anaconda:
     name: Upload to Anaconda
     runs-on: ubuntu-latest
     if: ${{ github.event_name != 'pull_request' }}
-    needs: build_wheels
+    needs: [build_wheels, build_sdist]
 
     steps:
       - name: Checkout repository
