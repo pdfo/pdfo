@@ -64,19 +64,19 @@ jobs:
             platform: macosx_x86_64
 
           # 64-bit Windows
-          - os: windows-2019
+          - os: windows-2022
             python: 37
             platform: win_amd64
-          - os: windows-2019
+          - os: windows-2022
             python: 38
             platform: win_amd64
-          - os: windows-2019
+          - os: windows-2022
             python: 39
             platform: win_amd64
-          - os: windows-2019
+          - os: windows-2022
             python: 310
             platform: win_amd64
-          - os: windows-2019
+          - os: windows-2022
             python: 311
             platform: win_amd64
 
