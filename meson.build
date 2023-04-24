@@ -20,10 +20,10 @@ py3_dep = py3.dependency()
 
 # Compilers
 add_languages('fortran', native: false)
-cc = meson.get_compiler('c')
-m_dep = cc.find_library('m', required : false)
-if m_dep.found()
-  add_project_link_arguments('-lm', language : 'c')
-endif
+# cc = meson.get_compiler('c')
+# m_dep = cc.find_library('m', required : false)
+# if m_dep.found()
+#     add_project_link_arguments('-lm', language : 'c')
+# endif
 
 subdir('python/pdfo')
