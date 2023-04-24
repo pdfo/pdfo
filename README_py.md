@@ -1,7 +1,7 @@
 # PDFO for Python: Powell's Derivative-Free Optimization solvers
 
 Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
-FRS (1936&ndash;2015).
+FRS (1936--2015).
 
 We look forward to your feedback! Thank you very much!
 
@@ -88,21 +88,25 @@ python3 -m pip uninstall pdfo
 
 [1] M. J. D. Powell, A direct search optimization method that models the
 objective and constraint functions by linear interpolation, In Advances
-in Optimization and Numerical Analysis, eds. S. Gomez and J. P. Hennart,
-pages 51&ndash;67, Springer Verlag, Dordrecht, Netherlands, 1994
+in *Optimization and Numerical Analysis*, *eds.* S. Gomez and J. P. Hennart,
+pages 51--67, Springer Verlag, Dordrecht, Netherlands, 1994
 
 [2] M. J. D. Powell, UOBYQA: unconstrained optimization by quadratic
-approximation, Math. Program., 92(B):555&ndash;582, 2002
+approximation, *Math. Program.*, 92(B):555--582, 2002
 
 [3] M. J. D. Powell, The NEWUOA software for unconstrained optimization
-without derivatives, In Large-Scale Nonlinear Optimization, eds. G. Di Pillo
-and M. Roma, pages 255&ndash;297, Springer, New York, US, 2006
+without derivatives, In *Large-Scale Nonlinear Optimization*, *eds.* G. Di Pillo
+and M. Roma, pages 255--297, Springer, New York, US, 2006
 
 [4] M. J. D. Powell, The BOBYQA algorithm for bound constrained
 optimization without derivatives, Technical Report DAMTP 2009/NA06,
 Department of Applied Mathematics and Theoretical Physics, Cambridge
 University, Cambridge, UK, 2009
 
-*Remark:* LINCOA seeks the least value of a nonlinear function subject to
+[5] T. M. Ragonneau and Z. Zhang,
+[PDFO: a cross-platform package for Powell's derivative-free optimization solvers](https://arxiv.org/pdf/2302.13246.pdf),
+arXiv:2302.13246, 2023
+
+**Remark:** LINCOA seeks the least value of a nonlinear function subject to
 linear inequality constraints without using derivatives of the objective
 function. Powell did not publish a paper to introduce the algorithm.
