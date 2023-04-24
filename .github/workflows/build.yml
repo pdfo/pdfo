@@ -6,9 +6,9 @@ name: build
 
 on:
   push:
-    branches: [python/dev]
+    branches: [main]
   pull_request:
-    branches: [python/dev]
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
