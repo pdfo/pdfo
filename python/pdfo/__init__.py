@@ -27,7 +27,7 @@ __copyright__ = f'Copyright 2020--{datetime.now().year}, ' \
                 f'Tom M. Ragonneau and Zaikun Zhang'
 __credits__ = ['Tom M. Ragonneau', 'Zaikun Zhang', 'Antoine Dechaume']
 __license__ = '3-Clause BSD'
-__version__ = '1.2.1'
+__version__ = '1.3'
 __date__ = 'April, 2023'
 __maintainer__ = 'Tom M. Ragonneau and Zaikun Zhang'
 __email__ = 'tom.ragonneau@polyu.edu.hk and zaikun.zhang@polyu.edu.hk'

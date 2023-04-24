@@ -6,7 +6,7 @@ FRS (1936--2015).
 We look forward to your feedback! Thank you very much!
 
 This is the README for the Python version of PDFO.
-See https://www.pdfo.net for more information.
+See https://www.pdfo.net/ for more information.
 
 ## Installation
 
@@ -18,7 +18,7 @@ To use the Python version of PDFO on Linux, Mac, or Windows, you need
 It is highly recommended to install PDFO via [PyPI](https://pypi.org).
 
 Install [pip](https://pip.pypa.io/en/stable/installing/) in your system if
-you Python version does not incude it. Then execute
+you Python version does not include it. Then execute
 
 ```bash
 python3 -m pip install pdfo

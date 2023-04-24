@@ -6,7 +6,7 @@ FRS (1936--2015).
 We look forward to your feedback! Thank you very much!
 
 This is the README for the MATLAB version of PDFO.
-See https://www.pdfo.net for more information.
+See https://www.pdfo.net/ for more information.
 
 ## Prerequisites
 
@@ -23,7 +23,7 @@ mex('-setup', '-v', 'fortran'); mex('-v', fullfile(matlabroot, 'extern', 'exampl
 
 If this completes successfully, then your MEX is ready. Otherwise, it is not, and
 you may try the [`setup_mex` package](https://github.com/equipez/setup_mex) at
-```bash
+```
 https://github.com/equipez/setup_mex
 ```
 It will help you to set MEX up on Windows or macOS (the setup of MEX is trivial on Linux).
