@@ -82,3 +82,7 @@ before-build = "bash {project}/tools/github/cibw_before_build_macos.sh"
 
 [tool.cibuildwheel.windows]
 repair-wheel-command = "bash tools/github/cibw_repair_wheel_command_windows.sh {wheel} {dest_dir}"
+
+[[tool.cibuildwheel.overrides]]
+select = "*-win_amd64"
+environment = { PKG_CONFIG_PATH="c:/opt/64/lib/pkgconfig" }
