@@ -1,6 +1,6 @@
 # PDFO: Powell's Derivative-Free Optimization solvers
 
-[![wheels](https://github.com/pdfo/pdfo/actions/workflows/wheels.yml/badge.svg)](https://github.com/pdfo/pdfo/actions/workflows/wheels.yml)
+[![wheels](https://github.com/pdfo/pdfo/actions/workflows/build.yml/badge.svg)](https://github.com/pdfo/pdfo/actions/workflows/build.yml)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![pypi](https://img.shields.io/pypi/v/pdfo)](https://pypi.org/project/pdfo/)
 [![download](https://img.shields.io/pypi/dm/pdfo?label=pypi%20downloads)](https://pypi.org/project/pdfo/)
