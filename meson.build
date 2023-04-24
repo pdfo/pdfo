@@ -4,6 +4,10 @@ project(
     version: '1.2.1',
     license: 'BSD-3',
     meson_version: '>= 0.64.0',
+    default_options: [
+        'c_std=c99',
+        'fortran_std=legacy',
+    ],
 )
 
 # https://mesonbuild.com/Python-module.html
@@ -16,5 +20,9 @@ py3_dep = py3.dependency()
 
 # Compilers
 add_languages('fortran', native: false)
+m_dep = cc.find_library('m', required : false)
+if m_dep.found()
+  add_project_link_arguments('-lm', language : 'c')
+endif
 
 subdir('python/pdfo')
