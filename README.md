@@ -15,7 +15,7 @@ Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell
 PDFO (Powell's Derivative-Free Optimization solvers) is a cross-platform package
 providing interfaces for using the late Professor [M. J. D. Powell's](https://www.zhangzk.net/powell.html)
 derivative-free optimization solvers, including UOBYQA, NEWUOA, BOBYQA, LINCOA,
-and COBYLA. See the [PDFO homepage](https://www.pdfo.net) and the [PDFO paper](??) for more information.
+and COBYLA. See the [PDFO homepage](https://www.pdfo.net) and the [PDFO paper](https://arxiv.org/pdf/2302.13246.pdf) for more information.
 
 This package makes use of a modified version of [Powell's](https://www.zhangzk.net/powell.html)
 Fortran code. See the folder [`original`](https://github.com/pdfo/pdfo/tree/main/fsrc/original)
