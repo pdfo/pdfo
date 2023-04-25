@@ -10,24 +10,15 @@
 
 Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
 FRS (1936&ndash;2015).
- Getting started | Python version of PDFO
-## Table of contents
 
-<ol>
-    <li><a href="#getting-started">Getting started</a></li>
-    <li><a href="#python-version-of-pdfo">Python version of PDFO</a></li>
-    <li><a href="#matlab-version-of-pdfo">MATLAB version of PDFO</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-    <li><a href="#citing-the-pdfo-package">Citing the PDFO package</a></li>
-    <li><a href="#citing-powells-methods">Citing Powell’s methods</a></li>
-</ol>
+ **[Introduction](??) | [Python](??) | [MATLAB](??) | [Citing PDFO](??) | [Acknowledgments](??)**
 
-## Getting started
+## Introduction
 
 PDFO (Powell's Derivative-Free Optimization solvers) is a cross-platform package
 providing interfaces for using the late Professor [M. J. D. Powell's](https://www.zhangzk.net/powell.html)
 derivative-free optimization solvers, including UOBYQA, NEWUOA, BOBYQA, LINCOA,
-and COBYLA. See https://www.pdfo.net for more information.
+and COBYLA. See the [PDFO homepage](https://www.pdfo.net) and the [PDFO paper](??) for more information.
 
 This package makes use of a modified version of [Powell's](https://www.zhangzk.net/powell.html)
 Fortran code. See the folder [`original`](https://github.com/pdfo/pdfo/tree/main/fsrc/original)
@@ -204,7 +195,9 @@ the [Hong Kong Ph.D. Fellowship Scheme](https://cerg1.ugc.edu.hk/hkpfs) (ref. PF
 and the [Hong Kong Polytechnic University](https://www.polyu.edu.hk) (PolyU),
 in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/ama) (AMA).
 
-## Citing the PDFO package
+## Citing PDFO
+
+### Citing the PDFO package
 
 <details>
     <summary>T. M. Ragonneau and Z. Zhang, <a href="https://arxiv.org/pdf/2302.13246.pdf">PDFO: a cross-platform package for Powell's derivative-free optimization solvers</a>, arXiv:2302.13246, 2023</summary>
@@ -216,7 +209,7 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
 }</pre>
 </details>
 
-## Citing Powell’s methods
+### Citing Powell’s methods
 
 <details>
     <summary>M. J. D. Powell. A direct search optimization method that models the objective and constraint functions by linear interpolation. In S. Gomez and J. P. Hennart, editors, <i>Advances in Optimization and Numerical Analysis</i>, pages 51–67, Dordrecht, NL, 1994. Springer.</summary>
