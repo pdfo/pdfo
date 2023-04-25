@@ -75,7 +75,7 @@ Public beta release of PDFO.
 - Python version: the call to the objective function during the debugging
   mechanism did not include the extra arguments, which are added now.
 
-## [1.3] - 2023-04-xx
+## [1.3] - 2023-04-25
 
 ### Changed
 - The license is changed from GNU LGPLv3+ to the 3-clause BSD license.
