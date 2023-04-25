@@ -1,6 +1,9 @@
 <h1 align="center">
 PDFO: Powell's Derivative-Free Optimization solvers
 </h1>
+ **[Introduction](??) | [Python](??) | [MATLAB](??) | [Citing PDFO](??) | [Acknowledgments](??)**
+Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
+FRS (1936&ndash;2015).
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/pdfo/pdfo/build.yml?logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/actions/workflows/build.yml)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/pdfo/pdfo/spelling.yml?label=check%20spelling&logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/actions/workflows/spelling.yml)
@@ -10,12 +13,8 @@ PDFO: Powell's Derivative-Free Optimization solvers
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/pdfo?logo=pypi&style=for-the-badge)](https://pypi.org/project/pdfo/)
 [![View PDFO: Powell's Derivative-Free Optimization solvers on File Exchange](https://img.shields.io/badge/MATLAB-File_Exchange-orange?style=for-the-badge)](https://www.mathworks.com/matlabcentral/fileexchange/75195-pdfo-powell-s-derivative-free-optimization-solvers/)
 
-</p align = "center">
-Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
-FRS (1936&ndash;2015).
-<p>
 
- **[Introduction](??) | [Python](??) | [MATLAB](??) | [Citing PDFO](??) | [Acknowledgments](??)**
+
 
 ## Introduction
 
