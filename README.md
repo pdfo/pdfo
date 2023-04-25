@@ -202,7 +202,7 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
 
 ### Citing the PDFO package
 
-- T. M. Ragonneau and Z. Zhang, <a href="https://arxiv.org/pdf/2302.13246.pdf">PDFO: a cross-platform package for Powell's derivative-free optimization solvers</a>, arXiv:2302.13246, 2023  &nbsp; &nbsp; [BibTeX]
+- T. M. Ragonneau and Z. Zhang, <a href="https://arxiv.org/pdf/2302.13246.pdf">PDFO: a cross-platform package for Powell's derivative-free optimization solvers</a>, arXiv:2302.13246, 2023  &nbsp; &nbsp; [BibTeX] (make "BibTeX" clickable; do not remove the []; do the same for the other papers.)
 
 ### Citing Powell’s methods
 
@@ -218,8 +218,7 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
     pages        = {51--67},
     year         = 1994,
 }</pre>
-</details>  \[[BibTeX]\]
-
+</details>  
 
 <br/>
 
@@ -233,7 +232,7 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
     pages        = {555--582},
     year         = 2002,
 }</pre>
-</details>  \[[BibTeX]\]
+</details>  
 
 
 <br/>
@@ -252,7 +251,7 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
     pages        = {255--297},
     year         = 2006,
 }</pre>
-</details>  \[[BibTeX]\]
+</details>  
 
 
 <br/>
@@ -267,7 +266,7 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
     number       = {DAMTP 2009/NA06},
     year         = 2009,
 }</pre>
-</details>  \[[BibTeX]\]
+</details>  
 
 <br/>
 
