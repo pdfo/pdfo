@@ -179,8 +179,6 @@ setup uninstall
 
 ## Citing PDFO
 
-<details><summary>[BibTeX]</summary><pre></pre></details>
-
 ### Citing the PDFO package
 
 - T. M. Ragonneau and Z. Zhang, [PDFO: a cross-platform package for Powell's derivative-free optimization solvers](https://arxiv.org/pdf/2302.13246.pdf), arXiv:2302.13246, 2023
