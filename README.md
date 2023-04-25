@@ -2,13 +2,12 @@
 PDFO: Powell's Derivative-Free Optimization solvers
 </h1>
 
- **[Introduction](??) | [Python](??) | [MATLAB](??) | [Citing PDFO](??) | [Acknowledgments](??)**
+ **[Introduction](??) | [Python](??) | [MATLAB](??) | [Citing PDFO](??) | [Acknowledgments](??)** (Make this centerd)
 
-Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
-FRS (1936&ndash;2015).
+Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html) 
+FRS (1936&ndash;2015). (Make this centerd?)
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/pdfo/pdfo/build.yml?logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/actions/workflows/build.yml)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/pdfo/pdfo/spelling.yml?label=check%20spelling&logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/actions/workflows/spelling.yml)
 [![GitHub last commit](https://img.shields.io/github/last-commit/pdfo/pdfo?logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/)
 [![GitHub](https://img.shields.io/github/license/pdfo/pdfo?logo=github&style=for-the-badge)](https://opensource.org/licenses/BSD-3-Clause/)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/pdfo/pdfo?logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/releases/)
