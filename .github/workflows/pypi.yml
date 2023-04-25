@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-python@v4
 
       - name: Download distributions from staging
-        run: bash tools/github/download_anaconda.sh
+        run: bash python/build_tools/github/download_anaconda.sh
         env:
           PDFO_VERSION: ${{ github.event.inputs.version }}
 
