@@ -1,20 +1,16 @@
-<h1 align="center">
+<h1 style="text-align: center;">
 PDFO: Powell's Derivative-Free Optimization solvers
 </h1>
 
- **[Introduction](??) | [Python](??) | [MATLAB](??) | [Citing PDFO](??) | [Acknowledgments](??)** (Adjust the font size; Make this centerd)
+<p style="text-align: center;"><b><a href="#introduction">Introduction</a> | <a href="#python-version-of-pdfo">Python</a> | <a href="#matlab-version-of-pdfo">MATLAB</a> | <a href="#citing-pdfo">Citing PDFO</a> | <a href="#acknowledgments">Acknowledgments</a></b></p>
 
-Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html) 
-FRS (1936&ndash;2015). (Make this centerd or not?)
+Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html) FRS (1936&ndash;2015).
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/pdfo/pdfo/build.yml?logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/actions/workflows/build.yml)
 [![GitHub](https://img.shields.io/github/license/pdfo/pdfo?logo=github&style=for-the-badge)](https://opensource.org/licenses/BSD-3-Clause/)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/pdfo/pdfo?logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/releases/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/pdfo?logo=pypi&style=for-the-badge)](https://pypi.org/project/pdfo/)
 [![View PDFO: Powell's Derivative-Free Optimization solvers on File Exchange](https://img.shields.io/badge/MATLAB-File_Exchange-orange?style=for-the-badge)](https://www.mathworks.com/matlabcentral/fileexchange/75195-pdfo-powell-s-derivative-free-optimization-solvers/)
-
-
-
 
 ## Introduction
 
@@ -183,6 +179,87 @@ command in MATLAB:
 setup uninstall
 ```
 
+## Citing PDFO
+
+<details><summary>[BibTeX]</summary><pre></pre></details>
+
+### Citing the PDFO package
+
+- T. M. Ragonneau and Z. Zhang, [PDFO: a cross-platform package for Powell's derivative-free optimization solvers](https://arxiv.org/pdf/2302.13246.pdf), arXiv:2302.13246, 2023
+<details>
+    <summary>BibTeX</summary>
+    <pre>@misc{Ragonneau_Zhang_2023,
+    title        = {{PDFO}: a cross-platform package for {Powell}'s derivative-free optimization solvers},
+    author       = {Ragonneau, T. M. and Zhang, Z.},
+    howpublished = {arXiv:2302.13246},
+    year         = 2023
+}</pre>
+</details>
+
+### Citing Powell’s methods
+
+- M. J. D. Powell. A direct search optimization method that models the objective and constraint functions by linear interpolation. In S. Gomez and J. P. Hennart, editors, *Advances in Optimization and Numerical Analysis*, pages 51–67, Dordrecht, NL, 1994. Springer.
+<details>
+    <summary>BibTeX</summary>
+    <pre>@inproceedings{Powell_1994,
+    title        = {A direct search optimization method that models the objective and constraint functions by linear interpolation},
+    author       = {Powell, M. J. D.},
+    booktitle    = {Advances in Optimization and Numerical Analysis},
+    editor       = {Gomez, S. and Hennart, J. P.},
+    publisher    = {Springer},
+    address      = {Dordrecht, NL},
+    pages        = {51--67},
+    year         = 1994,
+}</pre>
+</details>
+
+- M. J. D. Powell. UOBYQA: unconstrained optimization by quadratic approximation. *Math. Program.*, 92:555–582, 2002.
+<details>
+    <summary>BibTeX</summary>
+    <pre>@article{Powell_2002,
+    title        = {{UOBYQA}: unconstrained optimization by quadratic approximation},
+    author       = {Powell, M. J. D.},
+    journal      = {Math. Program.},
+    volume       = 92,
+    pages        = {555--582},
+    year         = 2002,
+}</pre>
+</details>
+
+- M. J. D. Powell. The NEWUOA software for unconstrained optimization without derivatives. In G. Di Pillo and M. Roma, editors, *Large-Scale Nonlinear Optimization*, volume 83 of *Nonconvex Optimization and Its Applications*, pages 255–297, Boston, MA, USA, 2006. Springer.
+<details>
+    <summary>BibTeX</summary>
+    <pre>@inproceedings{Powell_2006,
+    title        = {The {NEWUOA} software for unconstrained optimization without derivatives},
+    author       = {Powell, M. J. D.},
+    booktitle    = {Large-Scale Nonlinear Optimization},
+    editor       = {{Di Pillo}, G. and Roma, M.},
+    publisher    = {Springer},
+    address      = {Boston, MA, USA},
+    series       = {Nonconvex Optimization and Its Applications},
+    volume       = 83,
+    pages        = {255--297},
+    year         = 2006,
+}</pre>
+</details>
+
+- M. J. D. Powell. The BOBYQA algorithm for bound constrained optimization without derivatives. Technical Report DAMTP 2009/NA06, Department of Applied Mathematics and Theoretical Physics, University of Cambridge, Cambridge, UK, 2009.
+<details>
+    <summary>BibTeX</summary>
+    <pre>@techreport{Powell_2009,
+    title        = {The {BOBYQA} algorithm for bound constrained optimization without derivatives},
+    author       = {Powell, M. J. D.},
+    institution  = {Department of Applied Mathematics and Theoretical Physics, University of Cambridge},
+    address      = {Cambridge, UK},
+    number       = {DAMTP 2009/NA06},
+    year         = 2009,
+}</pre>
+</details>
+
+**Remark:** LINCOA seeks the least value of a nonlinear function subject to
+linear inequality constraints without using derivatives of the objective
+function. Powell did not publish a paper to introduce the algorithm.
+
 ## Acknowledgments
 
 PDFO is dedicated to the memory of the late Professor [Powell](https://www.zhangzk.net/powell.html)
@@ -197,79 +274,3 @@ funds from the [Hong Kong Research Grants Council](https://www.ugc.edu.hk/eng/rg
 the [Hong Kong Ph.D. Fellowship Scheme](https://cerg1.ugc.edu.hk/hkpfs) (ref. PF18-24698),
 and the [Hong Kong Polytechnic University](https://www.polyu.edu.hk) (PolyU),
 in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/ama) (AMA).
-
-## Citing PDFO
-
-### Citing the PDFO package
-
-- T. M. Ragonneau and Z. Zhang, <a href="https://arxiv.org/pdf/2302.13246.pdf">PDFO: a cross-platform package for Powell's derivative-free optimization solvers</a>, arXiv:2302.13246, 2023  &nbsp; &nbsp; [BibTeX] (make "BibTeX" clickable; do not remove the []; do the same for the other papers.)
-
-### Citing Powell’s methods
-
-<details>
-    <summary>M. J. D. Powell. A direct search optimization method that models the objective and constraint functions by linear interpolation. In S. Gomez and J. P. Hennart, editors, <i>Advances in Optimization and Numerical Analysis</i>, pages 51–67, Dordrecht, NL, 1994. Springer.</summary>
-    <pre>@inproceedings{Powell_1994,
-    title        = {A direct search optimization method that models the objective and constraint functions by linear interpolation},
-    author       = {Powell, M. J. D.},
-    booktitle    = {Advances in Optimization and Numerical Analysis},
-    editor       = {Gomez, S. and Hennart, J. P.},
-    publisher    = {Springer},
-    address      = {Dordrecht, NL},
-    pages        = {51--67},
-    year         = 1994,
-}</pre>
-</details>  
-
-<br/>
-
-<details>
-    <summary>M. J. D. Powell. UOBYQA: unconstrained optimization by quadratic approximation. <i>Math. Program.</i>, 92:555–582, 2002.</summary>
-    <pre>@article{Powell_2002,
-    title        = {{UOBYQA}: unconstrained optimization by quadratic approximation},
-    author       = {Powell, M. J. D.},
-    journal      = {Math. Program.},
-    volume       = 92,
-    pages        = {555--582},
-    year         = 2002,
-}</pre>
-</details>  
-
-
-<br/>
-
-<details>
-    <summary>M. J. D. Powell. The NEWUOA software for unconstrained optimization without derivatives. In G. Di Pillo and M. Roma, editors, <i>Large-Scale Nonlinear Optimization</i>, volume 83 of <i>Nonconvex Optimization and Its Applications</i>, pages 255–297, Boston, MA, USA, 2006. Springer.</summary>
-    <pre>@inproceedings{Powell_2006,
-    title        = {The {NEWUOA} software for unconstrained optimization without derivatives},
-    author       = {Powell, M. J. D.},
-    booktitle    = {Large-Scale Nonlinear Optimization},
-    editor       = {{Di Pillo}, G. and Roma, M.},
-    publisher    = {Springer},
-    address      = {Boston, MA, USA},
-    series       = {Nonconvex Optimization and Its Applications},
-    volume       = 83,
-    pages        = {255--297},
-    year         = 2006,
-}</pre>
-</details>  
-
-
-<br/>
-
-<details>
-    <summary>M. J. D. Powell. The BOBYQA algorithm for bound constrained optimization without derivatives. Technical Report DAMTP 2009/NA06, Department of Applied Mathematics and Theoretical Physics, University of Cambridge, Cambridge, UK, 2009.</summary>
-    <pre>@techreport{Powell_2009,
-    title        = {The {BOBYQA} algorithm for bound constrained optimization without derivatives},
-    author       = {Powell, M. J. D.},
-    institution  = {Department of Applied Mathematics and Theoretical Physics, University of Cambridge},
-    address      = {Cambridge, UK},
-    number       = {DAMTP 2009/NA06},
-    year         = 2009,
-}</pre>
-</details>  
-
-<br/>
-
-**Remark:** LINCOA seeks the least value of a nonlinear function subject to
-linear inequality constraints without using derivatives of the objective
-function. Powell did not publish a paper to introduce the algorithm.
