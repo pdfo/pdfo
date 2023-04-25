@@ -2,13 +2,12 @@
 PDFO: Powell's Derivative-Free Optimization solvers
 </h1>
 
- **[Introduction](??) | [Python](??) | [MATLAB](??) | [Citing PDFO](??) | [Acknowledgments](??)** (Make this centerd)
+ **[Introduction](??) | [Python](??) | [MATLAB](??) | [Citing PDFO](??) | [Acknowledgments](??)** (Adjust the font size; Make this centerd)
 
 Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html) 
-FRS (1936&ndash;2015). (Make this centerd?)
+FRS (1936&ndash;2015). (Make this centerd or not?)
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/pdfo/pdfo/build.yml?logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/actions/workflows/build.yml)
-[![GitHub last commit](https://img.shields.io/github/last-commit/pdfo/pdfo?logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/)
 [![GitHub](https://img.shields.io/github/license/pdfo/pdfo?logo=github&style=for-the-badge)](https://opensource.org/licenses/BSD-3-Clause/)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/pdfo/pdfo?logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/releases/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/pdfo?logo=pypi&style=for-the-badge)](https://pypi.org/project/pdfo/)
