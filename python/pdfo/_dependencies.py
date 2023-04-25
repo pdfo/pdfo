@@ -575,7 +575,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     if args is not None and not hasattr(args, '__len__'):
         args = [args]
 
-    # Get the extrem barrier for the objective function.
+    # Get the extreme barrier for the objective function.
     try:
         from .gethuge import gethuge
     except ImportError:
@@ -2779,7 +2779,7 @@ def _project(x0, lb, ub, constraints, options=None):
 
     max_con = 1e20  # Decide whether an inequality constraint can be ignored
 
-    # Projecte onto the feasible set.
+    # Project onto the feasible set.
     if constraints['linear'] is None:
         # Direct projection onto the bound constraints
         x_proj = np.nanmin((np.nanmax((x0_c, lb_c), axis=0), ub_c), axis=0)

@@ -28,10 +28,10 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
             ``cobyla(lambda x: fun(x, *args), x0, ...)``
 
     bounds: ndarray of tuple with shape(n,2), or Bounds, optional
-        Bound constraints of the problem. It can be one of the two cases below. 
-            1. An ndarray with shape(n,2). If the ndarray is 'bounds', then the bound constraint for x[i] is 
-                bounds[i, 0]<=x[i]<=bounds[i, 1]. Set bounds[i, 0] to -numpy.inf or None if there is no lower bound, and 
-                set bounds[i, 1] to numpy.inf or None if there is no upper bound. 
+        Bound constraints of the problem. It can be one of the two cases below.
+            1. An ndarray with shape(n,2). If the ndarray is 'bounds', then the bound constraint for x[i] is
+                bounds[i, 0]<=x[i]<=bounds[i, 1]. Set bounds[i, 0] to -numpy.inf or None if there is no lower bound, and
+                set bounds[i, 1] to numpy.inf or None if there is no upper bound.
             2. An instance of the `Bounds` class. Bounds(lb, ub) specifies a bound constraint lb<=x<=ub.
     constraints: dict, LinearConstraint, NonlinearConstraint, or a list of them, optional
         Constraints of the problem. It can be one of the three cases below.
@@ -40,7 +40,7 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
                     Constraint type: 'eq' for equality constraints and 'ineq' for inequality constraints.
                 fun: callable
                     The constraint function.
-                When type='eq', such a dictionary specifies an equality constraint fun(x)=0; 
+                When type='eq', such a dictionary specifies an equality constraint fun(x)=0;
                 when type='ineq', it specifies an inequality constraint fun(x)>=0.
             2. An instance of the `LinearConstraint` class or the `NonlinearConstraint` class.
                 LinearConstraint(A, lb, ub) specifies a linear constraint lb<=A*x<=ub;
@@ -48,8 +48,8 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
     options: dict, optional
         The options passed to the solver. It is a structure that contains optionally:
             rhobeg: float, optional
-                Initial value of the trust region radius, which should be a positive scalar. Typically, `options['rhobeg']` 
-                should be in the order of one tenth of the greatest expected change to a variable. By default, it is 1 if 
+                Initial value of the trust region radius, which should be a positive scalar. Typically, `options['rhobeg']`
+                should be in the order of one tenth of the greatest expected change to a variable. By default, it is 1 if
                 the problem is not scaled, 0.5 if the problem is scaled.
             rhoend: float, optional
                 Final value of the trust region radius, which should be a positive scalar. `options['rhoend']` should
@@ -62,8 +62,8 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
                 Target value of the objective function. If a feasible iterate achieves an objective function value lower
                 or equal to `options['ftarget']`, the algorithm stops immediately. By default, it is -numpy.inf.
             scale: bool, optional
-                Flag indicating whether to scale the problem acording to the bound constraints. By default, it is False. 
-                If the problem is to be scaled, then rhobeg and rhoend mentioned above will be used as the initial and 
+                Flag indicating whether to scale the problem according to the bound constraints. By default, it is False.
+                If the problem is to be scaled, then rhobeg and rhoend mentioned above will be used as the initial and
                 final trust-region radii for the scaled problem.
             quiet: bool, optional
                 Flag of quietness of the interface. If it is set to True, the output message will not be printed. This
@@ -75,8 +75,8 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
             debug: bool, optional
                 Debugging flag. By default, it is False.
             chkfunval: bool, optional
-                Flag used when debugging. If both `options['debug']` and `options['chkfunval']` are True, an extra 
-                function/constraint evaluation would be performed to check whether the returned values of the objective 
+                Flag used when debugging. If both `options['debug']` and `options['chkfunval']` are True, an extra
+                function/constraint evaluation would be performed to check whether the returned values of the objective
                 function and the constraint match the returned x. By default, it is False.
 
     Returns

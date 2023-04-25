@@ -152,7 +152,7 @@ function [x, fx, exitflag, output] = pdfo(varargin)
 %   *** chkfunval: a boolean value indicating whether to verify the returned
 %       function and constraint (if applicable) values or not; default: false
 %       (if it is true, PDFO will check whether the returned values of fun and
-%       nonlcon matche fun(x) and nonlcon(x), which costs a function/constraint
+%       nonlcon match fun(x) and nonlcon(x), which costs a function/constraint
 %       evaluation; designed only for debugging)
 %
 %   For example, the following code

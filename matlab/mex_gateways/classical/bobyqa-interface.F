@@ -146,7 +146,7 @@ C Input 2: x0 (double column)
       if (mxIsDouble(prhs(2)) .ne. 1 .or. mxGetM(prhs(2)) .lt. 1
      &    .or. mxGetN(prhs(2)) .ne. 1) then
           call mexErrMsgIdAndTxt('fbobyqa:WrongInput',
-     &    'fbobybqa: Input 2 should be a column vector of doubles.')
+     &    'fbobyqa: Input 2 should be a column vector of doubles.')
       end if
 C Input 3: xl (double column)
       if (mxIsDouble(prhs(3)) .ne. 1 .or. mxGetN(prhs(3)) .ne. 1
@@ -166,7 +166,7 @@ C Input 5: rhobeg (double scalar)
       if (mxIsDouble(prhs(5)) .ne. 1 .or. mxGetM(prhs(5)) .ne. 1
      &    .or. mxGetN(prhs(5)) .ne. 1) then
           call mexErrMsgIdAndTxt('fbobyqa:WrongInput',
-     &    'fbobobyqa: Input 5 should be a double.')
+     &    'fbobyqa: Input 5 should be a double.')
       end if
 C Input 6: rhoend (double scalar)
       if (mxIsDouble(prhs(6)) .ne. 1 .or. mxGetM(prhs(6)) .ne. 1

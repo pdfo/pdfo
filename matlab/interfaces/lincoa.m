@@ -133,7 +133,7 @@ function [x, fx, exitflag, output] = lincoa(varargin)
 %   The same as FMINCON, a problem can be passed to LINCOA by a structure
 %   PROBLEM containing the following fields:
 %   PROBLEM.objective, PROBLEM.x0, PROBLEM.Aineq, PROBLEM.bineq,
-%   PROBLEM.Aeq, PROBLEM.beq, PROBLEM.lb, PROBLEM.ub, POBLEM.options,
+%   PROBLEM.Aeq, PROBLEM.beq, PROBLEM.lb, PROBLEM.ub, PROBLEM.options,
 %   where PROBLEM.objective is the function name or function handle of
 %   the objective function (corresponding to the input 'fun' mentioned
 %   above), and all the other fields correspond to the inputs introduced
@@ -197,7 +197,7 @@ output = struct();
 % N.B.: DO NOT record anything in PROBINFO. If the solver is called by pdfo,
 % then postpdfo will do nothing; the real postprocessing will be done when
 % pdfo calls postpdfo using the OUTPUT returned by solver together with the
-% PROBINFO in pdfo; that said, in such a senario, the PROBINFO of this solver
+% PROBINFO in pdfo; that said, in such a scenario, the PROBINFO of this solver
 % will NOT be passed to the real postprocessing. Indeed, the PROBINFO of
 % this solver is set to empty in prepdfo.
 
@@ -209,7 +209,7 @@ nvararg = length(varargin); % Number of inputs
 
 % Interpret the input.
 % Expected inputs: [fun, x0, Aineq, bineq, Aeq, beq, lb, ub, options],
-% yet some of them may be ommitted
+% yet some of them may be omitted
 if (nvararg < 1)
     if ismember(invoker, internal_invokers) % Private/unexpected error
         error(sprintf('%s:TooFewInputs', funname), '%s: UNEXPECTED ERROR: at least 1 input.', funname);

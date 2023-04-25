@@ -37,7 +37,7 @@ chist(:)=hugenum
 do i=1,m
     ! The values of the constraint functions at the initial guess are
     ! evaluated in the Python code, in order to get their number.
-    ! Therefore, not to re-evalute it, we store it in the module
+    ! Therefore, not to re-evaluate it, we store it in the module
     ! fcobyla to use it during the first evaluation.
     conval_x0(i)=conval(i)
 end do
@@ -87,7 +87,7 @@ do i=1,m
         con(i) = -HUGECON ! HUGECON is defined in pdfoconst
     endif
 
-    ! This part is NOT extrem barrier. We replace extremely negative values
+    ! This part is NOT extreme barrier. We replace extremely negative values
     ! of the constraint array (which leads to no constraint violation) by
     ! -hugecon. Otherwise, NaN of Inf may occur in the interpolation models.
     if (con(i) .gt. HUGECON) then

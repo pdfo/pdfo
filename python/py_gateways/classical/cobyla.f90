@@ -37,7 +37,7 @@ chist(:)=hugenum
 do i=1,m
     ! The values of the constraint functions at the initial guess are
     ! evaluated in the Python code, in order to get their number.
-    ! Therefore, not to re-evalute it, we store it in the module
+    ! Therefore, not to re-evaluate it, we store it in the module
     ! fcobyla to use it during the first evaluation.
     conval_x0(i)=conval(i)
 end do

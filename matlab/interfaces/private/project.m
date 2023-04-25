@@ -38,7 +38,7 @@ function [x, fx, exitflag, output] = project (Ai, bi, Ae, be, lb, ub, x0, option
 % exitflag of these MATLAB functions.
 %
 % 3. Although the code may be used to solve the above mentioned problem for
-% general purposes, it was written to provide a feasilble starting point for
+% general purposes, it was written to provide a feasible starting point for
 % Powell's LINCOA code, where the problem size is normally not big
 % (typically tens of variables/constraints; at most thousands of them),
 % and a feasible point is adequate.
