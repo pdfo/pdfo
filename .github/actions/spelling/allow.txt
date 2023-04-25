@@ -32,6 +32,7 @@ calcsize
 calfun
 callstack
 cdec
+cdecs
 cellfun
 ceq
 chebquad
@@ -52,6 +53,7 @@ confun
 conhist
 constrv
 constrviolation
+constrviolations
 conval
 convalopt
 Conx
@@ -84,6 +86,7 @@ evalc
 evalcon
 evalobj
 exitflag
+exitflags
 fbobyqa
 fcobyla
 fct
@@ -224,6 +227,7 @@ nanmin
 nargin
 nargout
 ndarray
+ndarrays
 ndash
 NEquality
 newuoa
