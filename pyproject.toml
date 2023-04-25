@@ -71,17 +71,17 @@ tracker = "https://github.com/pdfo/pdfo/issues/"
 
 [tool.cibuildwheel]
 build-verbosity = "3"
-test-command = "bash {project}/python/build_tools/github/cibw_test_command.sh"
+test-command = "bash {project}/python/build_tools/cibw_test_command.sh"
 
 [tool.cibuildwheel.linux]
 manylinux-i686-image = "manylinux2014"
 manylinux-x86_64-image = "manylinux2014"
 
 [tool.cibuildwheel.macos]
-before-build = "bash {project}/python/build_tools/github/cibw_before_build_macos.sh"
+before-build = "bash {project}/python/build_tools/cibw_before_build_macos.sh"
 
 [tool.cibuildwheel.windows]
-repair-wheel-command = "bash python/build_tools/github/cibw_repair_wheel_command_windows.sh {wheel} {dest_dir}"
+repair-wheel-command = "bash python/build_tools/cibw_repair_wheel_command_windows.sh {wheel} {dest_dir}"
 
 [[tool.cibuildwheel.overrides]]
 select = "*-win_amd64"
