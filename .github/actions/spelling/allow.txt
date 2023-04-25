@@ -26,6 +26,7 @@ BLOWEYA
 BLOWEYB
 bobyqa
 bobyqb
+booktitle
 bresmax
 calcfc
 calcsize
@@ -127,6 +128,7 @@ Hennart
 HIMMELBJ
 Himmelblau
 hmlb
+howpublished
 HUESTIS
 hugecon
 hugefun
@@ -142,6 +144,7 @@ ifun
 incdir
 includenan
 ineq
+inproceedings
 iprint
 irun
 isa
@@ -245,6 +248,7 @@ nlhs
 nlinceq
 nodepr
 nofreex
+Nonconvex
 nonlcon
 nonlin
 normd
@@ -272,6 +276,7 @@ ponit
 postpdfo
 postprocesses
 POWELL
+powells
 prepdfo
 prhs
 printoptions
@@ -317,6 +322,7 @@ strjoin
 strrep
 svd
 Szego
+techreport
 testpdfo
 testpypi
 textscan
