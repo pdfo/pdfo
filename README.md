@@ -179,8 +179,6 @@ setup uninstall
 
 ## Citing PDFO
 
-### Citing the PDFO package
-
 - T. M. Ragonneau and Z. Zhang, [PDFO: a cross-platform package for Powell's derivative-free optimization solvers](https://arxiv.org/pdf/2302.13246.pdf), arXiv:2302.13246, 2023.
 ```bibtex
 @misc{Ragonneau_Zhang_2023,
@@ -191,8 +189,7 @@ setup uninstall
 }
 ```
 
-
-### Citing Powell’s methods
+In addtion, Powell’s methods can be cited as follows.
 
 - M. J. D. Powell. A direct search optimization method that models the objective and constraint functions by linear interpolation. In S. Gomez and J. P. Hennart, editors, *Advances in Optimization and Numerical Analysis*, pages 51–67, Dordrecht, NL, 1994. Springer.
 
