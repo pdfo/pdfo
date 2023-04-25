@@ -71,7 +71,6 @@ delvewheel
 denomc
 denomg
 DFO
-disthinguish
 dmax
 DTOC
 dtype
@@ -286,11 +285,9 @@ qmstep
 qtb
 quadprog
 ragonneau
-rasied
 rcn
 rcond
 RCV
-rediculous
 refbook
 resmax
 rhobeg

@@ -496,7 +496,7 @@ end
 if ~isempty(warnings)
     output.warnings = warnings;
 %    if ~options.quiet
-%        fprintf('The following warnings were rasied by %s:\n', invoker);
+%        fprintf('The following warnings were raised by %s:\n', invoker);
 %        fprintf('%s\n', warnings{:});
 %    end
 end
