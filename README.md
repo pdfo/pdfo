@@ -211,7 +211,7 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
     howpublished = {arXiv:2302.13246},
     year         = 2023
 }</pre>
-</details>
+</details> \[[BibTeX]\]
 
 ### Citing Powell’s methods
 
@@ -227,7 +227,8 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
     pages        = {51--67},
     year         = 1994,
 }</pre>
-</details>
+</details>  \[[BibTeX]\]
+
 
 <br/>
 
@@ -241,7 +242,8 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
     pages        = {555--582},
     year         = 2002,
 }</pre>
-</details>
+</details>  \[[BibTeX]\]
+
 
 <br/>
 
@@ -259,7 +261,8 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
     pages        = {255--297},
     year         = 2006,
 }</pre>
-</details>
+</details>  \[[BibTeX]\]
+
 
 <br/>
 
@@ -273,7 +276,7 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
     number       = {DAMTP 2009/NA06},
     year         = 2009,
 }</pre>
-</details>
+</details>  \[[BibTeX]\]
 
 <br/>
 
