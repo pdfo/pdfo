@@ -1,8 +1,6 @@
-<h1 style="text-align: center;">
-PDFO: Powell's Derivative-Free Optimization solvers
-</h1>
+<h1 align="center">PDFO: Powell's Derivative-Free Optimization solvers</h1>
 
-<p style="text-align: center;"><b><a href="#introduction">Introduction</a> | <a href="#python-version-of-pdfo">Python</a> | <a href="#matlab-version-of-pdfo">MATLAB</a> | <a href="#citing-pdfo">Citing PDFO</a> | <a href="#acknowledgments">Acknowledgments</a></b></p>
+<p align="center"><b><a href="#introduction">Introduction</a> | <a href="#python-version-of-pdfo">Python</a> | <a href="#matlab-version-of-pdfo">MATLAB</a> | <a href="#citing-pdfo">Citing PDFO</a> | <a href="#acknowledgments">Acknowledgments</a></b></p>
 
 Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html) FRS (1936&ndash;2015).
 
