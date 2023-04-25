@@ -203,15 +203,7 @@ in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/a
 
 ### Citing the PDFO package
 
-<details>
-    <summary>T. M. Ragonneau and Z. Zhang, <a href="https://arxiv.org/pdf/2302.13246.pdf">PDFO: a cross-platform package for Powell's derivative-free optimization solvers</a>, arXiv:2302.13246, 2023</summary>
-    <pre>@misc{Ragonneau_Zhang_2023,
-    title        = {{PDFO}: a cross-platform package for {Powell}'s derivative-free optimization solvers},
-    author       = {Ragonneau, T. M. and Zhang, Z.},
-    howpublished = {arXiv:2302.13246},
-    year         = 2023
-}</pre>
-</details> \[[BibTeX]\]
+T. M. Ragonneau and Z. Zhang, <a href="https://arxiv.org/pdf/2302.13246.pdf">PDFO: a cross-platform package for Powell's derivative-free optimization solvers</a>, arXiv:2302.13246, 2023 [BibTeX]
 
 ### Citing Powell’s methods
 
