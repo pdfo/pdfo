@@ -189,7 +189,7 @@ setup uninstall
 }
 ```
 
-In addtion, Powell’s methods can be cited as follows.
+In addition, Powell’s methods can be cited as follows.
 
 - M. J. D. Powell. A direct search optimization method that models the objective and constraint functions by linear interpolation. In S. Gomez and J. P. Hennart, editors, *Advances in Optimization and Numerical Analysis*, pages 51–67, Dordrecht, NL, 1994. Springer.
 
