@@ -11,7 +11,16 @@
 Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell.html)
 FRS (1936&ndash;2015).
 
-We look forward to your feedback! Thank you very much!
+## Table of contents
+
+<ol>
+    <li><a href="#getting-started">Getting started</a></li>
+    <li><a href="#python-version-of-pdfo">Python version of PDFO</a></li>
+    <li><a href="#matlab-version-of-pdfo">MATLAB version of PDFO</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#citing-the-pdfo-package">Citing the PDFO package</a></li>
+    <li><a href="#citing-powells-methods">Citing Powell’s methods</a></li>
+</ol>
 
 ## Getting started
 
@@ -23,84 +32,6 @@ and COBYLA. See https://www.pdfo.net for more information.
 This package makes use of a modified version of [Powell's](https://www.zhangzk.net/powell.html)
 Fortran code. See the folder [`original`](https://github.com/pdfo/pdfo/tree/main/fsrc/original)
 under `fsrc` for [Powell's](https://www.zhangzk.net/powell.html) original code.
-
-## MATLAB version of PDFO
-
-### Prerequisites
-
-PDFO supports MATLAB R2014a and later releases. To use PDFO, you need first
-set up the [MEX](https://www.mathworks.com/help/matlab/ref/mex.html) of your
-MATLAB so that it can compile Fortran.
-**The setup of MEX is a pure MATLAB usage problem and it has nothing to do with PDFO.**
-
-To see whether your MEX is ready, run the following code in MATLAB:
-
-```matlab
-mex('-setup', '-v', 'fortran'); mex('-v', fullfile(matlabroot, 'extern', 'examples', 'refbook', 'timestwo.F'));
-```
-
-If this completes successfully, then your MEX is ready. Otherwise, it is not, and
-you may try the [`setup_mex` package](https://github.com/equipez/setup_mex) at
-```
-https://github.com/equipez/setup_mex
-```
-It will help you to set MEX up on Windows or macOS (the setup of MEX is trivial on Linux).
-In case `setup_mex` does not work, you need to consult a local MATLAB expert or the technical support of
-MathWorks about "[how to set up MEX](https://www.mathworks.com/help/matlab/ref/mex.html)", which is
-**not** part of PDFO.
-
-### Installation
-
-Download and decompress the [source code package](https://www.pdfo.net/docs.html#download),
-or clone it from [GitHub](https://github.com/pdfo/pdfo) or [Gitee](https://gitee.com/pdfo/pdfo).
-You will obtain a folder containing `setup.m`. Place this folder at the location
-where you  want PDFO to be installed. In MATLAB, change the directory to this
-folder, and execute the following command:
-
-```matlab
-setup
-```
-
-If this command runs successfully, PDFO is installed. You may execute the
-following command in MATLAB to verify the installation:
-
-```matlab
-testpdfo
-```
-
-### Usage
-
-PDFO provides the following MATLAB functions:
-`pdfo`, `uobyqa`, `newuoa`, `bobyqa`, `lincoa`, `cobyla`.
-
-The `pdfo` function can automatically identify the type of your problem
-and then call one of [Powell's](https://www.zhangzk.net/powell.html) solvers.
-The other five functions call the solver indicated by their names. It is highly
-recommended using `pdfo` instead of `uobyqa`, `newuoa`, etc.
-
-The `pdfo` function is designed to be compatible with the `fmincon`
-function available in the [Optimization Toolbox](https://www.mathworks.com/products/optimization.html)
-of MATLAB. You can call `pdfo` in exactly the same way as calling `fmincon`. In
-addition, `pdfo` can be  called in some flexible ways that are not supported by
-`fmincon`.
-
-For detailed syntax of these functions, use the standard `help` command
-of MATLAB. For example,
-
-```matlab
-help pdfo
-```
-
-will tell you how to use `pdfo`.
-
-### Uninstall
-
-PDFO can be uninstalled using the setup.m script by executing the following
-command in MATLAB:
-
-```matlab
-setup uninstall
-```
 
 ## Python version of PDFO
 
@@ -180,6 +111,84 @@ PDFO can be uninstalled by executing the following command in a command shell:
 python3 -m pip uninstall pdfo
 ```
 
+## MATLAB version of PDFO
+
+### Prerequisites
+
+PDFO supports MATLAB R2014a and later releases. To use PDFO, you need first
+set up the [MEX](https://www.mathworks.com/help/matlab/ref/mex.html) of your
+MATLAB so that it can compile Fortran.
+**The setup of MEX is a pure MATLAB usage problem and it has nothing to do with PDFO.**
+
+To see whether your MEX is ready, run the following code in MATLAB:
+
+```matlab
+mex('-setup', '-v', 'fortran'); mex('-v', fullfile(matlabroot, 'extern', 'examples', 'refbook', 'timestwo.F'));
+```
+
+If this completes successfully, then your MEX is ready. Otherwise, it is not, and
+you may try the [`setup_mex` package](https://github.com/equipez/setup_mex) at
+```
+https://github.com/equipez/setup_mex
+```
+It will help you to set MEX up on Windows or macOS (the setup of MEX is trivial on Linux).
+In case `setup_mex` does not work, you need to consult a local MATLAB expert or the technical support of
+MathWorks about "[how to set up MEX](https://www.mathworks.com/help/matlab/ref/mex.html)", which is
+**not** part of PDFO.
+
+### Installation
+
+Download and decompress the [source code package](https://www.pdfo.net/docs.html#download),
+or clone it from [GitHub](https://github.com/pdfo/pdfo) or [Gitee](https://gitee.com/pdfo/pdfo).
+You will obtain a folder containing `setup.m`. Place this folder at the location
+where you  want PDFO to be installed. In MATLAB, change the directory to this
+folder, and execute the following command:
+
+```matlab
+setup
+```
+
+If this command runs successfully, PDFO is installed. You may execute the
+following command in MATLAB to verify the installation:
+
+```matlab
+testpdfo
+```
+
+### Usage
+
+PDFO provides the following MATLAB functions:
+`pdfo`, `uobyqa`, `newuoa`, `bobyqa`, `lincoa`, `cobyla`.
+
+The `pdfo` function can automatically identify the type of your problem
+and then call one of [Powell's](https://www.zhangzk.net/powell.html) solvers.
+The other five functions call the solver indicated by their names. It is highly
+recommended using `pdfo` instead of `uobyqa`, `newuoa`, etc.
+
+The `pdfo` function is designed to be compatible with the `fmincon`
+function available in the [Optimization Toolbox](https://www.mathworks.com/products/optimization.html)
+of MATLAB. You can call `pdfo` in exactly the same way as calling `fmincon`. In
+addition, `pdfo` can be  called in some flexible ways that are not supported by
+`fmincon`.
+
+For detailed syntax of these functions, use the standard `help` command
+of MATLAB. For example,
+
+```matlab
+help pdfo
+```
+
+will tell you how to use `pdfo`.
+
+### Uninstall
+
+PDFO can be uninstalled using the setup.m script by executing the following
+command in MATLAB:
+
+```matlab
+setup uninstall
+```
+
 ## Acknowledgments
 
 PDFO is dedicated to the memory of the late Professor [Powell](https://www.zhangzk.net/powell.html)
@@ -195,28 +204,81 @@ the [Hong Kong Ph.D. Fellowship Scheme](https://cerg1.ugc.edu.hk/hkpfs) (ref. PF
 and the [Hong Kong Polytechnic University](https://www.polyu.edu.hk) (PolyU),
 in particular the [Department of Applied Mathematics](https://www.polyu.edu.hk/ama) (AMA).
 
-## References
+## Citing the PDFO package
 
-[1] M. J. D. Powell, A direct search optimization method that models the
-objective and constraint functions by linear interpolation, In Advances
-in *Optimization and Numerical Analysis*, *eds.* S. Gomez and J. P. Hennart,
-pages 51--67, Springer Verlag, Dordrecht, Netherlands, 1994
+<details>
+    <summary>T. M. Ragonneau and Z. Zhang, <a href="https://arxiv.org/pdf/2302.13246.pdf">PDFO: a cross-platform package for Powell's derivative-free optimization solvers</a>, arXiv:2302.13246, 2023</summary>
+    <pre>@misc{Ragonneau_Zhang_2023,
+    title        = {{PDFO}: a cross-platform package for {Powell}'s derivative-free optimization solvers},
+    author       = {Ragonneau, T. M. and Zhang, Z.},
+    howpublished = {arXiv:2302.13246},
+    year         = 2023
+}</pre>
+</details>
 
-[2] M. J. D. Powell, UOBYQA: unconstrained optimization by quadratic
-approximation, *Math. Program.*, 92(B):555--582, 2002
+## Citing Powell’s methods
 
-[3] M. J. D. Powell, The NEWUOA software for unconstrained optimization
-without derivatives, In *Large-Scale Nonlinear Optimization*, *eds.* G. Di Pillo
-and M. Roma, pages 255--297, Springer, New York, US, 2006
+<details>
+    <summary>M. J. D. Powell. A direct search optimization method that models the objective and constraint functions by linear interpolation. In S. Gomez and J. P. Hennart, editors, <i>Advances in Optimization and Numerical Analysis</i>, pages 51–67, Dordrecht, NL, 1994. Springer.</summary>
+    <pre>@inproceedings{Powell_1994,
+    title        = {A direct search optimization method that models the objective and constraint functions by linear interpolation},
+    author       = {Powell, M. J. D.},
+    booktitle    = {Advances in Optimization and Numerical Analysis},
+    editor       = {Gomez, S. and Hennart, J. P.},
+    publisher    = {Springer},
+    address      = {Dordrecht, NL},
+    pages        = {51--67},
+    year         = 1994,
+}</pre>
+</details>
 
-[4] M. J. D. Powell, The BOBYQA algorithm for bound constrained
-optimization without derivatives, Technical Report DAMTP 2009/NA06,
-Department of Applied Mathematics and Theoretical Physics, Cambridge
-University, Cambridge, UK, 2009
+<br/>
 
-[5] T. M. Ragonneau and Z. Zhang,
-[PDFO: a cross-platform package for Powell's derivative-free optimization solvers](https://arxiv.org/pdf/2302.13246.pdf),
-arXiv:2302.13246, 2023
+<details>
+    <summary>M. J. D. Powell. UOBYQA: unconstrained optimization by quadratic approximation. <i>Math. Program.</i>, 92:555–582, 2002.</summary>
+    <pre>@article{Powell_2002,
+    title        = {{UOBYQA}: unconstrained optimization by quadratic approximation},
+    author       = {Powell, M. J. D.},
+    journal      = {Math. Program.},
+    volume       = 92,
+    pages        = {555--582},
+    year         = 2002,
+}</pre>
+</details>
+
+<br/>
+
+<details>
+    <summary>M. J. D. Powell. The NEWUOA software for unconstrained optimization without derivatives. In G. Di Pillo and M. Roma, editors, <i>Large-Scale Nonlinear Optimization</i>, volume 83 of <i>Nonconvex Optimization and Its Applications</i>, pages 255–297, Boston, MA, USA, 2006. Springer.</summary>
+    <pre>@inproceedings{Powell_2006,
+    title        = {The {NEWUOA} software for unconstrained optimization without derivatives},
+    author       = {Powell, M. J. D.},
+    booktitle    = {Large-Scale Nonlinear Optimization},
+    editor       = {{Di Pillo}, G. and Roma, M.},
+    publisher    = {Springer},
+    address      = {Boston, MA, USA},
+    series       = {Nonconvex Optimization and Its Applications},
+    volume       = 83,
+    pages        = {255--297},
+    year         = 2006,
+}</pre>
+</details>
+
+<br/>
+
+<details>
+    <summary>M. J. D. Powell. The BOBYQA algorithm for bound constrained optimization without derivatives. Technical Report DAMTP 2009/NA06, Department of Applied Mathematics and Theoretical Physics, University of Cambridge, Cambridge, UK, 2009.</summary>
+    <pre>@techreport{Powell_2009,
+    title        = {The {BOBYQA} algorithm for bound constrained optimization without derivatives},
+    author       = {Powell, M. J. D.},
+    institution  = {Department of Applied Mathematics and Theoretical Physics, University of Cambridge},
+    address      = {Cambridge, UK},
+    number       = {DAMTP 2009/NA06},
+    year         = 2009,
+}</pre>
+</details>
+
+<br/>
 
 **Remark:** LINCOA seeks the least value of a nonlinear function subject to
 linear inequality constraints without using derivatives of the objective

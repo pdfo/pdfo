@@ -9,7 +9,5 @@ Modified by:Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
 
 Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
 
-We look forward to your feedback! Thank you very much!
-
 March 2020, Hong Kong
 ***********************************************************************
