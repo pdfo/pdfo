@@ -58,8 +58,10 @@ Alternatively, although deeply discouraged, PDFO can be installed from the
 source code. It requires you to install additional Python headers, a Fortran
 compiler (e.g., [gfortran](https://gcc.gnu.org/fortran/)), and
 [F2PY](https://numpy.org/doc/stable/f2py/) (provided by
-[NumPy](https://numpy.org/)). Download and decompress the source code package;
-you will obtain a folder containing `pyproject.toml`; in a command shell,
+[NumPy](https://numpy.org/)).
+Download and decompress the [source code package](https://www.pdfo.net/docs.html#download),
+or clone it from [GitHub](https://github.com/pdfo/pdfo) or [Gitee](https://gitee.com/pdfo/pdfo).
+You will obtain a folder containing `pyproject.toml`; in a command shell,
 change your directory to this folder; then install PDFO by executing
 
 ```bash
