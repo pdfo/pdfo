@@ -76,8 +76,9 @@ and call one of [Powell's](https://www.zhangzk.net/powell.html) solvers. The
 other five functions call the solver indicated by their names. It is highly
 recommended using `pdfo` instead of `uobyqa`, `newuoa`, etc.
 
-The `pdfo` function is designed to be compatible with the `minimize`
-function available in [scipy.optimize](https://docs.scipy.org/doc/scipy/reference/optimize.html).
+The `pdfo` function is designed to be compatible with the 
+[`minimize`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)
+function available in `scipy.optimize`.
 You can call `pdfo` in exactly the same way as calling `minimize`, without the
 derivative arguments (PDFO does not use derivatives).
 
@@ -153,8 +154,9 @@ and then call one of [Powell's](https://www.zhangzk.net/powell.html) solvers.
 The other five functions call the solver indicated by their names. It is highly
 recommended using `pdfo` instead of `uobyqa`, `newuoa`, etc.
 
-The `pdfo` function is designed to be compatible with the `fmincon`
-function available in the [Optimization Toolbox](https://www.mathworks.com/products/optimization.html)
+The `pdfo` function is designed to be compatible with the 
+[`fmincon`](https://www.mathworks.com/help/optim/ug/fmincon.html)
+function available in the Optimization Toolbox
 of MATLAB. You can call `pdfo` in exactly the same way as calling `fmincon`. In
 addition, `pdfo` can be  called in some flexible ways that are not supported by
 `fmincon`.
