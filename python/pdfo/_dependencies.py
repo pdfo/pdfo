@@ -1746,7 +1746,10 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
     #      a positive integer).
     validated = False
     if 'npt' in option_fields:
-        integer_types = (int, np.int, np.int8, np.int16, np.int32, np.int64)
+        # Note 2023-05-11: np.int was deprecated in NumPy 1.20.0, and is no
+        # longer available in recent NumPy versions. It was only an alias for
+        # int anyway, so it is safe to remove it from the type detection below.
+        integer_types = (int, np.int8, np.int16, np.int32, np.int64)
         if method is not None and \
                 (not isinstance(options['npt'], integer_types) or options['npt'] < 1 or np.isnan(options['npt'])):
             warn_message = '{}: invalid npt. It should be a positive integer.'.format(invoker)
