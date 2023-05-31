@@ -314,7 +314,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         nrun_str = sys.argv.pop(1)
         try:
-            nrun = np.int(nrun_str)
+            nrun = int(nrun_str)
             TestPDFO.NRUN = nrun
         except ValueError:
             w_message = 'The number of run cannot be read: {} received.'.format(nrun_str)
