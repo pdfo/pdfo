@@ -183,6 +183,8 @@ setup uninstall
 
 ## Citing PDFO
 
+If you use PDFO, please cite the following paper. Note that PDFO contains improvements and bug fixes that do not exist in Powell's original code. See Subsections 4.3--4.5 of the paper for details. 
+
 - T. M. Ragonneau and Z. Zhang, [PDFO: a cross-platform package for Powell's derivative-free optimization solvers](https://arxiv.org/pdf/2302.13246.pdf), arXiv:2302.13246, 2023.
 ```bibtex
 @misc{Ragonneau_Zhang_2023,
