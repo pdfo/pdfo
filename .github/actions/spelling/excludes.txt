@@ -71,3 +71,4 @@ ignore$
 ^fsrc/newuoa/
 ^fsrc/original/
 ^fsrc/uobyqa/
+^doc/source/_static/fontawesome-free-6.4.0-desktop/
