@@ -16,7 +16,7 @@ clean:
 	find $(BUILDDIR) -mindepth 1 -	name . -o -prune -exec rm -rf "{}" ";"
 	find . -name generated -type d -prune -exec rm -rf "{}" ";"
 
-.PHONY: cleqn help Makefile
+.PHONY: clean help Makefile
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
