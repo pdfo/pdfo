@@ -81,8 +81,8 @@ html_theme_options = {
 }
 
 html_context = {
-    'github_user': 'ragonneau',
-    'github_repo': 'pdfo-website',
+    'github_user': 'pdfo',
+    'github_repo': 'pdfo',
     'github_version': 'main',
     'doc_path': 'doc/source',
 }
