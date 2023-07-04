@@ -22,75 +22,97 @@ invoker_list.append('pdfo')
 
 
 class OptimizeResult(dict):
-    """Result structure of the DFO algorithms.
+    r"""Result structure of the DFO algorithms.
 
     Attributes
     ----------
     x: ndarray, shape (n,)
-        The (approximate) solution array.
+        Solution array.
     success: bool
-       Flag indicating whether the optimizer exited successfully.
+        Whether the optimizer exited successfully.
     status: int
-        Flag characterizing the exit condition:
-          0  The lower bound for the trust region radius is reached
-          1  The target function value is achieved
-          2  A trust region step failed to reduce the quadratic model
-          3  The objective function has been evaluated `maxfev` times
-          4, 7, 8, 9  Rounding errors become severe in the Fortran code
-         13  All variables are fixed by the constraints
-         14  A linear feasibility problem has been received and solved
-         15  A linear feasibility problem has been received but was not solved
-         -1  NaN occurs in `x`
-         -2  The objective/constraint function returns NaN or nearly infinite values (only in the classical mode)
-         -3  NaN occurs in the models
-         -4  Constraints are infeasible
+        Flag characterizing the exit condition.
 
-        exitflag = 5, 10, 11, 12 are possible exitflags of the Fortran code but cannot be returned by pdfo or its
-        solvers.
+        .. list-table::
+            :widths: 15 85
+            :header-rows: 1
+
+            * - Status
+              - Message
+            * - 0
+              - The lower bound for the trust region radius is reached.
+            * - 1
+              - The target function value is achieved.
+            * - 2
+              - A trust region step failed to reduce the quadratic model.
+            * - 3
+              - The objective function has been evaluated ``maxfev`` times.
+            * - 4, 7, 8, 9
+              - Rounding errors become severe in the Fortran code.
+            * - 13
+              - All variables are fixed by the constraints.
+            * - 14
+              - A linear feasibility problem has been received and solved.
+            * - 15
+              - A linear feasibility problem has been received but failed.
+            * - -1
+              - NaN occurs in `x`.
+            * - -2
+              - The objective/constraint function returns NaN or nearly infinite
+                values (only in the classical mode).
+            * - -3
+              - NaN occurs in the models.
+            * - -4
+              - Constraints are infeasible.
+
+        The exit flags 5, 6, 10, 11, and 12 are possible in the Fortran code but
+        cannot be returned by `pdfo` or its solvers.
     message: str
-        Message related to the exit condition flag. If `options['quiet']` is set to True, this message will not be
-        printed.
+        Message related to the exit condition flag. If ``options['quiet']`` is
+        set to ``True``, this message will not be printed.
     fun: float
         Returns the computed objective function value at the solution `x`.
     nfev: int
         Number of function evaluations.
     constrviolation: float
-        Constraint violation at the solution `x`. It is set to 0 if the problem is unconstrained.
+        Constraint violation at the solution `x`. It is set to ``0`` if the
+        problem is unconstrained.
     fhist: ndarray, shape (nfev,)
-        History of the objective function evaluations performed during the computation. Its size is `nfev` and is
-        ordered by iteration. Its minimum among the feasible point should be fun.
+        History of the objective function evaluations performed during the
+        computation. Its size is `nfev` and is ordered by iteration. Its minimum
+        among the feasible point should be `fun`.
     chist: ndarray, shape (nfev,)
-        History of the constraint violations computed during the computation. If the problem is unconstrained, `chist`
-        is set to None.
+        History of the constraint violations computed during the computation. If
+        the problem is unconstrained, `chist` is set to ``None``.
     constr_value: ndarray or list of ndarrays
-        Values of the constraint functions at the returned `x`. It can be one of the two cases below depending on how
-        the `constraints` variable is specified at the input.
-        1. If `constraints` is a dictionary or an instance of NonlinearConstraint or LinearConstraint, then
-           `constr_value` is an ndarray, whose value is `constraints['fun'](x)`, `constraints.fun(x)`, or
-           `constraints.A*x`.
-        2. If `constraints` is a list of dictionaries or instances of NonlinearConstraint or LinearConstraint, then
-           `constr_value` is a list of ndarrays described in 1, each of which is the value of the corresponding
-           component in `constraints`.
-        If a nonlinear constraint is trivial (i.e., it has -inf as th lower bound and +inf as th upper bound), then its
-        is represented by NaN in constr_value, because such constraints are not evaluated during the computation.
-        Trivial nonlinear constraints with unknown dimensions (for example, {'type': 'eq', 'fun': None} or
-        NonlinearConstraint(fun, None, None)) are represented by empty arrays in constr_value.
+        Values of the constraint functions at the returned `x`. It can be one of
+        the two cases below depending on how the `constraints` variable is
+        specified at the input.
+
+        #. If `constraints` is a dictionary or an instance of
+           `NonlinearConstraint` or `LinearConstraint`, then `constr_value` is
+           an ndarray, whose value is ``constraints['fun'](x)``,
+           ``constraints.fun(x)``, or ``constraints.A * x``.
+        #. If `constraints` is a list of dictionaries or instances of
+           `NonlinearConstraint` or `LinearConstraint`, then `constr_value` is a
+           list of ndarrays described in 1, each of which is the value of the
+           corresponding component in `constraints`.
+
+        If a nonlinear constraint is trivial (i.e., it has :math:`-\infty` as
+        lower bound and :math:`\infty` as upper bound), then its is represented
+        by NaN in `constr_value`, because such constraints are not evaluated
+        during the computation. Trivial nonlinear constraints with unknown
+        dimensions (for example, ``{'type': 'eq', 'fun': None}`` or
+        ``NonlinearConstraint(fun, None, None)``) are represented by empty
+        arrays in `constr_value`.
     method: str
         The name of the method that was used to solve the problem.
     constr_modified: bool
-        An indicator specifying if the constraints have been modified during the algorithm (LINCOA may modify the
-        constraints if it cannot find a feasible starting point).
+        An indicator specifying if the constraints have been modified during the
+        algorithm (LINCOA may modify the constraints if it cannot find a
+        feasible starting point).
     warnings: list
         A recording of every warning raised during the computation.
-
-    Authors
-    -------
-    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-    and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-    Department of Applied Mathematics,
-    The Hong Kong Polytechnic University.
-
-    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
 
     def __delattr__(self, key):
@@ -154,31 +176,25 @@ class OptimizeResult(dict):
 
 
 class Bounds:
-    """Bound structure.
+    r"""Simple bound constraints.
 
-    Bounds(lb, ub) specifies a bound constraint
+    This class represents simple bound constraints of the form
 
-    lb <= x <= ub,
+    .. math::
 
-    where x is an n-dimensional vector.
+        \xl \le x \le \xu,
+
+    where :math:`\xl \in \R^n` and :math:`\xu \in \R^n`.
 
     Attributes
     ----------
     lb: ndarray, shape (n,)
-        The lower-bound vector of the constraint. Set ``lb`` to ``-numpy.inf``
+        Above-mentioned lower bound :math:`\xl`. To disable a component of the
+        bound, set the corresponding element of `lb` to :math:`-\infty`.
         to disable these bounds.
     ub: ndarray, shape (n,)
-        The upper-bound vector of the constraint. Set ``ub`` to ``numpy.inf``
-        to disable these bounds.
-
-    Authors
-    -------
-    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-    and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-    Department of Applied Mathematics,
-    The Hong Kong Polytechnic University.
-
-    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
+        Above-mentioned upper bound :math:`\xu`. To disable a component of the
+        bound, set the corresponding element of `ub` to :math:`\infty`.
     """
 
     def __init__(self, lb=None, ub=None):
@@ -223,33 +239,26 @@ class Bounds:
 
 
 class LinearConstraint:
-    """Linear constraint structure.
+    r"""Linear inequality and equality constraints.
 
-    LinearConstraint(A, lb, ub) specifies a linear constraint
+    This class represents linear constraints of the form
 
-    lb <= A*x <= ub,
+    .. math::
 
-    where x is an n-dimensional vector.
+        \xl \le \aub x \le \xu,
+
+    where :math:`\aub \in \R^{m \times n}`, :math:`\xl \in \R^m`, and
+    :math:`\xu \in \R^m`. To specify equality constraints, set the
+    corresponding elements of :math:`\xl` and :math:`\xu` to the same values.
 
     Attributes
     ----------
-    A: ndarray, shape (m,n)
-        The coefficient matrix of the constraint.
+    A: ndarray, shape (m, n)
+        Above-mentioned coefficient matrix :math:`\aub`.
     lb: ndarray, shape (m,)
-        The lower-bound vector of the constraint. Set ``lb`` to ``-numpy.inf``
-        to disable these bounds.
+        Above-mentioned lower bound :math:`\xl`.
     ub: ndarray, shape (m,)
-        The upper-bound vector of the constraint. Set ``ub`` to ``numpy.inf``
-        to disable these bounds.
-
-    Authors
-    -------
-    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-    and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-    Department of Applied Mathematics,
-    The Hong Kong Polytechnic University.
-
-    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
+        Above-mentioned upper bound :math:`\xu`.
     """
 
     def __init__(self, a=None, lb=None, ub=None):
@@ -316,31 +325,30 @@ class LinearConstraint:
 
 
 class NonlinearConstraint:
-    """Nonlinear constraint structure.
+    r"""Nonlinear inequality and equality constraints.
 
-    NonlinearConstraint(fun, lb, ub) specifies a nonlinear constraint
+    This class represents nonlinear constraints of the form
 
-    lb <= fun(x) <= ub.
+    .. math::
+
+        \xl \le \cub ( x ) \le \xu,
+
+    where :math:`\cub \colon \R^n \to \R^m`, :math:`\xl \in \R^m`, and
+    :math:`\xu \in \R^m`. To specify equality constraints, set the
+    corresponding elements of :math:`\xl` and :math:`\xu` to the same values.
 
     Attributes
     ----------
     fun: callable
-        The constraint function, which accepts a vector `x` at input and returns a vector of shape (m,).
+        Above-mentioned nonlinear constraint function :math:`\cub`.
+
+            ``fun(x) -> ndarray, shape (m,)``
+
+        where ``x`` is an array with shape (n,).
     lb: ndarray, shape (m,)
-        The lower-bound vector of the constraint. Set ``lb`` to ``-numpy.inf``
-        to disable these bounds.
+        Above-mentioned lower bound :math:`\xl`.
     ub: ndarray, shape (m,)
-        The upper-bound vector of the constraint. Set ``ub`` to ``numpy.inf``
-        to disable these bounds.
-
-    Authors
-    -------
-    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-    and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-    Department of Applied Mathematics,
-    The Hong Kong Polytechnic University.
-
-    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
+        Above-mentioned upper bound :math:`\xu`.
     """
 
     def __init__(self, fun, lb=None, ub=None):

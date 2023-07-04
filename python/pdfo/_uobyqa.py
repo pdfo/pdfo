@@ -6,107 +6,101 @@ import numpy as np
 
 
 def uobyqa(fun, x0, args=(), options=None):
-    """UOBYQA: Unconstrained Optimization BY Quadratic Approximation
-
-    The algorithm is described in [M. J. D. Powell, UOBYQA: unconstrained optimization by quadratic approximation, Math.
-    Program., 92(B):555--582, 2002].
+    r"""Unconstrained Optimization BY Quadratic Approximation.
 
     Parameters
     ----------
     fun: callable
-        The objective function, which accepts a vector `x` at input and returns a scalar.
-    x0: ndarray, shape (n,)
-        The initial guess. The size of `x0` should be consistent with the objective function.
-    args: tuple, optional
-        The extra-arguments to pass to the objective function. For example,
+        Objective function to be minimized.
 
-            ``uobyqa(fun, x0, args, options)``
+            ``fun(x, *args) -> float``
+
+        where ``x`` is an array with shape (n,) and `args` is a tuple.
+    x0: ndarray, shape (n,)
+        Initial guess.
+    args: tuple, optional
+        Parameters of the objective function. For example,
+
+            ``pdfo(fun, x0, args, ...)``
 
         is equivalent to
 
-            ``uobyqa(lambda x: fun(x, *args), x0, options=options)``
+            ``pdfo(lambda x: fun(x, *args), x0, ...)``
 
     options: dict, optional
-        The options passed to the solver. It is a structure that contains optionally:
+        The options passed to the solver. It contains optionally:
+
             rhobeg: float, optional
-                Initial value of the trust region radius, which should be a positive scalar. Typically, `options['rhobeg']`
-                should in the order of  one tenth of the greatest expected change to a variable. By default, it is 1.
+                Initial value of the trust region radius, which should be a
+                positive scalar. Typically, ``options['rhobeg']`` should be in
+                the order of one tenth of the greatest expected change to a
+                variable. By default, it is ``1``.
             rhoend: float, optional
-                Final value of the trust region radius, which should be a positive scalar. `options['rhoend']` should
-                indicate typically the accuracy required in the final values of the variables. Moreover,
-                `options['rhoend']` should be no more than `options['rhobeg']` and is by default 1e-6.
+                Final value of the trust region radius, which should be a
+                positive scalar. ``options['rhoend']`` should indicate the
+                accuracy required in the final values of the variables.
+                Moreover, ``options['rhoend']`` should be no more than
+                ``options['rhobeg']`` and is by default ``1e-6``.
             maxfev: int, optional
-                Upper bound of the number of calls of the objective function `fun`. Its value must be not less than
-                (n+1)*(n+2)/2+1. By default, it is 500*n.
+                Upper bound of the number of calls of the objective function
+                `fun`. Its value must be not less than ``options['npt'] + 1``.
+                By default, it is ``500 * n``.
             ftarget: float, optional
-                Target value of the objective function. If an iterate achieves an objective function value lower or
-                equal to `options['ftarget']`, the algorithm stops immediately. By default, it is -numpy.inf.
+                Target value of the objective function. If a feasible iterate
+                achieves an objective function value lower or equal to
+                ```options['ftarget']``, the algorithm stops immediately. By
+                default, it is :math:`-\infty`.
             quiet: bool, optional
-                Flag of quietness of the interface. If it is set to True, the output message will not be printed. This
-                flag does not interfere with the warning and error printing.
+                Whether the interface is quiet. If it is set to ``True``, the
+                output message will not be printed. This flag does not interfere
+                with the warning and error printing.
             classical: bool, optional
-                Flag indicating whether to call the classical Powell code or not. By default, it is False.
-            eliminate_lin_eq: bool, optional
-                Flag indicating whether the linear equality constraints should be eliminated. By default, it is True.
+                Whether to call the classical Powell code or not. It is not
+                encouraged in production. By default, it is ``False``.
             debug: bool, optional
-                Debugging flag. By default, it is False.
+                Debugging flag. It is not encouraged in production. By default,
+                it is ``False``.
             chkfunval: bool, optional
-                Flag used when debugging. If both `options['debug']` and `options['chkfunval']` are True, an extra
-                function evaluation would be performed to check whether the returned objective function value matches
-                the returned x. By default, it is False.
+                Flag used when debugging. If both ``options['debug']`` and
+                ``options['chkfunval']`` are ``True``, an extra function
+                evaluation would be performed to check whether the returned
+                values of objective function and constraint match the returned
+                ``x``. By default, it is ``False``.
 
     Returns
     -------
     res: OptimizeResult
-        The results of the solver. Check ``pdfo.OptimizeResult`` for a description of the attributes.
+        The results of the solver. Check `OptimizeResult` for a description of
+        the attributes.
 
-    Notes
-    -----
-    The signature of this function is consistent with the `minimize` function available in ``scipy.optimize``, included
-    in the SciPy package.
-
-    See https://www.pdfo.net for more information.
+    References
+    ----------
+    .. [1] M. J. D. Powell. UOBYQA: unconstrained optimization by quadratic
+       approximation. *Math. Program.*, 92:555--582, 2002.
 
     See also
     --------
-    bobyqa : Bounded Optimization BY Quadratic Approximations
-    cobyla : Constrained Optimization BY Linear Approximations
-    lincoa : LINearly Constrained Optimization Algorithm
-    newuoa : NEW Unconstrained Optimization Algorithm
-    pdfo : Powell's Derivative-Free Optimization solvers
+    bobyqa : Bounded Optimization BY Quadratic Approximations.
+    cobyla : Constrained Optimization BY Linear Approximations.
+    lincoa : LINearly Constrained Optimization Algorithm.
+    newuoa : NEW Unconstrained Optimization Algorithm.
+    pdfo : Powell's Derivative-Free Optimization solvers.
 
     Examples
     --------
-    1. The following code
+    To solve
 
-    >>> from python.pdfo import *
-    >>> import numpy as np
-    >>> options = {'maxfev': 50}
-    >>> uobyqa(np.cos, -1, options=options)
+    .. math::
 
-    solves
-        min  cos(x)
-    starting from x0 = -1 with at most 50 function evaluations.
+        \min_{x, y \in \R} \quad x^2 + y^2,
 
-    2. The following code
+    starting from :math:`(x_0, y_0) = (0, 1)` with at most 200 function
+    evaluations, run
 
-    >>> from python.pdfo import *
+    >>> from pdfo import uobyqa
     >>> obj = lambda x: x[0]**2 + x[1]**2
     >>> options = {'maxfev': 200}
     >>> uobyqa(obj, [0, 1], options=options)
-
-    solves
-        min  x^2 + y^2
-    starting from [x0, y0] = [0, 1] with at most 200 function evaluations.
-
-    Authors
-    -------
-    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-    and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-    Department of Applied Mathematics,
-    The Hong Kong Polytechnic University.
-
-    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
     try:
         from .gethuge import gethuge

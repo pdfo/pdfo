@@ -6,131 +6,149 @@ import numpy as np
 
 
 def lincoa(fun, x0, args=(), bounds=None, constraints=(), options=None):
-    """LINCOA: LINearly Constrained Optimization Algorithm
-
-    M. J. D. Powell did not publish any paper introducing LINCOA.
+    r"""LINearly Constrained Optimization Algorithm.
 
     Parameters
     ----------
     fun: callable
-        The objective function, which accepts a vector `x` at input and returns a scalar.
-    x0: ndarray, shape (n,)
-        The initial guess. The size of `x0` should be consistent with the objective function.
-    args: tuple, optional
-        The extra-arguments to pass to the objective function. For example,
+        Objective function to be minimized.
 
-            ``lincoa(fun, x0, args, ...)``
+            ``fun(x, *args) -> float``
+
+        where ``x`` is an array with shape (n,) and `args` is a tuple.
+    x0: ndarray, shape (n,)
+        Initial guess.
+    args: tuple, optional
+        Parameters of the objective function. For example,
+
+            ``pdfo(fun, x0, args, ...)``
 
         is equivalent to
 
-            ``lincoa(lambda x: fun(x, *args), x0, ...)``
+            ``pdfo(lambda x: fun(x, *args), x0, ...)``
 
-    bounds: ndarray of tuple with shape(n,2), or Bounds, optional
-        Bound constraints of the problem. It can be one of the two cases below.
-            1. An ndarray with shape(n,2). If the ndarray is 'bounds', then the bound constraint for x[i] is
-                bounds[i, 0]<=x[i]<=bounds[i, 1]. Set bounds[i, 0] to -numpy.inf or None if there is no lower bound, and
-                set bounds[i, 1] to numpy.inf or None if there is no upper bound.
-            2. An instance of the `Bounds` class. Bounds(lb, ub) specifies a bound constraint lb<=x<=ub.
-    constraints: LinearConstraint or a list of them, optional
-        Linear constraints of the problem. It can be one of the two cases below.
-            1. An instance of the `LinearConstraint` class.
-                LinearConstraint(A, lb, ub) specifies a linear constraint lb<=A*x<=ub.
-            2. A list of LinearConstraint.
+    bounds: {Bounds, ndarray, shape (n, 2)}, optional
+        Bound constraints of the problem. It can be one of the cases below.
+
+        #. An instance of `Bounds`.
+        #. An ndarray with shape (n, 2). The bound constraint for x[i] is
+           ``bounds[i, 0] <= x[i] <= bounds[i, 1]``. Set ``bounds[i, 0]`` to
+           :math:`-\infty` or ``None`` if there is no lower bound, and set
+           ``bounds[i, 1]`` to :math:`\infty` or ``None`` if there is no upper
+           bound.
+
+    constraints: {LinearConstraint, list}, optional
+        Constraints of the problem. It can be one of the cases below.
+
+        #. An instance of `LinearConstraint`.
+        #. A list of instances of `LinearConstraint`.
+
     options: dict, optional
-        The options passed to the solver. It is a structure that contains optionally:
+        The options passed to the solver. It contains optionally:
+
             rhobeg: float, optional
-                Initial value of the trust region radius, which should be a positive scalar. Typically,
-                `options['rhobeg']` should be typically in the order of one tenth of the greatest expected change to a
-                variable. By default, it is 1 if the problem is not scaled, 0.5 if the problem is scaled.
+                Initial value of the trust region radius, which should be a
+                positive scalar. Typically, ``options['rhobeg']`` should be in
+                the order of one tenth of the greatest expected change to a
+                variable. By default, it is ``1`` if the problem is not scaled,
+                and ``0.5`` if the problem is scaled.
             rhoend: float, optional
-                Final value of the trust region radius, which should be a positive scalar. `options['rhoend']` should
-                indicate typically the accuracy required in the final values of the variables. Moreover,
-                `options['rhoend']` should be no more than `options['rhobeg']` and is by default 1e-6.
+                Final value of the trust region radius, which should be a
+                positive scalar. ``options['rhoend']`` should indicate the
+                accuracy required in the final values of the variables.
+                Moreover, ``options['rhoend']`` should be no more than
+                ``options['rhobeg']`` and is by default ``1e-6``.
             maxfev: int, optional
-                Upper bound of the number of calls of the objective function `fun`. Its value must be not less than
-                `options['npt']`+1. By default, it is 500*n.
+                Upper bound of the number of calls of the objective function
+                `fun`. Its value must be not less than ``options['npt'] + 1``.
+                By default, it is ``500 * n``.
             npt: int, optional
-                Number of interpolation points of each model used in Powell's Fortran code. By default, it is 2*n+1.
+                Number of interpolation points of each model used in Powell's
+                Fortran code.
             ftarget: float, optional
-                Target value of the objective function. If a feasible iterate achieves an objective function value lower
-                or equal to `options['ftarget']`, the algorithm stops immediately. By default, it is -numpy.inf.
+                Target value of the objective function. If a feasible iterate
+                achieves an objective function value lower or equal to
+                ```options['ftarget']``, the algorithm stops immediately. By
+                default, it is :math:`-\infty`.
             scale: bool, optional
-                Flag indicating whether to scale the problem according to the bound constraints or not. By default, it
-                is False. If the problem is to be scaled, then rhobeg and rhoend mentioned above will be used as the
-                initial and final trust region radii for the scaled problem.
+                Whether to scale the problem according to the bound constraints.
+                By default, it is ``False``. If the problem is to be scaled,
+                then ``rhobeg`` and ``rhoend`` will be used as the initial and
+                final trust region radii for the scaled problem.
             quiet: bool, optional
-                Flag of quietness of the interface. If it is set to True, the output message will not be printed. This
-                flag does not interfere with the warning and error printing.
+                Whether the interface is quiet. If it is set to ``True``, the
+                output message will not be printed. This flag does not interfere
+                with the warning and error printing.
             classical: bool, optional
-                Flag indicating whether to call the classical Powell code or not. By default, it is False.
+                Whether to call the classical Powell code or not. It is not
+                encouraged in production. By default, it is ``False``.
             eliminate_lin_eq: bool, optional
-                Flag indicating whether the linear equality constraints should be eliminated. By default, it is True.
+                Whether the linear equality constraints should be eliminated.
+                By default, it is ``True``.
             debug: bool, optional
-                Debugging flag. By default, it is False.
+                Debugging flag. It is not encouraged in production. By default,
+                it is ``False``.
             chkfunval: bool, optional
-                Flag used when debugging. If both `options['debug']` and `options['chkfunval']` are True, an extra
-                function evaluation would be performed to check whether the returned objective function value matches
-                the returned x. By default, it is False.
+                Flag used when debugging. If both ``options['debug']`` and
+                ``options['chkfunval']`` are ``True``, an extra
+                function/constraint evaluation would be performed to check
+                whether the returned values of objective function and constraint
+                match the returned ``x``. By default, it is ``False``.
 
     Returns
     -------
     res: OptimizeResult
-        The results of the solver. Check ``pdfo.OptimizeResult`` for a description of the attributes.
+        The results of the solver. Check `OptimizeResult` for a description of
+        the attributes.
 
     Notes
     -----
-    The signature of this function is consistent with the `minimize` function available in ``scipy.optimize``, included
-    in the SciPy package.
-
-    See https://www.pdfo.net for more information.
+    Professor Powell did not publish any paper introducing LINCOA.
 
     See also
     --------
-    bobyqa : Bounded Optimization BY Quadratic Approximations
-    cobyla : Constrained Optimization BY Linear Approximations
-    newuoa : NEW Unconstrained Optimization Algorithm
-    uobyqa : Unconstrained Optimization BY Quadratic Approximation
-    pdfo : Powell's Derivative-Free Optimization solvers
+    bobyqa : Bounded Optimization BY Quadratic Approximations.
+    cobyla : Constrained Optimization BY Linear Approximations.
+    newuoa : NEW Unconstrained Optimization Algorithm.
+    uobyqa : Unconstrained Optimization BY Quadratic Approximation.
+    pdfo : Powell's Derivative-Free Optimization solvers.
 
     Examples
     --------
-    1. The following code
+    1. To solve
 
-    >>> from python.pdfo import *
+    .. math::
+
+        \min_{x \in \R} \quad \cos ( x ) \quad \text{s.t.} \quad 2 x \le 3,
+
+    starting from :math:`x_0 = -1` with at most 50 function evaluations, run
+
     >>> import numpy as np
-    >>> lin_con = LinearConstraint(2, None, 3)
+    >>> from pdfo import Bounds, lincoa
+    >>> bounds = Bounds(-np.inf, 3 / 2)
     >>> options = {'maxfev': 50}
-    >>> lincoa(np.cos, -1, constraints=lin_con, options=options)
+    >>> lincoa(np.cos, -1, bounds=bounds, options=options)
 
-    solves
-        min  cos(x)
-        s.t. 2*x <= 3
-    starting from x0 = -1 with at most 50 function evaluations.
+    2. To solve
 
-    2. The following code
+    .. math::
 
-    >>> from python.pdfo import *
+        \min_{x, y \in \R} \quad x^2 + y^2 \quad \text{s.t.} \quad \left\{
+        \begin{array}{l}
+            0 \le x \le 2,\\
+            1 \le 2 y \le 6,\\
+            0 \le x + y \le 1,
+        \end{array} \right.
+
+    starting from :math:`(x_0, y_0) = (0, 1)` with at most 200 function
+    evaluations, run
+
+    >>> from pdfo import Bounds, LinearConstraint, lincoa
     >>> obj = lambda x: x[0]**2 + x[1]**2
     >>> bounds = Bounds([0, 0.5], [2, 3])
-    >>> lin_con = LinearConstraint([1, 1], 0, 1)
+    >>> constraints = LinearConstraint([1, 1], 0, 1)
     >>> options = {'maxfev': 200}
-    >>> lincoa(obj, [0, 1], bounds=bounds, constraints=lin_con, options=options)
-
-    solves
-        min  x^2 + y^2
-        s.t. 0 <= x <= 2
-             0.5 <= y <= 3
-             0 <= x + y <= 1
-    starting from [x0, y0] = [0, 1] with at most 200 function evaluations.
-
-    Authors
-    -------
-    Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-    and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-    Department of Applied Mathematics,
-    The Hong Kong Polytechnic University.
-
-    Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
+    >>> lincoa(obj, [0, 1], bounds=bounds, constraints=constraints, options=options)
     """
     try:
         from .gethuge import gethuge
