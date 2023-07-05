@@ -40,6 +40,7 @@ jobs:
           git config user.email github-actions[bot]@users.noreply.github.com
           git switch gh-pages || git switch -c gh-pages
           git rm -r '*' 2> /dev/null || true
+          git clean -fxd
           mv $BUILDDIR/html/* .
           echo "${{ env.CNAME }}" > CNAME
           git add -A
