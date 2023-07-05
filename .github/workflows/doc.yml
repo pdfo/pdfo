@@ -42,6 +42,7 @@ jobs:
           git rm -r '*' 2> /dev/null || true
           git clean -fxd
           mv $BUILDDIR/html/* .
+          > .nojekyll
           echo "${{ env.CNAME }}" > CNAME
           git add -A
           git commit -m "${{ env.COMMIT_MESSAGE }}"
