@@ -23,6 +23,7 @@ jobs:
 
       - name: Build and publish the documentation
         env:
+          CNAME: pdfo.net
           COMMIT_MESSAGE: Publish documentation
         run: |
           # Install dependencies
@@ -38,6 +39,8 @@ jobs:
           git config user.email github-actions[bot]@users.noreply.github.com
           git switch gh-pages || git switch -c gh-pages
           git rm -r '*' 2> /dev/null || true
+          > .nojekyll
+          echo "${{ env.CNAME }}" > CNAME
           mv doc/build/html/* . && rm -rf doc
           git add -A
           git commit -m "${{ env.COMMIT_MESSAGE }}"
