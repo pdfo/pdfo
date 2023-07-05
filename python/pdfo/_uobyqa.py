@@ -8,6 +8,11 @@ import numpy as np
 def uobyqa(fun, x0, args=(), options=None):
     r"""Unconstrained Optimization BY Quadratic Approximation.
 
+    .. deprecated:: 1.3
+        Calling the UOBYQA solver via the `uobyqa` function is deprecated.
+        The UOBYQA solver remains available in PDFO. Call the `pdfo` function
+        with the argument ``method='uobyqa'`` to use it.
+
     Parameters
     ----------
     fun: callable
@@ -80,27 +85,37 @@ def uobyqa(fun, x0, args=(), options=None):
 
     See also
     --------
-    bobyqa : Bounded Optimization BY Quadratic Approximations.
-    cobyla : Constrained Optimization BY Linear Approximations.
-    lincoa : LINearly Constrained Optimization Algorithm.
-    newuoa : NEW Unconstrained Optimization Algorithm.
     pdfo : Powell's Derivative-Free Optimization solvers.
+    newuoa : NEW Unconstrained Optimization Algorithm.
+    bobyqa : Bounded Optimization BY Quadratic Approximations.
+    lincoa : LINearly Constrained Optimization Algorithm.
+    cobyla : Constrained Optimization BY Linear Approximations.
 
     Examples
     --------
-    To solve
+    The following example shows how to solve a simple unconstrained optimization
+    problem. The problem considered below should be solved with a
+    derivative-based method. It is used here only as an illustration.
+
+    We consider the 2-dimensional problem
 
     .. math::
 
-        \min_{x, y \in \R} \quad x^2 + y^2,
+        \min_{x, y \in \R} \quad x^2 + y^2.
 
-    starting from :math:`(x_0, y_0) = (0, 1)` with at most 200 function
-    evaluations, run
+    We solve this problem using `uobyqa` starting from the initial guess
+    :math:`(x_0, y_0) = (0, 1)` with at most 200 function evaluations.
+
+    .. testsetup::
+
+        import numpy as np
+        np.set_printoptions(precision=1, suppress=True)
 
     >>> from pdfo import uobyqa
-    >>> obj = lambda x: x[0]**2 + x[1]**2
     >>> options = {'maxfev': 200}
-    >>> uobyqa(obj, [0, 1], options=options)
+    >>> res = uobyqa(lambda x: x[0]**2 + x[1]**2, [0, 1], options=options)
+    >>> res.x
+    array([0., 0.])
     """
     try:
         from .gethuge import gethuge

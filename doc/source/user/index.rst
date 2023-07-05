@@ -1,7 +1,9 @@
+.. _user-guide:
+
 User guide
 ==========
 
-This guide explains how to install and use PDFO in Python and MATLAB.
+This guide explains how to :ref:`install <installation>` and :ref:`use <usage>` PDFO in Python and MATLAB.
 It also contains information about the releases, past issues, and useful references.
 
 .. toctree::

@@ -133,45 +133,47 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
     lincoa : LINearly Constrained Optimization Algorithm.
     cobyla : Constrained Optimization BY Linear Approximations.
 
+    References
+    ----------
+    .. [1] T. M. Ragonneau and Z. Zhang. PDFO: a cross-platform package for
+       Powell's derivative-free optimization solvers.
+       arXiv:`2302.13246 [math.OC] <https://arxiv.org/abs/2302.13246>`_, 2023.
+
+
     Examples
     --------
-    1. To solve
+    The following example shows how to solve a simple constrained optimization
+    problem. The problem considered below should be solved with a
+    derivative-based method. It is used here only as an illustration.
 
-    .. math::
-
-        \min_{x \in \R} \quad \cos ( x ) \quad \text{s.t.} \quad 2 x \le 3,
-
-    starting from :math:`x_0 = -1` with at most 50 function evaluations, run
-
-    >>> import numpy as np
-    >>> from pdfo import Bounds, pdfo
-    >>> bounds = Bounds(-np.inf, 3 / 2)
-    >>> options = {'maxfev': 50}
-    >>> pdfo(np.cos, -1, bounds=bounds, options=options)
-
-    2. To solve
+    We consider the 2-dimensional problem
 
     .. math::
 
         \min_{x, y \in \R} \quad x^2 + y^2 \quad \text{s.t.} \quad \left\{
         \begin{array}{l}
             0 \le x \le 2,\\
-            1 \le 2 y \le 6,\\
+            1 / 2 \le y \le 3,\\
             0 \le x + y \le 1,\\
-            x^2 - y \le 0,
+            x^2 - y \le 0.
         \end{array} \right.
 
-    starting from :math:`(x_0, y_0) = (0, 1)` with at most 200 function
-    evaluations, run
+    We solve this problem using `pdfo` starting from the initial guess
+    :math:`(x_0, y_0) = (0, 1)` with at most 200 function evaluations.
+
+    .. testsetup::
+
+        import numpy as np
+        np.set_printoptions(precision=1, suppress=True)
 
     >>> from pdfo import Bounds, LinearConstraint, NonlinearConstraint, pdfo
-    >>> obj = lambda x: x[0]**2 + x[1]**2
-    >>> con = lambda x: x[0]**2 - x[1]
     >>> bounds = Bounds([0, 0.5], [2, 3])
     >>> linear_constraints = LinearConstraint([1, 1], 0, 1)
-    >>> nonlinear_constraints = NonlinearConstraint(con, None, 0)
+    >>> nonlinear_constraints = NonlinearConstraint(lambda x: x[0]**2 - x[1], None, 0)
     >>> options = {'maxfev': 200}
-    >>> pdfo(obj, [0, 1], bounds=bounds, constraints=[linear_constraints, nonlinear_constraints], options=options)
+    >>> res = pdfo(lambda x: x[0]**2 + x[1]**2, [0, 1], bounds=bounds, constraints=[linear_constraints, nonlinear_constraints], options=options)
+    >>> res.x
+    array([0. , 0.5])
     """
     from ._dependencies import prepdfo, postpdfo
 

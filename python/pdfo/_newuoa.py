@@ -8,6 +8,11 @@ import numpy as np
 def newuoa(fun, x0, args=(), options=None):
     r"""NEW Unconstrained Optimization Algorithm.
 
+    .. deprecated:: 1.3
+        Calling the NEWUOA solver via the `newuoa` function is deprecated.
+        The NEWUOA solver remains available in PDFO. Call the `newuoa` function
+        with the argument ``method='newuoa'`` to use it.
+
     Parameters
     ----------
     fun: callable
@@ -95,32 +100,29 @@ def newuoa(fun, x0, args=(), options=None):
 
     Examples
     --------
-    1. To solve
+    The following example shows how to solve a simple unconstrained optimization
+    problem. The problem considered below should be solved with a
+    derivative-based method. It is used here only as an illustration.
+
+    We consider the 2-dimensional problem
 
     .. math::
 
-        \min_{x \in \R} \quad \cos ( x ),
+        \min_{x, y \in \R} \quad x^2 + y^2.
 
-    starting from :math:`x_0 = -1` with at most 50 function evaluations, run
+    We solve this problem using `newuoa` starting from the initial guess
+    :math:`(x_0, y_0) = (0, 1)` with at most 200 function evaluations.
 
-    >>> import numpy as np
-    >>> from pdfo import newuoa
-    >>> options = {'maxfev': 50}
-    >>> newuoa(np.cos, -1, options=options)
+    .. testsetup::
 
-    2. To solve
-
-    .. math::
-
-        \min_{x, y \in \R} \quad x^2 + y^2,
-
-    starting from :math:`(x_0, y_0) = (0, 1)` with at most 200 function
-    evaluations, run
+        import numpy as np
+        np.set_printoptions(precision=1, suppress=True)
 
     >>> from pdfo import newuoa
-    >>> obj = lambda x: x[0]**2 + x[1]**2
     >>> options = {'maxfev': 200}
-    >>> newuoa(obj, [0, 1], options=options)
+    >>> res = newuoa(lambda x: x[0]**2 + x[1]**2, [0, 1], options=options)
+    >>> res.x
+    array([0., 0.])
     """
     try:
         from .gethuge import gethuge

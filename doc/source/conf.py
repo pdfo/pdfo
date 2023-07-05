@@ -28,7 +28,7 @@ version = re.sub(r'(\d+\.\d+)\.\d+(.*)', r'\1\2', release)
 version = re.sub(r'(\.dev\d+).*?$', r'\1', version)
 
 # Download statistics.
-archive = urlopen("https://raw.githubusercontent.com/pdfo/stats/main/archives/total.json")
+archive = urlopen('https://raw.githubusercontent.com/pdfo/stats/main/archives/total.json')
 downloads = json.loads(archive.read())
 
 
@@ -37,11 +37,12 @@ downloads = json.loads(archive.read())
 
 extensions = [
     'sphinx.ext.autosummary',
+    'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
+    'sphinx.ext.mathjax',
     'numpydoc',
     'sphinx_copybutton',
-    'sphinx_design',
 ]
 
 templates_path = ['_templates']
@@ -52,13 +53,15 @@ today_fmt = '%B %d, %Y'
 
 default_role = 'autolink'
 
+add_function_parentheses = False
+
 # String to include at the beginning of every source file.
-rst_prolog = f"""
-.. |conda_downloads| replace:: {downloads['conda']}
-.. |pypi_downloads| replace:: {downloads['pypi']}
-.. |github_downloads| replace:: {downloads['github']}
-.. |total_downloads| replace:: {sum(downloads.values())}
-"""
+rst_prolog = f'''
+.. |conda_downloads| replace:: {downloads['conda']:,}
+.. |pypi_downloads| replace:: {downloads['pypi']:,}
+.. |github_downloads| replace:: {downloads['github']:,}
+.. |total_downloads| replace:: {sum(downloads.values()):,}
+'''
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -76,6 +79,10 @@ html_theme_options = {
         {
             'name': 'MATLAB API reference',
             'url': 'https://www.mathworks.com/matlabcentral/fileexchange/75195-pdfo-powell-s-derivative-free-optimization-solvers',
+        },
+        {
+            'name': 'Issue tracker',
+            'url': 'https://github.com/pdfo/pdfo/issues',
         },
     ],
     'icon_links': [
@@ -99,9 +106,40 @@ html_context = {
     'github_repo': 'pdfo',
     'github_version': 'main',
     'doc_path': 'doc/source',
+    'default_mode': 'auto',
 }
 
 html_static_path = ['_static']
+
+html_title = f'{project} v{version} Manual'
+
+# Output file base name for HTML help builder.
+htmlhelp_basename = 'pdfo'
+
+
+# -- Options for LaTeX output ------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-latex-output
+
+latex_elements = {
+    'papersize': 'a4paper',
+    'fontenc': r'\usepackage[LGR,T1]{fontenc}',
+    'preamble': r'''
+% Prevent "LaTeX Error: Too deeply nested."
+\usepackage{enumitem}
+\setlistdepth{9}
+
+% Increase the default table of content depth.
+\setcounter{tocdepth}{2}
+
+% Extra mathematical macros.
+\newcommand{\R}{\mathbb{R}}
+    ''',
+}
+
+latex_documents = [
+    ('python/index', 'pdfo-python.tex', 'PDFO Python Reference', author, 'howto'),
+    ('user/index', 'pdfo-user.tex', 'PDFO User Guide', author, 'howto'),
+]
 
 
 # -- Math support for HTML outputs -------------------------------------------
@@ -109,12 +147,12 @@ html_static_path = ['_static']
 mathjax3_config = {
     'tex': {
         'macros': {
-            'aeq': r'C',
-            'aub': r'A',
-            'beq': r'd',
-            'bub': r'b',
-            'ceq': r'h',
-            'cub': r'g',
+            'aeq': r'A_{\scriptscriptstyle E}',
+            'aub': r'A_{\scriptscriptstyle I}',
+            'beq': r'b_{\scriptscriptstyle E}',
+            'bub': r'b_{\scriptscriptstyle I}',
+            'ceq': r'c_{\scriptscriptstyle E}',
+            'cub': r'c_{\scriptscriptstyle I}',
             'obj': r'f',
             'R': r'{\mathbb{R}}',
             'xl': r'l',

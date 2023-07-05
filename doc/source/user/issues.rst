@@ -2,7 +2,7 @@ Issues and bugs
 ===============
 
 During the development of PDFO, some issues have occurred.
-We keep below a list of the most important one.
+We keep below a list of the most important ones.
 
 In case of problems or bugs when using PDFO, you may open a `new issue <https://github.com/pdfo/pdfo/issues>`_ on GitHub.
 

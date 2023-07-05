@@ -1,5 +1,5 @@
-References
-==========
+Citation
+========
 
 If you would like to acknowledge the significance of PDFO in your research, we suggest citing the project as follows:
 

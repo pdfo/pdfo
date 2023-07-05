@@ -182,18 +182,18 @@ class Bounds:
 
     .. math::
 
-        \xl \le x \le \xu,
+        l \le x \le u,
 
-    where :math:`\xl \in \R^n` and :math:`\xu \in \R^n`.
+    where :math:`l \in \R^n` and :math:`u \in \R^n`.
 
     Attributes
     ----------
     lb: ndarray, shape (n,)
-        Above-mentioned lower bound :math:`\xl`. To disable a component of the
+        Above-mentioned lower bound :math:`l`. To disable a component of the
         bound, set the corresponding element of `lb` to :math:`-\infty`.
         to disable these bounds.
     ub: ndarray, shape (n,)
-        Above-mentioned upper bound :math:`\xu`. To disable a component of the
+        Above-mentioned upper bound :math:`u`. To disable a component of the
         bound, set the corresponding element of `ub` to :math:`\infty`.
     """
 
@@ -245,20 +245,20 @@ class LinearConstraint:
 
     .. math::
 
-        \xl \le \aub x \le \xu,
+        l \le A x \le u,
 
-    where :math:`\aub \in \R^{m \times n}`, :math:`\xl \in \R^m`, and
-    :math:`\xu \in \R^m`. To specify equality constraints, set the
-    corresponding elements of :math:`\xl` and :math:`\xu` to the same values.
+    where :math:`A \in \R^{m \times n}`, :math:`l \in \R^m`, and
+    :math:`u \in \R^m`. To specify equality constraints, set the
+    corresponding elements of :math:`l` and :math:`u` to the same values.
 
     Attributes
     ----------
     A: ndarray, shape (m, n)
-        Above-mentioned coefficient matrix :math:`\aub`.
+        Above-mentioned coefficient matrix :math:`A`.
     lb: ndarray, shape (m,)
-        Above-mentioned lower bound :math:`\xl`.
+        Above-mentioned lower bound :math:`l`.
     ub: ndarray, shape (m,)
-        Above-mentioned upper bound :math:`\xu`.
+        Above-mentioned upper bound :math:`u`.
     """
 
     def __init__(self, a=None, lb=None, ub=None):
@@ -331,24 +331,24 @@ class NonlinearConstraint:
 
     .. math::
 
-        \xl \le \cub ( x ) \le \xu,
+        l \le c ( x ) \le u,
 
-    where :math:`\cub \colon \R^n \to \R^m`, :math:`\xl \in \R^m`, and
-    :math:`\xu \in \R^m`. To specify equality constraints, set the
-    corresponding elements of :math:`\xl` and :math:`\xu` to the same values.
+    where :math:`c \colon \R^n \to \R^m`, :math:`l \in \R^m`, and
+    :math:`u \in \R^m`. To specify equality constraints, set the
+    corresponding elements of :math:`l` and :math:`u` to the same values.
 
     Attributes
     ----------
     fun: callable
-        Above-mentioned nonlinear constraint function :math:`\cub`.
+        Above-mentioned nonlinear constraint function :math:`c`.
 
             ``fun(x) -> ndarray, shape (m,)``
 
         where ``x`` is an array with shape (n,).
     lb: ndarray, shape (m,)
-        Above-mentioned lower bound :math:`\xl`.
+        Above-mentioned lower bound :math:`l`.
     ub: ndarray, shape (m,)
-        Above-mentioned upper bound :math:`\xu`.
+        Above-mentioned upper bound :math:`u`.
     """
 
     def __init__(self, fun, lb=None, ub=None):

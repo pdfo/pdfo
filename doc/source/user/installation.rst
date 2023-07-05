@@ -1,7 +1,11 @@
-Installation for Python and MATLAB
-==================================
+.. _installation:
 
-PDFO can be installed separately for Python and MATLAB, as detailed below.
+Installation
+============
+
+PDFO can be installed separately for :ref:`Python <python-installation>` and :ref:`MATLAB <matlab-installation>`, as detailed below.
+
+.. _python-installation:
 
 Python
 ------
@@ -17,17 +21,18 @@ Install `pip <https://pip.pypa.io/en/stable/installing>`_ in your system, then e
 
 .. code-block:: bash
 
-    python3 -m pip install pdfo
+    pip install pdfo
 
 in a command shell (e.g., the terminal in Linux or Mac, or the Command Shell for Windows).
-If your Python launcher is not ``python3``, adapt the command accordingly (it may be ``python`` on Windows for example).
+If your pip launcher is not ``pip``, adapt the command accordingly (it may be ``pip3`` for example).
 If this command runs successfully, PDFO is installed.
 You may verify the installation by
 
 .. code-block:: bash
 
-    python3 -m unittest pdfo.testpdfo
+    python -m unittest pdfo.testpdfo
 
+Once again, if your Python launcher is not ``python``, adapt the command accordingly (it may be ``python3`` for example).
 If you are an Anaconda user, PDFO is also available through the `conda installer <https://anaconda.org/conda-forge/pdfo>`_.
 
 Alternative installation (using source distribution)
@@ -41,7 +46,9 @@ In a command shell, change your directory to this folder, and then run
 
 .. code-block:: bash
 
-    python3 -m pip install .
+    pip install .
+
+.. _matlab-installation:
 
 MATLAB
 ------

@@ -8,6 +8,11 @@ import numpy as np
 def bobyqa(fun, x0, args=(), bounds=None, options=None):
     r"""Bounded Optimization BY Quadratic Approximations.
 
+    .. deprecated:: 1.3
+        Calling the BOBYQA solver via the `bobyqa` function is deprecated.
+        The BOBYQA solver remains available in PDFO. Call the `pdfo` function
+        with the argument ``method='bobyqa'`` to use it.
+
     Parameters
     ----------
     fun: callable
@@ -104,46 +109,44 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
 
     See also
     --------
-    cobyla : Constrained Optimization BY Linear Approximations.
-    lincoa : LINearly Constrained Optimization Algorithm.
-    newuoa : NEW Unconstrained Optimization Algorithm.
-    uobyqa : Unconstrained Optimization BY Quadratic Approximation.
     pdfo : Powell's Derivative-Free Optimization solvers.
+    uobyqa : Unconstrained Optimization BY Quadratic Approximation.
+    newuoa : NEW Unconstrained Optimization Algorithm.
+    lincoa : LINearly Constrained Optimization Algorithm.
+    cobyla : Constrained Optimization BY Linear Approximations.
 
     Examples
     --------
-    1. To solve
+    The following example shows how to solve a simple bound-constrained
+    optimization problem. The problem considered below should be solved with a
+    derivative-based method. It is used here only as an illustration.
 
-    .. math::
-
-        \min_{x \in \R} \quad \cos ( x ) \quad \text{s.t.} \quad 2 x \le 3,
-
-    starting from :math:`x_0 = -1` with at most 50 function evaluations, run
-
-    >>> import numpy as np
-    >>> from pdfo import Bounds, bobyqa
-    >>> bounds = Bounds(-np.inf, 3 / 2)
-    >>> options = {'maxfev': 50}
-    >>> bobyqa(np.cos, -1, bounds=bounds, options=options)
-
-    2. To solve
+    We consider the 2-dimensional problem
 
     .. math::
 
         \min_{x, y \in \R} \quad x^2 + y^2 \quad \text{s.t.} \quad \left\{
         \begin{array}{l}
             0 \le x \le 2,\\
-            1 \le 2 y \le 6,
+            1 / 2 \le y \le 3.
         \end{array} \right.
 
-    starting from :math:`(x_0, y_0) = (0, 1)` with at most 200 function
-    evaluations, run
+    We solve this problem using `bobyqa` starting from the initial guess
+    :math:`(x_0, y_0) = (0, 1)` with at most 200 function evaluations.
+
+    .. testsetup::
+
+        import numpy as np
+        np.set_printoptions(precision=1, suppress=True)
 
     >>> from pdfo import Bounds, bobyqa
-    >>> obj = lambda x: x[0]**2 + x[1]**2
     >>> bounds = Bounds([0, 0.5], [2, 3])
     >>> options = {'maxfev': 200}
-    >>> bobyqa(obj, [0, 1], bounds=bounds, options=options)
+    >>> res = bobyqa(lambda x: x[0]**2 + x[1]**2, [0, 1], bounds=bounds, options=options)
+    >>> res.x
+    array([0. , 0.5])
+
+    Note that `bobyqa` can also be used to solve unconstrained problems.
     """
     try:
         from .gethuge import gethuge

@@ -1,5 +1,7 @@
-Usage in Python and MATLAB
-==========================
+.. _usage:
+
+Usage
+=====
 
 We provide below general information about the Python and MATLAB interfaces of PDFO.
 For more detailed information, please refer to :ref:`python-api` for the Python version and `File Exchange <https://www.mathworks.com/matlabcentral/fileexchange/75195-pdfo-powell-s-derivative-free-optimization-solvers>`_ for the MATLAB version.

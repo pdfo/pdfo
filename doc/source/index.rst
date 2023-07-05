@@ -9,10 +9,12 @@ PDFO documentation
     Python API reference <python/index>
 
 :Version: |version|
-:Useful links: `Issue tracker <https://github.com/pdfo/pdfo/issues>`_ | `Email <mailto:pdfocode@gmail.com>`_
+:Downloads: |total_downloads|
+:Author of solvers: `M. J. D. Powell <https://www.zhangzk.net/powell.html>`_
+:Authors of PDFO: `Tom M. Ragonneau <https://www.tomragonneau.com>`_ | `Zaikun Zhang <https://www.zhangzk.net>`_
 
-PDFO is a cross-platform package providing Python and MATLAB interfaces for using the late Professor M. J. D. Powell's derivative-free optimization solvers.
-It aims at solving problems of the form
+PDFO is a cross-platform package providing the late Professor `M. J. D. Powell <https://www.zhangzk.net/powell.html>`_'s derivative-free (i.e., zeroth-order) optimization solvers.
+Using only function values, but not derivatives, it solves problems of the form
 
 .. math::
 
@@ -20,111 +22,17 @@ It aims at solving problems of the form
     \begin{array}{l}
         \xl \le x \le \xu,\\
         \aub x \le \bub, ~ \aeq x = \beq,\\
-        \cub ( x ) \le 0, ~ \ceq ( x ) = 0,
+        \cub ( x ) \le 0, ~ \ceq ( x ) = 0.
     \end{array} \right.
 
-where :math:`\obj` is a real-valued objective function, :math:`\xl` and :math:`\xu` are lower and upper bounds, :math:`\aub`, :math:`\aeq`, :math:`\bub`, and :math:`\beq` formulates linear constraints, and :math:`\cub` and :math:`\ceq` are vector-valued constraint functions.
-PDFO uses function values of :math:`\obj`, :math:`\cub`, and :math:`\ceq`, but no derivatives.
+To install PDFO for Python, run
 
-.. grid:: 1 2 2 3
+.. code-block:: bash
 
-    .. grid-item-card::
-        :img-top: ../source/_static/fontawesome-free-6.4.0-desktop/svgs/solid/download.svg
+    pip install pdfo
 
-        Installation
-        ^^^^^^^^^^^^
-
-        Installation manual.
-
-        .. button-ref:: user/installation
-            :expand:
-            :color: secondary
-            :click-parent:
-
-            To the installation
-
-    .. grid-item-card::
-        :img-top: ../source/_static/fontawesome-free-6.4.0-desktop/svgs/solid/users.svg
-
-        Usage
-        ^^^^^
-
-        Usage and examples.
-
-        .. button-ref:: user/usage
-            :expand:
-            :color: secondary
-            :click-parent:
-
-            To the usage
-
-    .. grid-item-card::
-        :img-top: ../source/_static/fontawesome-free-6.4.0-desktop/svgs/solid/code-branch.svg
-
-        Releases
-        ^^^^^^^^
-
-        Release notes.
-
-        .. button-ref:: user/releases
-            :expand:
-            :color: secondary
-            :click-parent:
-
-            To the releases
-
-    .. grid-item-card::
-        :img-top: ../source/_static/fontawesome-free-6.4.0-desktop/svgs/solid/screwdriver-wrench.svg
-
-        Issues
-        ^^^^^^
-
-        Issues and bugs.
-
-        .. button-ref:: user/issues
-            :expand:
-            :color: secondary
-            :click-parent:
-
-            To the issues
-
-    .. grid-item-card::
-        :img-top: ../source/_static/fontawesome-free-6.4.0-desktop/svgs/solid/book.svg
-
-        References
-        ^^^^^^^^^^
-
-        Related publications.
-
-        .. button-ref:: user/references
-            :expand:
-            :color: secondary
-            :click-parent:
-
-            To the references
-
-    .. grid-item-card::
-        :img-top: ../source/_static/fontawesome-free-6.4.0-desktop/svgs/solid/scale-balanced.svg
-
-        License
-        ^^^^^^^
-
-        License information.
-
-        .. button-ref:: license
-            :expand:
-            :color: secondary
-            :click-parent:
-
-            To the license
-
-.. note::
-
-    As of |today|, PDFO has been downloaded |total_downloads| times, including
-
-    - |github_downloads| times on `GitHub <https://github.com/pdfo/pdfo>`_,
-    - |pypi_downloads| times on `PyPI <https://pypi.org/project/pdfo/>`_ (`mirror downloads <https://pypistats.org/faqs>`_ excluded), and
-    - |conda_downloads| times on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_.
+You can also check the :ref:`installation guide for MATLAB<matlab-installation>`.
+For more details, see the :ref:`user guide<user-guide>`.
 
 Citing PDFO
 -----------
@@ -143,6 +51,15 @@ The corresponding BibTeX entry is given hereunder.
         howpublished = {arXiv:2302.13246 [math.OC]},
         year         = 2023,
     }
+
+Statistics
+----------
+
+As of |today|, PDFO has been downloaded |total_downloads| times, including
+
+- |github_downloads| times on `GitHub <https://github.com/pdfo/pdfo>`_,
+- |pypi_downloads| times on `PyPI <https://pypi.org/project/pdfo/>`_ (`mirror downloads <https://pypistats.org/faqs>`_ excluded), and
+- |conda_downloads| times on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_.
 
 Acknowledgments
 ---------------
