@@ -3,10 +3,12 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 import inspect
+import json
 import re
 import sys
 from datetime import datetime
 from pathlib import Path
+from urllib.request import urlopen
 
 import pdfo
 
@@ -24,6 +26,10 @@ release = pdfo.__version__
 # Short version (including .devX, rcX, b1 suffixes if present).
 version = re.sub(r'(\d+\.\d+)\.\d+(.*)', r'\1\2', release)
 version = re.sub(r'(\.dev\d+).*?$', r'\1', version)
+
+# Download statistics.
+archive = urlopen("https://raw.githubusercontent.com/pdfo/stats/main/archives/total.json")
+downloads = json.loads(archive.read())
 
 
 # -- General configuration ---------------------------------------------------
@@ -45,6 +51,14 @@ exclude_patterns = []
 today_fmt = '%B %d, %Y'
 
 default_role = 'autolink'
+
+# String to include at the beginning of every source file.
+rst_prolog = f"""
+.. |conda_downloads| replace:: {downloads['conda']}
+.. |pypi_downloads| replace:: {downloads['pypi']}
+.. |github_downloads| replace:: {downloads['github']}
+.. |total_downloads| replace:: {sum(downloads.values())}
+"""
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -118,8 +132,6 @@ autosummary_generate = True
 # -- Link to other projects’ documentation ------------------------------------
 
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'numpy': ('https://numpy.org/doc/stable/', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/', None)
 }
 

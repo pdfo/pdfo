@@ -120,11 +120,11 @@ PDFO uses function values of :math:`\obj`, :math:`\cub`, and :math:`\ceq`, but n
 
 .. note::
 
-    As of |today|, PDFO has been downloaded
+    As of |today|, PDFO has been downloaded |total_downloads| times, including
 
-    - X times on `GitHub <https://github.com/pdfo/pdfo>`_,
-    - Y times on `PyPI <https://pypi.org/project/pdfo/>`_ (`mirror downloads <https://pypistats.org/faqs>`_ excluded), and
-    - Z times on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_.
+    - |github_downloads| times on `GitHub <https://github.com/pdfo/pdfo>`_,
+    - |pypi_downloads| times on `PyPI <https://pypi.org/project/pdfo/>`_ (`mirror downloads <https://pypistats.org/faqs>`_ excluded), and
+    - |conda_downloads| times on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_.
 
 Citing PDFO
 -----------
