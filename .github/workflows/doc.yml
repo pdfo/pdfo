@@ -39,5 +39,6 @@ jobs:
           git switch gh-pages 2>/dev/null || git switch -c gh-pages
           git rm -r '*'
           mv doc/build/html/* . &q& rm -rf doc
-          git commit -a -m "${{ env.COMMIT_MESSAGE }}"
+          git add -A
+          git commit -m "${{ env.COMMIT_MESSAGE }}"
           git push -f origin gh-pages
