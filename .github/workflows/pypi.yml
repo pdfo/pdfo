@@ -1,7 +1,3 @@
-# .github/workflows/pypi.yml
-# GitHub Actions configuration file for uploading wheels to PyPI
-# See https://github.com/pypa/gh-action-pypi-publish for details
-
 name: publish
 
 on:

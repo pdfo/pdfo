@@ -25,6 +25,7 @@ Hennart
 Himmelblau
 IMA
 KKT
+LGR
 LINCONT
 Lato
 MATLABPATH
@@ -120,12 +121,14 @@ endblock
 enddo
 endfor
 endforeach
+enumitem
 eps
 errorid
 errormsg
 evalc
 evalcon
 evalobj
+ewcommand
 exitflag
 exitflags
 fbobyqa
@@ -144,6 +147,7 @@ flincoa
 fmincon
 fnewuoa
 fontawesome
+fontenc
 fopt
 fortranobject
 freex
@@ -167,6 +171,8 @@ goldp
 gub
 hmlb
 howpublished
+howto
+htmlhelp
 hugecon
 hugefun
 hugenum
@@ -306,6 +312,7 @@ objtype
 opti
 optimoptions
 ori
+papersize
 pathdef
 pathdefi
 pdfo
@@ -352,9 +359,12 @@ rubp
 savepath
 scipy
 scn
+scriptscriptstyle
 sdec
 semismooth
+setcounter
 setdiff
+setlistdepth
 sinc
 solvername
 speye
@@ -367,9 +377,11 @@ svg
 techreport
 testpdfo
 testpypi
+testsetup
 textscan
 timestwo
 tmp
+tocdepth
 toctree
 toml
 trsapp
@@ -385,6 +397,7 @@ uninstalling
 uninstalls
 uobyqa
 uobyqb
+usepackage
 userpath
 usr
 utb

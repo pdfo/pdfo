@@ -1,0 +1,32 @@
+name: documentation
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  run:
+    name: Publish documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install PDFO and dependencies
+        run: |
+          python -m pip install --progress-bar=off .[doc]
+
+      - name: Build and publish the documentation
+        uses: uibcdf/action-sphinx-docs-to-gh-pages@v1.1.0
+        with:
+          branch: main
+          dir_docs: doc

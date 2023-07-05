@@ -1,7 +1,3 @@
-# .github/workflows/spelling.yml
-# GitHub Actions configuration file for checking spelling
-# See https://github.com/check-spelling/check-spelling for details
-
 name: check spelling
 
 # Comment management is handled through a secondary job, for details see:
