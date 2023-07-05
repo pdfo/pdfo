@@ -13,7 +13,7 @@ help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 clean:
-	find $(BUILDDIR) -mindepth 1 -	name . -o -prune -exec rm -rf "{}" ";"
+	find $(BUILDDIR) -mindepth 1 -name . -o -prune -exec rm -rf "{}" ";"
 	find . -name generated -type d -prune -exec rm -rf "{}" ";"
 
 .PHONY: clean help Makefile
