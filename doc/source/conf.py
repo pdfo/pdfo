@@ -137,7 +137,7 @@ latex_elements = {
 }
 
 latex_documents = [
-    ('python/index', 'pdfo-python.tex', 'PDFO Python Reference', author, 'howto'),
+    ('python/index', 'pdfo-py.tex', 'PDFO Python Reference', author, 'howto'),
     ('user/index', 'pdfo-user.tex', 'PDFO User Guide', author, 'howto'),
 ]
 

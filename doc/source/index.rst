@@ -13,7 +13,7 @@ PDFO documentation
 :Author of solvers: `M. J. D. Powell <https://www.zhangzk.net/powell.html>`_
 :Authors of PDFO: `Tom M. Ragonneau <https://www.tomragonneau.com>`_ | `Zaikun Zhang <https://www.zhangzk.net>`_
 
-PDFO is a cross-platform package providing the late Professor `M. J. D. Powell <https://www.zhangzk.net/powell.html>`_'s derivative-free (i.e., zeroth-order) optimization solvers.
+PDFO is a cross-platform package providing the late `Professor M. J. D. Powell <https://www.zhangzk.net/powell.html>`_'s derivative-free (i.e., zeroth-order) optimization solvers.
 Using only function values, but not derivatives, it solves problems of the form
 
 .. math::
@@ -64,7 +64,7 @@ As of |today|, PDFO has been downloaded |total_downloads| times, including
 Acknowledgments
 ---------------
 
-PDFO is dedicated to the memory of the late `Professor Powell <https://www.zhangzk.net/powell.html>`_ with gratitude for his inspiration and for the treasures he left to us.
+PDFO is dedicated to the memory of the late `Professor M. J. D. Powell <https://www.zhangzk.net/powell.html>`_ with gratitude for his inspiration and for the treasures he left to us.
 We are grateful to `Professor Ya-xiang Yuan <http://lsec.cc.ac.cn/~yyx/>`_ for his everlasting encouragement and support.
 
 The development of PDFO is a long-term project, which would not be sustainable without the continued funds from the `Hong Kong Research Grants Council <https://www.ugc.edu.hk/eng/rgc/>`_ (ref. PolyU 253012/17P, PolyU 153054/20P, and PolyU 153066/21P), the `Hong Kong PhD Fellowship Scheme <https://cerg1.ugc.edu.hk/hkpfs/index.html>`_ (ref. PF18-24698), and `The Hong Kong Polytechnic University <https://www.polyu.edu.hk/>`_ (PolyU), in particular the `Department of Applied Mathematics <https://www.polyu.edu.hk/ama>`_ (AMA).
