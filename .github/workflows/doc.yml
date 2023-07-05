@@ -36,8 +36,8 @@ jobs:
           # Publish the documentation
           git config user.name github-actions[bot]
           git config user.email github-actions[bot]@users.noreply.github.com
-          git switch gh-pages 2>/dev/null || git switch -c gh-pages
-          git rm -r '*'
+          git switch gh-pages || git switch -c gh-pages
+          git rm -r '*' || true
           mv doc/build/html/* . &q& rm -rf doc
           git add -A
           git commit -m "${{ env.COMMIT_MESSAGE }}"
