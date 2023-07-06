@@ -168,6 +168,8 @@ gethugemodule
 gfortran
 gmail
 goldp
+Google
+googleanalytics
 gub
 hmlb
 howpublished
@@ -370,6 +372,7 @@ setlistdepth
 sinc
 solvername
 speye
+sphinxcontrib
 sqp
 strfind
 strjoin
