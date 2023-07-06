@@ -25,5 +25,4 @@ jobs:
         env:
           CNAME: pdfo.net
           COMMIT_MESSAGE: Publish documentation
-          DOC_BRANCH: gh-pages
         run: bash .github/actions/doc/build.sh

@@ -18,7 +18,7 @@ git config user.name github-actions[bot]
 git config user.email github-actions[bot]@users.noreply.github.com
 
 # Publish the documentation
-git switch "${{ env.DOC_BRANCH }}" || git switch -c "${{ env.DOC_BRANCH }}"
+git switch gh-pages || git switch -c gh-pages
 git rm -r '*' 2> /dev/null || true
 git clean -fxd
 mv $BUILDDIR/html/* .
@@ -26,4 +26,4 @@ mv $BUILDDIR/html/* .
 echo "${{ env.CNAME }}" > CNAME
 git add -A
 git commit -m "${{ env.COMMIT_MESSAGE }}"
-git push -f origin "${{ env.DOC_BRANCH }}"
+git push -f origin gh-pages
