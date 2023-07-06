@@ -43,6 +43,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'numpydoc',
     'sphinx_copybutton',
+    'sphinxcontrib.googleanalytics',
 ]
 
 templates_path = ['_templates']
@@ -223,3 +224,8 @@ def linkcode_resolve(domain, info):
         return f'{repository}/blob/main/python/pdfo/{fn}{lines}'
     else:
         return f'{repository}/blob/v{release}/python/pdfo/{fn}{lines}'
+
+
+# -- Google Analytics ---------------------------------------------------------
+
+googleanalytics_id = 'G-1DD20TL43D'
