@@ -36,14 +36,14 @@ downloads = json.loads(archive.read())
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    'numpydoc',
+    'sphinxcontrib.googleanalytics',
+    'sphinx_copybutton',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
     'sphinx.ext.mathjax',
-    'numpydoc',
-    'sphinx_copybutton',
-    'sphinxcontrib.googleanalytics',
 ]
 
 templates_path = ['_templates']

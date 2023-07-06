@@ -33,12 +33,6 @@ dt.sig.sig-object {
     padding-right: 1ex;
 }
 
-/* Primary (left) sidebar */
-
-.bd-sidebar-primary {
-  width: 20%;
-}
-
 /* Footer */
 
 .footer-items__start, .footer-items__end {
