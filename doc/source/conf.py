@@ -44,6 +44,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
     'sphinx.ext.mathjax',
+    'sphinx_favicon',
 ]
 
 templates_path = ['_templates']
@@ -75,6 +76,8 @@ html_css_files = ['pdfo.css']
 html_theme_options = {
     'logo': {
         'text': project,
+        'image_light': '_static/logo.svg',
+        'image_dark': '_static/logo.svg',
     },
     'external_links': [
         {
@@ -172,6 +175,11 @@ autosummary_generate = True
 intersphinx_mapping = {
     'scipy': ('https://docs.scipy.org/doc/scipy/', None)
 }
+
+
+# -- Favicons -----------------------------------------------------------------
+
+favicons = ['logo.svg']
 
 
 # -- Add external links to source code ----------------------------------------

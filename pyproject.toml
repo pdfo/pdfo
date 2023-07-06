@@ -69,6 +69,7 @@ doc = [
     "Sphinx==6.2.1",
     "sphinxcontrib-googleanalytics==0.4",
     "sphinx-copybutton==0.5.2",
+    "sphinx-favicon==1.0.1",
 ]
 
 [project.urls]
