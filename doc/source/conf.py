@@ -107,7 +107,6 @@ html_context = {
     'github_repo': 'pdfo',
     'github_version': 'main',
     'doc_path': 'doc/source',
-    'default_mode': 'auto',
 }
 
 html_static_path = ['_static']
