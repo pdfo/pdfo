@@ -64,7 +64,6 @@ PDFO supports MATLAB R2014a and later releases. To use the MATLAB version of PDF
 
 It will attempt to set up your MEX and then compile an `example provided by MathWorks <https://www.mathworks.com/help/matlab/matlab_external/create-fortran-source-mex-file.html>`_ for testing MEX on Fortran.
 If this completes successfully, then your MEX is ready. Otherwise, it is not, and you may try https://github.com/equipez/setup_mex.
-
 It will help you to set MEX up on Windows or macOS (the setup of MEX is trivial on Linux).
 In case ``setup_mex`` does not work, you need to consult a local MATLAB expert or the technical support of MathWorks about "`how to set up MEX <https://www.mathworks.com/help/matlab/ref/mex.html>`_," which is not part of PDFO.
 

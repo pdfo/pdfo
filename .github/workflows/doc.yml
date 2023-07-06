@@ -25,25 +25,5 @@ jobs:
         env:
           CNAME: pdfo.net
           COMMIT_MESSAGE: Publish documentation
-        run: |
-          # Install dependencies
-          python -m pip install --progress-bar=off .[doc]
-          
-          # Build the documentation
-          cd doc
-          export BUILDDIR=/tmp/pdfo-doc
-          make html
-          cd ..
-          
-          # Publish the documentation
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-          git switch gh-pages || git switch -c gh-pages
-          git rm -r '*' 2> /dev/null || true
-          git clean -fxd
-          mv $BUILDDIR/html/* .
-          > .nojekyll
-          echo "${{ env.CNAME }}" > CNAME
-          git add -A
-          git commit -m "${{ env.COMMIT_MESSAGE }}"
-          git push -f origin gh-pages
+          DOC_BRANCH: gh-pages
+        run: bash .github/actions/doc/build.sh
