@@ -36,15 +36,16 @@ downloads = json.loads(archive.read())
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    'matplotlib.sphinxext.plot_directive',
+    'numpydoc',
+    'sphinxcontrib.googleanalytics',
+    'sphinx_copybutton',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
     'sphinx.ext.mathjax',
-    'matplotlib.sphinxext.plot_directive',
-    'numpydoc',
-    'sphinx_copybutton',
-    'sphinxcontrib.googleanalytics',
+    'sphinx_favicon',
 ]
 
 templates_path = ['_templates']
@@ -76,6 +77,8 @@ html_css_files = ['pdfo.css']
 html_theme_options = {
     'logo': {
         'text': project,
+        'image_light': '_static/logo.svg',
+        'image_dark': '_static/logo.svg',
     },
     'external_links': [
         {
@@ -108,7 +111,6 @@ html_context = {
     'github_repo': 'pdfo',
     'github_version': 'main',
     'doc_path': 'doc/source',
-    'default_mode': 'auto',
 }
 
 html_static_path = ['_static']
@@ -174,6 +176,11 @@ autosummary_generate = True
 intersphinx_mapping = {
     'scipy': ('https://docs.scipy.org/doc/scipy/', None)
 }
+
+
+# -- Favicons -----------------------------------------------------------------
+
+favicons = ['logo.svg']
 
 
 # -- Add external links to source code ----------------------------------------

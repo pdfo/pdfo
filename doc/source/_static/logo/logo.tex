@@ -1,0 +1,30 @@
+\documentclass[
+    tikz,
+    border=30pt,
+    convert={outext=.svg,command=\unexpanded{pdf2svg \infile\space\outfile}},
+    multi=false,
+]{standalone}
+\usepackage{fourier}
+
+\usetikzlibrary{shapes.geometric}
+\definecolor{primary}{HTML}{4f8d97}
+\definecolor{secondary}{HTML}{3f7179}
+\definecolor{muted}{HTML}{59515e}
+
+\begin{document}
+
+\begin{tikzpicture}
+    \node[
+        regular polygon,
+        regular polygon sides=6,
+        draw=secondary,
+        fill=primary,
+        rounded corners=7,
+        minimum size=10cm,
+        line width=10pt,
+    ] at (0,0) {};
+    \node[text=white] at (0,0) {\scalebox{25}{$\pi$}};
+\end{tikzpicture}
+
+\end{document}
+

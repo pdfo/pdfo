@@ -57,8 +57,8 @@ Statistics
 
 As of |today|, PDFO has been downloaded |total_downloads| times, including
 
-- |github_downloads| times on `GitHub <https://github.com/pdfo/pdfo>`_,
-- |pypi_downloads| times on `PyPI <https://pypi.org/project/pdfo/>`_ (`mirror downloads <https://pypistats.org/faqs>`_ excluded), and
+- |github_downloads| times on `GitHub <https://hanadigital.github.io/grev/?user=pdfo&repo=pdfo>`_,
+- |pypi_downloads| times on `PyPI <https://pypistats.org/packages/pdfo>`_ (`mirror downloads <https://pypistats.org/faqs>`_ excluded), and
 - |conda_downloads| times on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_.
 
 The following figure shows the cumulative downloads of PDFO.

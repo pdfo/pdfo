@@ -36,19 +36,20 @@ Install [pip](https://pip.pypa.io/en/stable/installing/) in your system if
 you Python version does not include it. Then execute
 
 ```bash
-python3 -m pip install pdfo
+pip install pdfo
 ```
 
 in a command shell (e.g., the terminal for Linux and macOS, or the Command
-Shell for Windows). If your Python 3 launcher is not `python3`, adapt the
-command accordingly (it may be `python` on Windows for example). If this
+Shell for Windows). If your pip launcher is not `pip`, adapt the
+command accordingly (it may be `pip3` for example). If this
 command runs successfully, PDFO is installed. You may verify the
 installation by
 
 ```bash
-python3 -m unittest pdfo.testpdfo
+python -m unittest pdfo.testpdfo
 ```
 
+Once again, if your Python launcher is not `python`, adapt the command accordingly (it may be `python3` for example).
 If you are an Anaconda user, PDFO is also available through the conda installer
 ( https://anaconda.org/conda-forge/pdfo ). However, it is not managed by us.
 
@@ -65,7 +66,7 @@ You will obtain a folder containing `pyproject.toml`; in a command shell,
 change your directory to this folder; then install PDFO by executing
 
 ```bash
-python3 -m pip install .
+pip install .
 ```
 
 ### Usage
