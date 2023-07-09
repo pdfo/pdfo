@@ -61,6 +61,57 @@ As of |today|, PDFO has been downloaded |total_downloads| times, including
 - |pypi_downloads| times on `PyPI <https://pypi.org/project/pdfo/>`_ (`mirror downloads <https://pypistats.org/faqs>`_ excluded), and
 - |conda_downloads| times on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_.
 
+The following figure shows the cumulative downloads of PDFO.
+
+.. plot::
+
+    import json
+    from datetime import datetime
+    from urllib.request import urlopen
+
+    from matplotlib import pyplot as plt
+    from matplotlib.ticker import FuncFormatter
+
+    # Download the raw statistics from GitHub.
+    base_url = 'https://raw.githubusercontent.com/pdfo/stats/main/archives/'
+    conda = json.loads(urlopen(base_url + 'conda.json').read())
+    github = json.loads(urlopen(base_url + 'github.json').read())
+    pypi = json.loads(urlopen(base_url + 'pypi.json').read())
+
+    # Keep only the mirror-excluded statistics for PyPI.
+    pypi = [{'date': d['date'], 'downloads': d['downloads']} for d in pypi if d['category'] == 'without_mirrors']
+
+    # Combine the daily statistics into a single list.
+    download_dates = []
+    daily_downloads = []
+    for src in [conda, github, pypi]:
+        for d in src:
+            date = datetime.strptime(d['date'], '%Y-%m-%d').date()
+            try:
+                # If the date is already in the list, add the downloads.
+                i = download_dates.index(date)
+                daily_downloads[i] += d['downloads']
+            except ValueError:
+                # Otherwise, add the date and downloads.
+                download_dates.append(date)
+                daily_downloads.append(d['downloads'])
+    daily_downloads = [d for _, d in sorted(zip(download_dates, daily_downloads))]
+    download_dates = sorted(download_dates)
+    cumulative_downloads = [sum(daily_downloads[:i]) for i in range(1, len(daily_downloads) + 1)]
+
+    # Plot the cumulative downloads.
+    fig, ax = plt.subplots()
+    fig.autofmt_xdate(rotation=45)
+    ax.get_yaxis().set_major_formatter(FuncFormatter(lambda y, p: format(int(y), ',')))
+    ax.margins(x=0, y=0)
+    ax.plot(download_dates, cumulative_downloads, color='tab:gray')
+    ax.set_title('Cumulative downloads of PDFO')
+
+We started tracking the downloads of PDFO on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_ on October 2022.
+The API we employ to track the downloads of PDFO on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_ provides only the cumulative downloads.
+Therefore, we do not know when the downloads of PDFO on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_ have been made.
+In this plot, all of them are assumed to have been made on October 2022.
+
 Acknowledgments
 ---------------
 

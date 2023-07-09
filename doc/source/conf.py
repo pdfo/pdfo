@@ -41,6 +41,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
     'sphinx.ext.mathjax',
+    'matplotlib.sphinxext.plot_directive',
     'numpydoc',
     'sphinx_copybutton',
     'sphinxcontrib.googleanalytics',
