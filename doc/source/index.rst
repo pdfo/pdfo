@@ -69,6 +69,7 @@ The following figure shows the cumulative downloads of PDFO.
     from datetime import datetime
     from urllib.request import urlopen
 
+    from matplotlib import dates as mdates
     from matplotlib import pyplot as plt
     from matplotlib.ticker import FuncFormatter
 
@@ -101,10 +102,12 @@ The following figure shows the cumulative downloads of PDFO.
 
     # Plot the cumulative downloads.
     fig, ax = plt.subplots()
-    fig.autofmt_xdate(rotation=45)
-    ax.get_yaxis().set_major_formatter(FuncFormatter(lambda y, p: format(int(y), ',')))
+    ax.xaxis.set_minor_locator(mdates.MonthLocator())
+    ax.xaxis.set_major_locator(mdates.YearLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda y, p: format(int(y), ',')))
     ax.margins(x=0, y=0)
-    ax.plot(download_dates, cumulative_downloads, color='tab:gray')
+    ax.plot(download_dates, cumulative_downloads, color='#4f8d97')
     ax.set_title('Cumulative downloads of PDFO')
 
 We started tracking the downloads of PDFO on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_ on October 2022.
