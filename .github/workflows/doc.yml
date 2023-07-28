@@ -3,6 +3,8 @@ name: documentation
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '0 2 * * *'
   workflow_dispatch:
 
 jobs:
