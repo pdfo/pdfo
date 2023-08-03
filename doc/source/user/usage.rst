@@ -17,7 +17,7 @@ General information
 PDFO provides a Python function `pdfo`, which can solve general constrained or unconstrained optimization problems without using derivatives.
 
 The `pdfo` function can automatically identify the type of your problem and then call one of Powell's solvers, namely COBYLA, UOBYQA, NEWUOA, BOBYQA, and LINCOA.
-The user can also specify the solver by setting the solver field of the options passed to `pdfo`.
+The user can also specify the solver by setting the ``method`` field of the options passed to `pdfo`.
 
 The pdfo function is designed to be compatible with the `scipy.optimize.minimize` function of `SciPy <https://scipy.org>`_.
 You can call pdfo in exactly the same way as calling `scipy.optimize.minimize` except that `pdfo` does not accept derivative arguments.
@@ -106,7 +106,7 @@ General information
 PDFO provides a MATLAB function ``pdfo``, which can solve general constrained or unconstrained optimization problems without using derivatives.
 
 The ``pdfo`` function can automatically identify the type of your problem and then call one of Powell's solvers, namely COBYLA, UOBYQA, NEWUOA, BOBYQA, and LINCOA.
-The user can also specify the solver by setting the solver field of the options passed to ``pdfo``.
+The user can also specify the solver by setting the ``solver`` field of the options passed to ``pdfo``.
 
 The ``pdfo`` function is designed to be compatible with the ``fmincon`` function available in the `Optimization Toolbox <https://www.mathworks.com/products/optimization.html>`_ of MATLAB.
 You can call ``pdfo`` in the same way as calling ``fmincon``.
