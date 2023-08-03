@@ -14,16 +14,15 @@ General information
 
 .. currentmodule:: pdfo
 
-PDFO provides the following Python functions: `pdfo`, `uobyqa`, `newuoa`, `bobyqa`, `lincoa`, and `cobyla`.
+PDFO provides a Python function `pdfo`, which can solve general constrained or unconstrained optimization problems without using derivatives.
 
-The `pdfo` function can automatically identify the type of your problem and the call one of Powell's solvers.
-The other five functions call the solver indicated by their names.
-It is highly recommended to use `pdfo` instead of `uobyqa`, `newuoa`, etc.
+The `pdfo` function can automatically identify the type of your problem and then call one of Powell's solvers, namely COBYLA, UOBYQA, NEWUOA, BOBYQA, and LINCOA.
+The user can also specify the solver by setting the solver field of the options passed to `pdfo`.
 
 The pdfo function is designed to be compatible with the `scipy.optimize.minimize` function of `SciPy <https://scipy.org>`_.
 You can call pdfo in exactly the same way as calling `scipy.optimize.minimize` except that `pdfo` does not accept derivative arguments.
 
-For detailed syntaxes of these functions, see :ref:`python-api`.
+For detailed syntax of `pdfo`, see :ref:`python-api`.
 
 An example
 ^^^^^^^^^^
@@ -104,17 +103,16 @@ MATLAB
 General information
 ^^^^^^^^^^^^^^^^^^^
 
-PDFO provides the following MATLAB functions: ``pdfo``, ``uobyqa``, ``newuoa``, ``bobyqa``, ``lincoa``, and ``cobyla``.
+PDFO provides a MATLAB function ``pdfo``, which can solve general constrained or unconstrained optimization problems without using derivatives.
 
-The ``pdfo`` function can automatically identify the type of your problem and then call one of Powell's Fortran solvers.
-The other five functions call the solver indicated by their names.
-It is highly recommended to use ``pdfo`` instead of ``uobyqa``, ``newuoa``, etc.
+The ``pdfo`` function can automatically identify the type of your problem and then call one of Powell's solvers, namely COBYLA, UOBYQA, NEWUOA, BOBYQA, and LINCOA.
+The user can also specify the solver by setting the solver field of the options passed to ``pdfo``.
 
 The ``pdfo`` function is designed to be compatible with the ``fmincon`` function available in the `Optimization Toolbox <https://www.mathworks.com/products/optimization.html>`_ of MATLAB.
 You can call ``pdfo`` in the same way as calling ``fmincon``.
 In addition, ``pdfo`` can be called in some flexible ways that are not supported by ``fmincon``, which will be illustrated in the example below.
 
-For the detailed syntax of these functions, use the standard ``help`` command of MATLAB.
+For detailed syntax of ``pdfo``, use the standard ``help`` command of MATLAB.
 For example, run
 
 .. code-block:: matlab
