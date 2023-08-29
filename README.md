@@ -71,19 +71,12 @@ pip install .
 
 ### Usage
 
-PDFO provides the following Python functions:
-`pdfo`, `uobyqa`, `newuoa`, `bobyqa`, `lincoa`, `cobyla`.
+PDFO provides a Python function `pdfo`, which can solve general constrained or unconstrained optimization problems without using derivatives.
 
-The `pdfo` function can automatically identify the type of your problem
-and call one of [Powell's](https://www.zhangzk.net/powell.html) solvers. The
-other five functions call the solver indicated by their names. It is highly
-recommended using `pdfo` instead of `uobyqa`, `newuoa`, etc.
+The `pdfo` function can automatically identify the type of your problem and then call one of Powell’s solvers, namely COBYLA, UOBYQA, NEWUOA, BOBYQA, and LINCOA.
+The user can also specify the solver by setting the `method` field of the options passed to `pdfo`.
 
-The `pdfo` function is designed to be compatible with the 
-[`minimize`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)
-function available in `scipy.optimize`.
-You can call `pdfo` in exactly the same way as calling `minimize`, without the
-derivative arguments (PDFO does not use derivatives).
+The `pdfo` function is designed to be compatible with the [scipy.optimize.minimize](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize) function of [SciPy](https://scipy.org/). You can call pdfo in exactly the same way as calling [scipy.optimize.minimize](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize) except that `pdfo` does not accept derivative arguments.
 
 For the detailed syntax of these functions, use the standard `help` command
 of Python. For example,
@@ -149,20 +142,13 @@ testpdfo
 
 ### Usage
 
-PDFO provides the following MATLAB functions:
-`pdfo`, `uobyqa`, `newuoa`, `bobyqa`, `lincoa`, `cobyla`.
+PDFO provides a MATLAB function `pdfo`, which can solve general constrained or unconstrained optimization problems without using derivatives.
 
-The `pdfo` function can automatically identify the type of your problem
-and then call one of [Powell's](https://www.zhangzk.net/powell.html) solvers.
-The other five functions call the solver indicated by their names. It is highly
-recommended using `pdfo` instead of `uobyqa`, `newuoa`, etc.
+The `pdfo` function can automatically identify the type of your problem and then call one of Powell’s solvers, namely COBYLA, UOBYQA, NEWUOA, BOBYQA, and LINCOA.
+The user can also specify the solver by setting the `solver` field of the options passed to `pdfo`.
 
-The `pdfo` function is designed to be compatible with the 
-[`fmincon`](https://www.mathworks.com/help/optim/ug/fmincon.html)
-function available in the Optimization Toolbox
-of MATLAB. You can call `pdfo` in exactly the same way as calling `fmincon`. In
-addition, `pdfo` can be  called in some flexible ways that are not supported by
-`fmincon`.
+The `pdfo` function is designed to be compatible with the `fmincon` function available in the [Optimization Toolbox](https://www.mathworks.com/products/optimization.html) of MATLAB.
+You can call `pdfo` in the same way as calling `fmincon`. In addition, `pdfo` can be called in some flexible ways that are not supported by `fmincon`.
 
 For detailed syntax of these functions, use the standard `help` command
 of MATLAB. For example,
