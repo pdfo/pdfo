@@ -78,15 +78,13 @@ The user can also specify the solver by setting the `method` field of the option
 
 The `pdfo` function is designed to be compatible with the [scipy.optimize.minimize](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize) function of [SciPy](https://scipy.org/). You can call pdfo in exactly the same way as calling [scipy.optimize.minimize](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize) except that `pdfo` does not accept derivative arguments.
 
-For the detailed syntax of these functions, use the standard `help` command
-of Python. For example,
+For the detailed syntax of `pdfo`, use the standard `help` command
+of Python:
 
 ```python
 from pdfo import pdfo
 help(pdfo)
 ```
-
-will tell you how to use `pdfo`.
 
 ### Uninstall
 
@@ -150,14 +148,13 @@ The user can also specify the solver by setting the `solver` field of the option
 The `pdfo` function is designed to be compatible with the `fmincon` function available in the [Optimization Toolbox](https://www.mathworks.com/products/optimization.html) of MATLAB.
 You can call `pdfo` in the same way as calling `fmincon`. In addition, `pdfo` can be called in some flexible ways that are not supported by `fmincon`.
 
-For detailed syntax of these functions, use the standard `help` command
-of MATLAB. For example,
+For detailed syntax of `pdfo`, use the standard `help` command
+of MATLAB:
 
 ```matlab
 help pdfo
 ```
 
-will tell you how to use `pdfo`.
 
 ### Uninstall
 
