@@ -8,7 +8,7 @@ from inspect import stack
 import numpy as np
 from scipy.optimize import OptimizeResult
 
-from .settings import ExitStatus
+from ._settings import ExitStatus
 
 python_version = sys.version_info.major
 if python_version >= 3:

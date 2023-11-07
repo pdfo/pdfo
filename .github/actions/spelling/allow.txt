@@ -232,6 +232,7 @@ lstsq
 manylinux
 matd
 mathbb
+mathcal
 mathjax
 matlab
 MATLABPATH
@@ -239,6 +240,7 @@ matlabroot
 matplotlib
 maxarg
 maxcon
+maxcv
 maxdepth
 maxe
 maxexponent
@@ -321,6 +323,7 @@ optimoptions
 ori
 OUTDIR
 outext
+owell
 papersize
 pathdef
 pathdefi
@@ -449,6 +452,7 @@ xopt
 xuresmax
 yaxis
 yml
+Yrc
 YYY
 zaikun
 zhang

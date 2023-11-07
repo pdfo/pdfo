@@ -171,13 +171,13 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
     try:
         from .gethuge import gethuge
     except ImportError:
-        from .common import import_error_so
+        from ._common import import_error_so
 
         # If gethuge cannot be imported, the execution should stop because the package is most likely not built.
         import_error_so('gethuge')
 
-    from .common import prepdfo, _augmented_linear_constraint, postpdfo
-    from .settings import ExitStatus
+    from ._common import prepdfo, _augmented_linear_constraint, postpdfo
+    from ._settings import ExitStatus
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:
@@ -288,7 +288,7 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
             else:
                 from . import fcobyla
         except ImportError:
-            from .common import import_error_so
+            from ._common import import_error_so
             import_error_so()
 
         # m should be precised not to raise any error if there is no linear constraints.

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """Management of the importable functions of pdfo."""
-from .bobyqa import bobyqa
-from .cobyla import cobyla
-from .lincoa import lincoa
-from .newuoa import newuoa
-from .uobyqa import uobyqa
-from .pdfo import pdfo
+from ._bobyqa import bobyqa
+from ._cobyla import cobyla
+from ._lincoa import lincoa
+from ._newuoa import newuoa
+from ._uobyqa import uobyqa
+from ._pdfo import pdfo
 from . import tests
 from .tests import test_pdfo as testpdfo
 

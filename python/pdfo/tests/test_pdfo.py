@@ -72,7 +72,7 @@ class TestPDFO(unittest.TestCase):
                             else:
                                 x0r = x0
 
-                            linear_constraints = LinearConstraint(np.ones((1, n)), [], 1)
+                            linear_constraints = LinearConstraint(np.ones((1, n)), None, 1)
                             lb, ub = -0.5 * np.ones(n), 0.5 * np.ones(n)
                             zeros_n = np.zeros(n)
                             inf_n = np.full(n, np.inf)

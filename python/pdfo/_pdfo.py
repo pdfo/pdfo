@@ -172,8 +172,8 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
     >>> res.x
     array([0. , 0.5])
     """
-    from .common import prepdfo, postpdfo
-    from .settings import ExitStatus
+    from ._common import prepdfo, postpdfo
+    from ._settings import ExitStatus
 
     # A cell that records all the warnings.
     output = dict()
@@ -242,7 +242,7 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
                 from . import cobyla
                 opti_res = cobyla(fun_c, x0_c, bounds=bounds_c, constraints=constraints_c, options=options_c)
         except ImportError:
-            from .common import import_error_so
+            from ._common import import_error_so
             import_error_so(lower_method)
 
         # Extract the output from the solvers. The output is extended with the possible outputs returned by some
