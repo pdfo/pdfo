@@ -35,10 +35,17 @@ You may verify the installation by
 Once again, if your Python launcher is not ``python``, adapt the command accordingly (it may be ``python3`` for example).
 If you are an Anaconda user, PDFO is also available through the `conda installer <https://anaconda.org/conda-forge/pdfo>`_.
 
+.. important::
+
+    Python wheels (i.e., pre-compiled packages) are available for Linux, Mac, and Windows.
+    However, we only distribute wheels for 64-bit systems.
+    Moreover, we do not yet provide wheels for non x86_64 systems (e.g., ARM-based systems).
+    Recent Apple machines with M1, M2, and M3 chips are ARM-based systems.
+
 Alternative installation (using source distribution)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Alternatively, although *deeply discouraged*, PDFO can be installed from the source code.
+Alternatively, although deeply discouraged, PDFO can be installed from the source code.
 It requires you to install additional Python headers and a Fortran compiler (e.g., `gfortran <https://gcc.gnu.org/fortran>`_).
 Download and decompress the source code package.
 You will obtain a folder containing ``pyproject.toml``.

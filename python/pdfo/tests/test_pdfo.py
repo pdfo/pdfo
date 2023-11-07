@@ -4,21 +4,10 @@
 
 Notes
 -----
-Do NOT follow the syntax here when you use pdfo. This file is written for testing purpose, and it uses quite atypical
-syntax. See rosenbrock.py for an illustration about how to use pdfo.
-
-Authors
--------
-Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-Department of Applied Mathematics,
-The Hong Kong Polytechnic University.
-
-Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
+Do NOT follow the syntax here when you use pdfo. This file is written for
+testing purpose, and it uses quite atypical syntax. See rosenbrock.py for an
+illustration about how to use pdfo.
 """
-
-from __future__ import division, print_function, absolute_import
-
 import os
 import struct
 import sys
@@ -26,7 +15,8 @@ import unittest
 import warnings
 
 import numpy as np
-from pdfo import LinearConstraint, Bounds, pdfo
+from pdfo import pdfo
+from scipy.optimize import Bounds, LinearConstraint
 
 
 class TestPDFO(unittest.TestCase):
@@ -38,15 +28,7 @@ class TestPDFO(unittest.TestCase):
     EPS = np.finfo(np.float64).eps
 
     def setUp(self):
-        """Initializes the pdfo tests.
-
-        Authors
-        -------
-        Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-        and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-        Department of Applied Mathematics,
-        The Hong Kong Polytechnic University.
-        """
+        """Initializes the pdfo tests."""
         self.module_pdfo = __import__('pdfo')
         self.options = {'debug': True, 'chkfunval': True}
         self.type_list = ['unconstrained', 'bound-constrained', 'linearly-constrained', 'nonlinearly-constrained']
@@ -67,15 +49,7 @@ class TestPDFO(unittest.TestCase):
         warnings.filterwarnings('ignore')
 
     def runTest(self):
-        """PDFO tests on unconstrained and constrained problems.
-
-        Authors
-        -------
-        Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-        and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-        Department of Applied Mathematics,
-        The Hong Kong Polytechnic University.
-        """
+        """PDFO tests on unconstrained and constrained problems."""
         devnull = open(os.devnull, 'w')  # The empty stdout redirection
         default_stdout = sys.stdout  # The default value of stdout (screen)
 
@@ -89,14 +63,11 @@ class TestPDFO(unittest.TestCase):
                         print()
 
                 for solver in self.solver_list[i_type]:
-                    for x0, fun, fun_name, fopt in zip(self.x0_list, self.fun_list, self.fun_list_name,
-                                                       self.fopt_list[i_type]):
+                    for x0, fun, fun_name, fopt in zip(self.x0_list, self.fun_list, self.fun_list_name, self.fopt_list[i_type]):
                         for clflag in self.clflag_list:
                             n = x0.size
                             if solver != 'cobyla' or fun_name != 'chebquad':
-                                r = np.abs(np.sin(
-                                    1e3 * np.array(solver + fun_name + p_type, 'c').view(np.uint8).sum() *
-                                    irun * (np.arange(n) + 1)))
+                                r = np.abs(np.sin(1e3 * np.array(solver + fun_name + p_type, 'c').view(np.uint8).sum() * irun * (np.arange(n) + 1)))
                                 x0r = x0 + self.PERTURB * r
                             else:
                                 x0r = x0
@@ -152,20 +123,7 @@ class TestPDFO(unittest.TestCase):
 
     @staticmethod
     def chrosen(x):
-        """Calculates the function value, gradient, and Hessian of the Chained Rosenbrock function.
-
-        See
-            [1] Toint (1978), 'Some numerical results using a sparse matrix updating formula in unconstrained
-                optimization'
-            [2] Powell (2006), 'The NEWUOA software for unconstrained optimization without derivatives'
-
-        Authors
-        -------
-        Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-        and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-        Department of Applied Mathematics,
-        The Hong Kong Polytechnic University.
-        """
+        """Chained Rosenbrock function."""
         alpha = 4
 
         f = 0  # Function value
@@ -183,114 +141,57 @@ class TestPDFO(unittest.TestCase):
             h[i, i + 1] -= 4 * alpha * x[i]
             h[i + 1, i] -= 4 * alpha * x[i]
             h[i + 1, i + 1] += 2 * alpha
-
         return f, g, h
 
     @staticmethod
     def chebquad(x):
-        """Evaluates the Chebyquad function.
-
-        See
-            [1] Fletcher (1965), 'Function minimization without evaluating derivatives - a review'
-
-        Authors
-        -------
-        Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-        and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-        Department of Applied Mathematics,
-        The Hong Kong Polytechnic University.
-        """
+        """Chebyquad function."""
         n = x.size
         y = np.ones((n + 1, n))
         y[1, :] = 2 * x - 1
         for i in range(1, n):
             y[i + 1, :] = 2 * y[1, :] * y[i, :] - y[i - 1, :]
-
         f = 0
         for i in range(1, n + 2):
             tmp = np.mean(y[i - 1, :])
             if i % 2 == 1:
                 tmp += 1 / float(i * i - 2 * i)
             f += tmp * tmp
-
         return f
 
     @staticmethod
     def hmlb(x):
-        """Evaluates the Himmelblau's function and its gradient.
-
-        See
-            [1]  Himmelblau (1972),  'Applied Nonlinear Programming'
-
-        Authors
-        -------
-        Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-        and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-        Department of Applied Mathematics,
-        The Hong Kong Polytechnic University.
-        """
+        """Himmelblau's function."""
         f = (x[0] ** 2 + x[1] - 11) ** 2 + (x[0] + x[1] ** 2 - 7) ** 2
         g = np.empty(2, dtype=np.float64)
         g[0] = -7 + x[1] + x[1] ** 2 + 2 * x[0] * (-11 + x[0] ** 2 + x[1])
         g[1] = -11 + x[0] ** 2 + x[1] + 2 * x[1] * (-7 + x[0] + x[1] ** 2)
         g *= 2
-
         return f, g
 
     @staticmethod
     def goldp(x):
-        """GOLDP evaluates the Goldstein-Price function.
-
-        See
-            [1] Dixon, L. C. W., & Szego, G. P. (1978). The global optimization problem: an introduction. Towards global
-            optimization, 2, 1-15
-
-        Authors
-        -------
-        Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-        and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-        Department of Applied Mathematics,
-        The Hong Kong Polytechnic University.
-        """
+        """Goldstein-Price function."""
         f1a = (x[0] + x[1] + 1) ** 2
         f1b = 19 - 14 * x[0] + 3 * x[0] ** 2 - 14 * x[1] + 6 * x[0] * x[1] - 3 * x[1] ** 2
         f1 = 1 + f1a * f1b
-
         f2a = (2 * x[0] - 3 * x[1]) ** 2
         f2b = 18 - 32 * x[0] + 12 * x[0] ** 2 + 48 * x[1] - 36 * x[0] * x[1] + 27 * x[1] ** 2
         f2 = 30 + f2a * f2b
-
         return f1 * f2
 
     @staticmethod
     def mcc(x):
-        """Evaluates the McCormick function.
-
-        Authors
-        -------
-        Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-        and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-        Department of Applied Mathematics,
-        The Hong Kong Polytechnic University.
-        """
+        """McCormick function."""
         f1 = np.sin(x[0] + x[1])
         f2 = (x[0] - x[1]) ** 2
         f3 = -1.5 * x[0]
         f4 = 2.5 * x[1]
-
         return f1 + f2 + f3 + f4 + 1
 
     @staticmethod
     def ballcon(x, center, radius):
-        """Represents the ball constraints ||x - center||_2 <= radius.
-
-        Authors
-        -------
-        Tom M. RAGONNEAU (tom.ragonneau@polyu.edu.hk)
-        and Zaikun ZHANG (zaikun.zhang@polyu.edu.hk)
-        Department of Applied Mathematics,
-        The Hong Kong Polytechnic University.
-        """
+        """Represents the ball constraints ||x - center||_2 <= radius."""
         return radius ** 2 - np.linalg.norm(x - center) ** 2
 
 

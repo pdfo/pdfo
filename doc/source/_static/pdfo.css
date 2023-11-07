@@ -1,40 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap');
-
-html[data-theme=light] {
-    --pst-color-primary: #4f8d97;
-    --pst-color-success: #607d3b;
-    --pst-color-danger: #900009;
-    --pst-color-inline-code: #a08941;
-    --pst-color-target: var(--pst-color-surface);
-    --pst-color-text-muted: #59515e;
-}
-
-html[data-theme=dark] {
-    --pst-color-primary: #6da9b3;
-    --pst-color-success: #789c4a;
-    --pst-color-danger: #b4000b;
-    --pst-color-inline-code: #a08941;
-    --pst-color-target: var(--pst-color-surface);
-    --pst-color-text-muted: #c5c6d0;
-}
-
-body {
-    font-family: 'Open Sans', sans-serif;
-}
-
-h1 {
-    font-family: 'Lato', sans-serif;
-}
-
 /* API title boxes */
 
 dt.sig.sig-object {
     padding-left: 1ex;
     padding-right: 1ex;
-}
-
-/* Footer */
-
-.footer-items__start, .footer-items__end {
-    flex-direction: row !important;
 }

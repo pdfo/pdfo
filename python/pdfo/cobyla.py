@@ -171,12 +171,13 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
     try:
         from .gethuge import gethuge
     except ImportError:
-        from ._dependencies import import_error_so
+        from .common import import_error_so
 
         # If gethuge cannot be imported, the execution should stop because the package is most likely not built.
         import_error_so('gethuge')
 
-    from ._dependencies import prepdfo, _augmented_linear_constraint, postpdfo
+    from .common import prepdfo, _augmented_linear_constraint, postpdfo
+    from .settings import ExitStatus
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:
@@ -197,7 +198,7 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
 
     if invoker != 'pdfo' and prob_info['infeasible']:
         # The problem turned out infeasible during prepdfo.
-        exitflag = -4
+        exitflag = ExitStatus.INFEASIBLE_ERROR.value
         nf = 1
         x = x0_c
         fx = fun_c(x)
@@ -207,7 +208,7 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
         output['constr_value'] = prob_info['nlc_x0']
     elif invoker != 'pdfo' and prob_info['nofreex']:
         # x was fixed by the bound constraints during prepdfo
-        exitflag = 13
+        exitflag = ExitStatus.FIXED_SUCCESS.value
         nf = 1
         x = prob_info['fixedx_value']
         fx = fun_c(x)
@@ -229,9 +230,9 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
         output['constr_value'] = np.asarray([], dtype=np.float64)
         if constrviolation < np.finfo(np.float64).eps:
             # Did prepdfo find a feasible point?
-            exitflag = 14
+            exitflag = ExitStatus.FEASIBILITY_SUCCESS.value
         else:
-            exitflag = 15
+            exitflag = ExitStatus.INFEASIBILITY_ERROR.value
     else:
         # The problem turns out 'normal' during prepdfo include all the constraints into one single nonlinear
         # constraint.
@@ -287,7 +288,7 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
             else:
                 from . import fcobyla
         except ImportError:
-            from ._dependencies import import_error_so
+            from .common import import_error_so
             import_error_so()
 
         # m should be precised not to raise any error if there is no linear constraints.

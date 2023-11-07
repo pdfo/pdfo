@@ -1,6 +1,4 @@
-# .github/dependabot.yml
 # Dependabot configuration file
-# See https://docs.github.com/en/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot for details
 
 version: 2
 
@@ -8,7 +6,15 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: "weekly"
-      day: "friday"
-      time: "15:00"
-      timezone: "Asia/Shanghai"
+      interval: 'weekly'
+      day: 'friday'
+      time: '15:00'
+      timezone: 'Asia/Hong_Kong'
+
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: 'weekly'
+      day: 'friday'
+      time: '15:00'
+      timezone: 'Asia/Hong_Kong'

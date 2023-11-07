@@ -102,13 +102,13 @@ endforeach
 
 py3.install_sources([
     '__init__.py',
-    '_bobyqa.py',
-    '_cobyla.py',
-    '_dependencies.py',
-    '_lincoa.py',
-    '_newuoa.py',
-    '_pdfo.py',
-    '_uobyqa.py',
+    'bobyqa.py',
+    'cobyla.py',
+    'common.py',
+    'lincoa.py',
+    'newuoa.py',
+    'pdfo.py',
+    'uobyqa.py',
 ], subdir: 'pdfo')
 
 subdir('tests')

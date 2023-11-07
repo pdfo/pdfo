@@ -74,6 +74,13 @@ html_theme = 'pydata_sphinx_theme'
 
 html_css_files = ['pdfo.css']
 
+html_context = {
+    'github_user': 'pdfo',
+    'github_repo': 'pdfo',
+    'github_version': 'main',
+    'doc_path': 'doc/source',
+}
+
 html_theme_options = {
     'logo': {
         'text': project,
@@ -87,14 +94,19 @@ html_theme_options = {
         },
         {
             'name': 'Issue tracker',
-            'url': 'https://github.com/pdfo/pdfo/issues',
+            'url': f'https://github.com/{html_context["github_user"]}/{html_context["github_repo"]}/issues',
         },
     ],
     'icon_links': [
         {
-            'name': 'GitHub',
-            'url': 'https://github.com/pdfo/pdfo',
+            'name': f'GitHub ({downloads["github"]:,} downloads)',
+            'url': f'https://github.com/{html_context["github_user"]}/{html_context["github_repo"]}',
             'icon': 'fa-brands fa-github',
+        },
+        {
+            'name': f'PyPI ({downloads["pypi"]:,} downloads)',
+            'url': 'https://pypi.org/project/pdfo',
+            'icon': 'fa-solid fa-box',
         },
         {
             'name': 'Twitter',
@@ -102,16 +114,8 @@ html_theme_options = {
             'icon': 'fa-brands fa-twitter',
         },
     ],
-    'footer_start': ['copyright', 'sphinx-version', 'theme-version'],
-    'footer_end': [],
-}
-
-html_context = {
-    'github_user': 'pdfo',
-    'github_repo': 'pdfo',
-    'github_version': 'main',
-    'doc_path': 'doc/source',
-    'default_mode': 'light',
+    'navbar_align': 'left',
+    'navigation_with_keys': False,  # TODO: Remove this when pydata-sphinx-theme 0.15 is released.
 }
 
 html_static_path = ['_static']
@@ -152,12 +156,12 @@ latex_documents = [
 mathjax3_config = {
     'tex': {
         'macros': {
-            'aeq': r'A_{\scriptscriptstyle E}',
-            'aub': r'A_{\scriptscriptstyle I}',
-            'beq': r'b_{\scriptscriptstyle E}',
-            'bub': r'b_{\scriptscriptstyle I}',
-            'ceq': r'c_{\scriptscriptstyle E}',
-            'cub': r'c_{\scriptscriptstyle I}',
+            'aeq': r'A_{\scriptscriptstyle\mathcal{E}}',
+            'aub': r'A_{\scriptscriptstyle\mathcal{I}}',
+            'beq': r'b_{\scriptscriptstyle\mathcal{E}}',
+            'bub': r'b_{\scriptscriptstyle\mathcal{I}}',
+            'ceq': r'c_{\scriptscriptstyle\mathcal{E}}',
+            'cub': r'c_{\scriptscriptstyle\mathcal{I}}',
             'obj': r'f',
             'R': r'{\mathbb{R}}',
             'xl': r'l',
@@ -175,7 +179,8 @@ autosummary_generate = True
 # -- Link to other projects’ documentation ------------------------------------
 
 intersphinx_mapping = {
-    'scipy': ('https://docs.scipy.org/doc/scipy/', None)
+    'numpy': ('https://numpy.org/doc/stable/', None),
+    'scipy': ('https://docs.scipy.org/doc/scipy/', None),
 }
 
 
@@ -210,11 +215,11 @@ def linkcode_resolve(domain, info):
 
     # Get the relative path to the source of the object.
     try:
-        fn = Path(inspect.getsourcefile(obj)).resolve(strict=True)
+        fn = Path(inspect.getsourcefile(obj)).resolve(True)
     except TypeError:
         return None
     else:
-        fn = fn.relative_to(Path(pdfo.__file__).resolve(strict=True).parent)
+        fn = fn.relative_to(Path(pdfo.__file__).resolve(True).parent)
 
     # Ignore re-exports as their source files are not within the repository.
     module = inspect.getmodule(obj)
@@ -228,9 +233,9 @@ def linkcode_resolve(domain, info):
     except OSError:
         lines = ''
 
-    repository = f'https://github.com/pdfo/pdfo'
+    repository = f'https://github.com/{html_context["github_user"]}/{html_context["github_repo"]}'
     if 'dev' in release:
-        return f'{repository}/blob/main/python/pdfo/{fn}{lines}'
+        return f'{repository}/blob/{html_context["github_version"]}/python/pdfo/{fn}{lines}'
     else:
         return f'{repository}/blob/v{release}/python/pdfo/{fn}{lines}'
 

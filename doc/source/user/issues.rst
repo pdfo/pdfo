@@ -1,10 +1,10 @@
 Issues and bugs
 ===============
 
-During the development of PDFO, some issues have occurred.
+During the development of PDFO, we have encountered several issues and been requested several features.
 We keep below a list of the most important ones.
 
-In case of problems or bugs when using PDFO, you may open a `new issue <https://github.com/pdfo/pdfo/issues>`_ on GitHub.
+If you encounter any issue or bug when using PDFO, please open a `new issue <https://github.com/pdfo/pdfo/issues>`_ on GitHub.
 
 .. list-table::
    :widths: 20 40 40
@@ -20,5 +20,5 @@ In case of problems or bugs when using PDFO, you may open a `new issue <https://
      - Version 1.0 of PDFO could not be installed on Windows for Python 3.8 and above, because the most recent version of `Intel Distribution for Python <https://software.intel.com/content/www/us/en/develop/tools/distribution-for-python.html>`_ supports only Python 3.7.
      - The latest versions of Python are supported on Windows by version 1.1 and above.
    * - April 19, 2020
-     - Version 0.9 does not support 64-bit Python on Windows because F2PY does not work well with MinGW-w64.
+     - Version 0.9 does not support 64-bit Python on Windows because `F2PY <https://numpy.org/doc/stable/f2py/>`_ does not work well with MinGW-w64.
      - 64-bit Python is supported by version 1.0 and above on Windows.

@@ -18,14 +18,14 @@ Using only function values, but not derivatives, it solves problems of the form
 
 .. math::
 
-    \min_{x \in \R^n} \quad \obj ( x ) \quad \text{s.t.} \quad \left\{
-    \begin{array}{l}
+    \min_{x \in \R^n} \quad \obj ( x ) \quad \text{s.t.} \quad
+    \begin{cases}
         \xl \le x \le \xu,\\
         \aub x \le \bub, ~ \aeq x = \beq,\\
         \cub ( x ) \le 0, ~ \ceq ( x ) = 0.
-    \end{array} \right.
+    \end{cases}
 
-To install PDFO for Python, run
+To install PDFO for Python, run in your terminal
 
 .. code-block:: bash
 
@@ -47,7 +47,7 @@ The corresponding BibTeX entry is given hereunder.
 
     @misc{pdfo,
         author       = {Ragonneau, T. M. and Zhang, Z.},
-        title        = {{PDFO}: a cross-platform package for {Powell}'s derivative-free optimization solvers},
+        title        = {{PDFO}: a cross-platform package for {P}owell's derivative-free optimization solvers},
         howpublished = {arXiv:2302.13246 [math.OC]},
         year         = 2023,
     }
@@ -111,7 +111,7 @@ The following figure shows the cumulative downloads of PDFO.
     ax.set_title('Cumulative downloads of PDFO')
 
 We started tracking the downloads of PDFO on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_ on October 2022.
-The API we employ to track the downloads of PDFO on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_ provides only the cumulative downloads.
+The API we employ to track the downloads of PDFO on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_ only provides the cumulative downloads.
 Therefore, we do not know when the downloads of PDFO on `Anaconda <https://anaconda.org/conda-forge/pdfo>`_ have been made.
 In this plot, all of them are assumed to have been made on October 2022.
 

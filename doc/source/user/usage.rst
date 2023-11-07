@@ -17,7 +17,12 @@ General information
 PDFO provides a Python function `pdfo`, which can solve general constrained or unconstrained optimization problems without using derivatives.
 
 The `pdfo` function can automatically identify the type of your problem and then call one of Powell's solvers, namely COBYLA, UOBYQA, NEWUOA, BOBYQA, and LINCOA.
-The user can also specify the solver by setting the ``method`` field of the options passed to `pdfo`.
+The user can also specify the solver by setting the ``method`` argument of `pdfo`.
+
+.. attention::
+
+    The `pdfo` method does not accept any ``'solver'`` options.
+    If you want to specify which solver to use, please use the ``method`` argument of the `pdfo` function.
 
 The pdfo function is designed to be compatible with the `scipy.optimize.minimize` function of `SciPy <https://scipy.org>`_.
 You can call pdfo in exactly the same way as calling `scipy.optimize.minimize` except that `pdfo` does not accept derivative arguments.
@@ -39,7 +44,8 @@ subject to various constraints.
 .. code-block:: python
 
     import numpy as np
-    from pdfo import pdfo, Bounds, LinearConstraint, NonlinearConstraint
+    from pdfo import pdfo
+    from scipy.optimize import Bounds, LinearConstraint, NonlinearConstraint
 
 
     def chrosen(x):
@@ -166,13 +172,13 @@ The following code illustrates how to minimize the chained Rosenbrock function :
     [x, fx, exitflag, output] = pdfo(@chrosen, x0)
     return
 
-    function f = chrosen(x)  % the subroutine defining the objective function
+    function f = chrosen(x)  % objective function
     f = sum((x(1:end-1)-1).^2 + 4*(x(2:end)-x(1:end-1).^2).^2);
     return
 
-    function [cineq, ceq] = nlc(x)  % the subroutine defining the nonlinear constraints
+    function [cineq, ceq] = nlc(x)  % nonlinear constraints
     % The same as fmincon, nonlinear constraints cineq(x) <= 0 and ceq(x) = 0 are specified
-    % by a function with two returns, the first being cineq and the second being ceq.
+    % by a function with two return values, the first being cineq and the second being ceq.
     cineq = x(2:end) - x(1:end-1).^2;
     ceq = x'*x - 1;
     return

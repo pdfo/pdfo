@@ -11,7 +11,7 @@ The corresponding BibTeX entry is given hereunder.
 
     @misc{pdfo,
         author       = {Ragonneau, T. M. and Zhang, Z.},
-        title        = {{PDFO}: a cross-platform package for {Powell}'s derivative-free optimization solvers},
+        title        = {{PDFO}: a cross-platform package for {P}owell's derivative-free optimization solvers},
         howpublished = {arXiv:2302.13246 [math.OC]},
         year         = 2023,
     }
@@ -28,7 +28,7 @@ In addition, we provide below a list of references closely related to PDFO.
 #. M.\  J.\  D.\  Powell. Developments of NEWUOA for minimization without derivatives. *IMA J. Numer. Anal.*, 28:649--664, 2008.
 #. M.\  J.\  D.\  Powell. The BOBYQA algorithm for bound constrained optimization without derivatives. Technical Report DAMTP 2009/NA06, Department of Applied Mathematics and Theoretical Physics, University of Cambridge, 2009.
 #. M.\  J.\  D.\  Powell. On fast trust region methods for quadratic models with linear constraints. *Math. Program. Comput.*, 7:237--267, 2015.
-#. T.\  M.\  Ragonneau. *Model-Based Derivative-Free Optimization Methods and Software*, Chapter 3. PhD thesis, The Hong Kong Polytechnic University, Hong Kong SAR, China, 2022.
+#. T.\  M.\  Ragonneau. *Model-Based Derivative-Free Optimization Methods and Software*, Chapter 3. PhD thesis, The Hong Kong Polytechnic University, Hong Kong, China, 2022.
 #. Z.\  Zhang, PRIMA: Reference Implementation for Powell's Methods with Modernization and Amelioration, available at http://www.libprima.net, 2023.
 
 Remarks

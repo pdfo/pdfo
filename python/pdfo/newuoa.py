@@ -5,13 +5,13 @@ from inspect import stack
 import numpy as np
 
 
-def uobyqa(fun, x0, args=(), options=None):
-    r"""Unconstrained Optimization BY Quadratic Approximation.
+def newuoa(fun, x0, args=(), options=None):
+    r"""NEW Unconstrained Optimization Algorithm.
 
     .. deprecated:: 1.3
-        Calling the UOBYQA solver via the `uobyqa` function is deprecated.
-        The UOBYQA solver remains available in PDFO. Call the `pdfo` function
-        with the argument ``method='uobyqa'`` to use it.
+        Calling the NEWUOA solver via the `newuoa` function is deprecated.
+        The NEWUOA solver remains available in PDFO. Call the `newuoa` function
+        with the argument ``method='newuoa'`` to use it.
 
     Parameters
     ----------
@@ -50,6 +50,9 @@ def uobyqa(fun, x0, args=(), options=None):
                 Upper bound of the number of calls of the objective function
                 `fun`. Its value must be not less than ``options['npt'] + 1``.
                 By default, it is ``500 * n``.
+            npt: int, optional
+                Number of interpolation points of each model used in Powell's
+                Fortran code.
             ftarget: float, optional
                 Target value of the objective function. If a feasible iterate
                 achieves an objective function value lower or equal to
@@ -80,16 +83,20 @@ def uobyqa(fun, x0, args=(), options=None):
 
     References
     ----------
-    .. [1] M. J. D. Powell. UOBYQA: unconstrained optimization by quadratic
-       approximation. *Math. Program.*, 92:555--582, 2002.
+    .. [1] M. J. D. Powell. The NEWUOA software for unconstrained optimization
+       without derivatives. In G. Di Pillo and M. Roma, editors, *Large-Scale
+       Nonlinear Optimization*, volume 83 of Nonconvex Optimization and Its
+       Applications, 255--297. Springer, 2006.
+    .. [2] M. J. D. Powell. Developments of NEWUOA for minimization without
+       derivatives. *IMA J. Numer. Anal.*, 28:649--664, 2008.
 
     See also
     --------
-    pdfo : Powell's Derivative-Free Optimization solvers.
-    newuoa : NEW Unconstrained Optimization Algorithm.
     bobyqa : Bounded Optimization BY Quadratic Approximations.
-    lincoa : LINearly Constrained Optimization Algorithm.
     cobyla : Constrained Optimization BY Linear Approximations.
+    lincoa : LINearly Constrained Optimization Algorithm.
+    uobyqa : Unconstrained Optimization BY Quadratic Approximation.
+    pdfo : Powell's Derivative-Free Optimization solvers.
 
     Examples
     --------
@@ -103,7 +110,7 @@ def uobyqa(fun, x0, args=(), options=None):
 
         \min_{x, y \in \R} \quad x^2 + y^2.
 
-    We solve this problem using `uobyqa` starting from the initial guess
+    We solve this problem using `newuoa` starting from the initial guess
     :math:`(x_0, y_0) = (0, 1)` with at most 200 function evaluations.
 
     .. testsetup::
@@ -111,21 +118,22 @@ def uobyqa(fun, x0, args=(), options=None):
         import numpy as np
         np.set_printoptions(precision=1, suppress=True)
 
-    >>> from pdfo import uobyqa
+    >>> from pdfo import newuoa
     >>> options = {'maxfev': 200}
-    >>> res = uobyqa(lambda x: x[0]**2 + x[1]**2, [0, 1], options=options)
+    >>> res = newuoa(lambda x: x[0]**2 + x[1]**2, [0, 1], options=options)
     >>> res.x
     array([0., 0.])
     """
     try:
         from .gethuge import gethuge
     except ImportError:
-        from ._dependencies import import_error_so
+        from .common import import_error_so
 
         # If gethuge cannot be imported, the execution should stop because the package is most likely not built.
         import_error_so('gethuge')
 
-    from ._dependencies import prepdfo, postpdfo
+    from .common import prepdfo, postpdfo
+    from .settings import ExitStatus
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:
@@ -134,7 +142,7 @@ def uobyqa(fun, x0, args=(), options=None):
         invoker = ''
 
     # A cell that records all the warnings.
-    # Why do we record the warning message in output['warnings'] instead of prob_info['warnings']? Because, if uobyqa is
+    # Why do we record the warning message in output['warnings'] instead of prob_info['warnings']? Because, if newuoa is
     # called by pdfo, then prob_info will not be passed to postpdfo, and hence the warning message will be lost. To the
     # contrary, output will be passed to postpdfo anyway.
     output = dict()
@@ -152,32 +160,35 @@ def uobyqa(fun, x0, args=(), options=None):
         x = x0_c  # prepdfo has tried to set x0 to a feasible point (but may have failed)
         fx = fun_c(x)
         fhist = np.array([fx], dtype=np.float64)
-        exitflag = 14
+        exitflag = ExitStatus.FEASIBILITY_SUCCESS.value
     else:
         # Extract the options and parameters.
+        npt = options_c['npt']
         maxfev = options_c['maxfev']
         rhobeg = options_c['rhobeg']
         rhoend = options_c['rhoend']
         ftarget = options_c['ftarget']
 
-        # UOBYQA is not intended to solve univariate problem; most likely, the solver will fail.
-        n = x0_c.size
-        if n <= 1:
-            w_message = '{}: a univariate problem received; {} may fail. Try other solvers.'.format(fun_name, fun_name)
-            warnings.warn(w_message, Warning)
-            output['warnings'].append(w_message)
-
         # The largest integer in the fortran functions; the factor 0.99 provides a buffer.
         max_int = np.floor(0.99 * gethuge('integer'))
+        n = x0_c.size
 
-        # The smallest nw, i.e., the nw with npt = (n+1)*(n+2)/2. If it is larger than a threshold (system dependent),
-        # the problem is too large to be executed on the system.
-        min_nw = (n * (42 + n * (23 + n * (8 + n))) + max(2 * n**2, 18 * n)) / 4
+        # The smallest nw, i.e., the nw with npt = n + 2. If it is larger than a threshold (system dependent), the
+        # problem is too large to be executed on the system.
+        min_nw = (n + 15) * (2 * n + 2) + 3 * n * (n + 3) / 2
         if min_nw + 1 >= max_int:
             executor = invoker.lower() if invoker == 'pdfo' else fun_name
             # nw would suffer from overflow in the Fortran code, exit immediately.
             raise SystemError('{}: problem too large for {}. Try other solvers.'.format(executor, fun_name))
 
+        # The largest possible value for npt given that nw <= max_int.
+        max_npt = max(n + 2, np.floor(0.5 * (-n - 13 + np.sqrt((n - 13) ** 2 + 4 * (max_int - 3 * n * (n + 3) / 2 - 1)))))
+        if npt > max_npt:
+            npt = max_npt
+            w_message = \
+                '{}: npt is so large that it is unable to allocate the workspace; it is set to {}'.format(fun_name, npt)
+            warnings.warn(w_message, Warning)
+            output['warnings'].append(w_message)
         if maxfev > max_int:
             maxfev = max_int
             w_message = '{}: maxfev exceeds the upper limit of Fortran integer; it is set to {}'.format(fun_name, maxfev)
@@ -187,15 +198,15 @@ def uobyqa(fun, x0, args=(), options=None):
         # Call the Fortran code.
         try:
             if options_c['classical']:
-                from . import fuobyqa_classical as fuobyqa
+                from . import fnewuoa_classical as fnewuoa
             else:
-                from . import fuobyqa
+                from . import fnewuoa
         except ImportError:
-            from ._dependencies import import_error_so
+            from .common import import_error_so
             import_error_so()
 
-        x, fx, exitflag, fhist = fuobyqa.muobyqa(x0_c, rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
-        nf = int(fuobyqa.fuobyqa.nf)
+        x, fx, exitflag, fhist = fnewuoa.mnewuoa(npt, x0_c, rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
+        nf = int(fnewuoa.fnewuoa.nf)
 
     # Postprocess the result.
     return postpdfo(x, fx, exitflag, output, fun_name, nf, fhist, options_c, prob_info)

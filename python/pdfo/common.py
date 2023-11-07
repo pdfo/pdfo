@@ -6,6 +6,9 @@ import warnings
 from inspect import stack
 
 import numpy as np
+from scipy.optimize import OptimizeResult
+
+from .settings import ExitStatus
 
 python_version = sys.version_info.major
 if python_version >= 3:
@@ -19,160 +22,6 @@ eps = np.finfo(np.float64).eps
 solver_list = ['uobyqa', 'newuoa', 'bobyqa', 'lincoa', 'cobyla']
 invoker_list = solver_list[:]
 invoker_list.append('pdfo')
-
-
-class OptimizeResult(dict):
-    r"""Result structure of the DFO algorithms.
-
-    Attributes
-    ----------
-    x: ndarray, shape (n,)
-        Solution array.
-    success: bool
-        Whether the optimizer exited successfully.
-    status: int
-        Flag characterizing the exit condition.
-
-        .. list-table::
-            :widths: 15 85
-            :header-rows: 1
-
-            * - Status
-              - Message
-            * - 0
-              - The lower bound for the trust region radius is reached.
-            * - 1
-              - The target function value is achieved.
-            * - 2
-              - A trust region step failed to reduce the quadratic model.
-            * - 3
-              - The objective function has been evaluated ``maxfev`` times.
-            * - 4, 7, 8, 9
-              - Rounding errors become severe in the Fortran code.
-            * - 13
-              - All variables are fixed by the constraints.
-            * - 14
-              - A linear feasibility problem has been received and solved.
-            * - 15
-              - A linear feasibility problem has been received but failed.
-            * - -1
-              - NaN occurs in `x`.
-            * - -2
-              - The objective/constraint function returns NaN or nearly infinite
-                values (only in the classical mode).
-            * - -3
-              - NaN occurs in the models.
-            * - -4
-              - Constraints are infeasible.
-
-        The exit flags 5, 6, 10, 11, and 12 are possible in the Fortran code but
-        cannot be returned by `pdfo` or its solvers.
-    message: str
-        Message related to the exit condition flag. If ``options['quiet']`` is
-        set to ``True``, this message will not be printed.
-    fun: float
-        Returns the computed objective function value at the solution `x`.
-    nfev: int
-        Number of function evaluations.
-    constrviolation: float
-        Constraint violation at the solution `x`. It is set to ``0`` if the
-        problem is unconstrained.
-    fhist: ndarray, shape (nfev,)
-        History of the objective function evaluations performed during the
-        computation. Its size is `nfev` and is ordered by iteration. Its minimum
-        among the feasible point should be `fun`.
-    chist: ndarray, shape (nfev,)
-        History of the constraint violations computed during the computation. If
-        the problem is unconstrained, `chist` is set to ``None``.
-    constr_value: ndarray or list of ndarrays
-        Values of the constraint functions at the returned `x`. It can be one of
-        the two cases below depending on how the `constraints` variable is
-        specified at the input.
-
-        #. If `constraints` is a dictionary or an instance of
-           `NonlinearConstraint` or `LinearConstraint`, then `constr_value` is
-           an ndarray, whose value is ``constraints['fun'](x)``,
-           ``constraints.fun(x)``, or ``constraints.A * x``.
-        #. If `constraints` is a list of dictionaries or instances of
-           `NonlinearConstraint` or `LinearConstraint`, then `constr_value` is a
-           list of ndarrays described in 1, each of which is the value of the
-           corresponding component in `constraints`.
-
-        If a nonlinear constraint is trivial (i.e., it has :math:`-\infty` as
-        lower bound and :math:`\infty` as upper bound), then its is represented
-        by NaN in `constr_value`, because such constraints are not evaluated
-        during the computation. Trivial nonlinear constraints with unknown
-        dimensions (for example, ``{'type': 'eq', 'fun': None}`` or
-        ``NonlinearConstraint(fun, None, None)``) are represented by empty
-        arrays in `constr_value`.
-    method: str
-        The name of the method that was used to solve the problem.
-    constr_modified: bool
-        An indicator specifying if the constraints have been modified during the
-        algorithm (LINCOA may modify the constraints if it cannot find a
-        feasible starting point).
-    warnings: list
-        A recording of every warning raised during the computation.
-    """
-
-    def __delattr__(self, key):
-        r"""
-        Delete the attribute ``key``. This method is called by the built-in
-        command ``del obj.key``, where ``obj`` is an instance of this class.
-        """
-        super(OptimizeResult, self).__delitem__(key)
-
-    def __dir__(self):
-        r"""
-        Return the list of the names of the attributes in the current scope.
-        This method is called when the built-in function ``dir(obj)`` is called,
-        where ``obj`` is an instance of this class.
-        """
-        return list(self.keys())
-
-    def __getattr__(self, name):
-        r"""
-        Return the value of the attribute ``name``. This method raises an
-        `AttributeError` exception if such an attribute does not exist and is
-        called when the built-in access ``obj.name`` is called, where ``obj`` is
-        an instance of this class.
-        """
-        try:
-            return self[name]
-        except KeyError as e:
-            raise AttributeError(name) from e
-
-    def __repr__(self):
-        r"""
-        Return a string representation of an instance of this class, which looks
-        like a valid Python expression that can be used to recreate an object
-        with the same value (given an appropriate environment).
-        """
-        items = sorted(self.items())
-        args = ', '.join(k + '=' + repr(v) for k, v in items)
-        return self.__class__.__name__ + '(' + args + ')'
-
-    def __setattr__(self, key, value):
-        r"""
-        Assign the value ``value`` to the attribute ``key``. This method is
-        called when the built-in assignment ``obj.key = value`` is made, where
-        ``obj`` is an instance of this class.
-        """
-        super(OptimizeResult, self).__setitem__(key, value)
-
-    def __str__(self):
-        r"""
-        Return an informal string representation of an instance of this class,
-        which is designed to be nicely printable. This method is called when the
-        built-in functions ``format(obj)`` or ``print(obj)`` is called, where
-        ``obj`` is an instance of this class.
-        """
-        if self.keys():
-            items = sorted(self.items())
-            width = max(map(len, self.keys())) + 1
-            return '\n'.join(k.rjust(width) + ': ' + str(v) for k, v in items)
-        else:
-            return self.__class__.__name__ + '()'
 
 
 class Bounds:
@@ -210,13 +59,13 @@ class Bounds:
         # Either lb, ub or both can be set to None or [] not to precise the bound.
         if (lb is None or len(lb) == 0) and ub is not None and len(ub) > 0:
             self.lb = np.full(len(ub), -np.inf, dtype=np.float64)
-            self.ub = np.asarray(ub, dtype=np.float64)
+            self.ub = np.array(ub, dtype=np.float64)
         elif lb is not None and len(lb) > 0 and (ub is None or len(ub) == 0):
-            self.lb = np.asarray(lb, dtype=np.float64)
+            self.lb = np.array(lb, dtype=np.float64)
             self.ub = np.full(len(lb), np.inf, dtype=np.float64)
         else:
-            self.lb = np.asarray(lb if lb is not None else [], dtype=np.float64)
-            self.ub = np.asarray(ub if ub is not None else [], dtype=np.float64)
+            self.lb = np.array(lb if lb is not None else [], dtype=np.float64)
+            self.ub = np.array(ub if ub is not None else [], dtype=np.float64)
 
         # Reshape the flat matrices.
         if len(self.lb.shape) > 1 and np.prod(self.lb.shape) == self.lb.size:
@@ -274,16 +123,16 @@ class LinearConstraint:
             raise AttributeError('The bounds lb and ub should be vectors.')
 
         # Either lb, ub or both can be set to None or [] not to precise the bound.
-        self.A = np.asarray(a if a is not None else [[]], dtype=np.float64, order='F')
+        self.A = np.array(a if a is not None else [[]], dtype=np.float64, order='F')
         if (lb is None or len(lb) == 0) and ub is not None and len(ub) > 0:
             self.lb = np.full(len(ub), -np.inf, dtype=np.float64)
-            self.ub = np.asarray(ub, dtype=np.float64)
+            self.ub = np.array(ub, dtype=np.float64)
         elif lb is not None and len(lb) > 0 and (ub is None or len(ub) == 0):
-            self.lb = np.asarray(lb, dtype=np.float64)
+            self.lb = np.array(lb, dtype=np.float64)
             self.ub = np.full(len(lb), np.inf, dtype=np.float64)
         else:
-            self.lb = np.asarray(lb if lb is not None else [], dtype=np.float64)
-            self.ub = np.asarray(ub if ub is not None else [], dtype=np.float64)
+            self.lb = np.array(lb if lb is not None else [], dtype=np.float64)
+            self.ub = np.array(ub if ub is not None else [], dtype=np.float64)
 
         # If any NaN is detected, the it should not altered the constraint. The NaN will be most likely generated during
         # the conversion of the type of the arrays to np.float64, since np.float64(None) is NaN.
@@ -397,13 +246,13 @@ class NonlinearConstraint:
         self.fun = float_fun
         if (lb is None or len(lb) == 0) and ub is not None and len(ub) > 0:
             self.lb = np.full(len(ub), -np.inf, dtype=np.float64)
-            self.ub = np.asarray(ub, dtype=np.float64)
+            self.ub = np.array(ub, dtype=np.float64)
         elif lb is not None and len(lb) > 0 and (ub is None or len(ub) == 0):
-            self.lb = np.asarray(lb, dtype=np.float64)
+            self.lb = np.array(lb, dtype=np.float64)
             self.ub = np.full(len(lb), np.inf, dtype=np.float64)
         else:
-            self.lb = np.asarray(lb if lb is not None else [], dtype=np.float64)
-            self.ub = np.asarray(ub if ub is not None else [], dtype=np.float64)
+            self.lb = np.array(lb if lb is not None else [], dtype=np.float64)
+            self.ub = np.array(ub if ub is not None else [], dtype=np.float64)
 
         # If any NaN is detected, the it should not altered the constraint. The NaN will be most likely generated during
         # the conversion of the type of the arrays to np.float64, since np.float64(None) is NaN.
@@ -3092,10 +2941,10 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     output['x'] = x_c
     output['fun'] = fx_c
     output['status'] = exitflag_c
-    output['success'] = (exitflag_c in [0, 1, 14]) or (exitflag_c == 13 and abs(constrviolation_c) <= 1e-15)
+    output['success'] = (exitflag_c in [ExitStatus.RADIUS_SUCCESS.value, ExitStatus.TARGET_SUCCESS.value, ExitStatus.FEASIBILITY_SUCCESS.value]) or (exitflag_c == ExitStatus.FIXED_SUCCESS.value and abs(constrviolation_c) <= 1e-15)
     if len(stack()) >= 4 and stack()[2][3].lower() == 'pdfo':
         output['nfev'] = nf_c
-        output['constrviolation'] = constrviolation_c
+        output['maxcv'] = constrviolation_c
         output['fhist'] = fhist_c
         output['chist'] = chist_c
 
@@ -3262,7 +3111,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
 
     # Set output.{nf, constrviolation, fhist, chist, method}.
     output['nfev'] = nf_c
-    output['constrviolation'] = constrviolation_c
+    output['maxcv'] = constrviolation_c
     output['fhist'] = fhist_c
     output['chist'] = chist_c
     output['method'] = method
@@ -3286,12 +3135,12 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     #         'problem.'.format(invoker, method))
 
     if prob_info_c['raw_type'] == 'unconstrained':
-        if 'constrviolation' in output.keys():
-            del output['constrviolation']
+        if 'maxcv' in output.keys():
+            del output['maxcv']
         if 'chist' in output.keys():
             del output['chist']
     elif prob_info_c['refined_type'] == 'unconstrained' and prob_info_c['raw_type'] != 'unconstrained':
-        output['constrviolation'] = np.float64(0)
+        output['maxcv'] = np.float64(0)
         output['chist'] = np.zeros(nf_c)
 
     # Revise output['constr_value'] according to problem type.
@@ -3305,46 +3154,46 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
         del output['constr_value']
 
     # Record the returned message.
-    if exitflag_c == 0:
+    if exitflag_c == ExitStatus.RADIUS_SUCCESS.value:
         output['message'] = \
             'Return from {} because the lower bound for the trust region radius is reached.'.format(method)
-    elif exitflag_c == 1:
+    elif exitflag_c == ExitStatus.TARGET_SUCCESS.value:
         output['message'] = 'Return from {} because the target function value is achieved.'.format(method)
-    elif exitflag_c == 2:
+    elif exitflag_c == ExitStatus.STEP_REDUCTION_ERROR.value:
         output['message'] = \
             'Return from {} because a trust region step has failed to reduce the quadratic model.'.format(method)
-    elif exitflag_c == 3:
+    elif exitflag_c == ExitStatus.MAX_EVAL_WARNING.value:
         output['message'] = \
             'Return from {} because the objective function has been evaluated maxfev times.'.format(method)
-    elif exitflag_c == 4:
+    elif exitflag_c == ExitStatus.SMALL_DENOMINATOR_WARNING.value:
         output['message'] = 'Return from {} because of much cancellation in a denominator.'.format(method)
-    elif exitflag_c == 5:
+    elif exitflag_c == ExitStatus.NPT_ERROR.value:
         output['message'] = 'Return from {} because npt is not in the required interval.'.format(method)
-    elif exitflag_c == 6:
+    elif exitflag_c == ExitStatus.BOUND_ERROR.value:
         output['message'] = \
             'Return from {} because one of the differences xu(i) - xl(i) is less than 2*rhobeg.'.format(method)
-    elif exitflag_c == 7:
+    elif exitflag_c == ExitStatus.DAMAGE_ROUNDING_ERROR.value:
         output['message'] = 'Return from {} because rounding errors are becoming damaging.'.format(method)
-    elif exitflag_c == 8:
+    elif exitflag_c == ExitStatus.X_ROUNDING_ERROR.value:
         output['message'] = 'Return from {} because rounding errors prevent reasonable changes to x.'.format(method)
-    elif exitflag_c == 9:
+    elif exitflag_c == ExitStatus.ZERO_DENOMINATOR_ERROR.value:
         output['message'] = 'Return from {} because the denominator of the updating formula is zero.'.format(method)
-    elif exitflag_c == 10:
+    elif exitflag_c == ExitStatus.N_ERROR.value:
         output['message'] = 'Return from {} because n should not be less than 2.'.format(method)
-    elif exitflag_c == 11:
+    elif exitflag_c == ExitStatus.MAXFEV_ERROR.value:
         output['message'] = 'Return from {} because maxfev is less than npt+1.'.format(method)
-    elif exitflag_c == 12:
+    elif exitflag_c == ExitStatus.TRIVIAL_CONSTRAINT_ERROR.value:
         output['message'] = 'Return from {} because the gradient of a constraint is zero.'.format(method)
-    elif exitflag_c == 13:
+    elif exitflag_c == ExitStatus.FIXED_SUCCESS.value:
         output['message'] = 'Return from {} because all the variables are fixed by the constraints.'.format(method)
-    elif exitflag_c == 14:
+    elif exitflag_c == ExitStatus.FEASIBILITY_SUCCESS.value:
         output['message'] = '{} receives a linear feasibility problem and finds a feasible point.'.format(method)
-    elif exitflag_c == 15:
+    elif exitflag_c == ExitStatus.INFEASIBILITY_ERROR.value:
         output['message'] = \
             '{} receives a linear feasibility problem but does not find a feasible point.'.format(method)
-    elif exitflag_c == -1:
+    elif exitflag_c == ExitStatus.NAN_X_ERROR.value:
         output['message'] = 'Return from {} because NaN occurs in x.'.format(method)
-    elif exitflag_c == -2:
+    elif exitflag_c == ExitStatus.NAN_EVAL_ERROR.value:
         if method == 'cobyla':
             output['message'] = \
                 'Return from {} because the objective function returns an NaN or nearly infinite value, or the ' \
@@ -3352,9 +3201,9 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
         else:
             output['message'] = \
                 'Return from {} because the objective function returns an NaN or nearly infinite value.'.format(method)
-    elif exitflag_c == -3:
+    elif exitflag_c == ExitStatus.NAN_MODEL_ERROR.value:
         output['message'] = 'Return from {} because NaN occurs in the models.'.format(method)
-    elif exitflag_c == -4:
+    elif exitflag_c == ExitStatus.INFEASIBLE_ERROR.value:
         if np.any(prob_info['infeasible_nonlinear']):
             output['InfeasibleNonlinear'] = np.where(prob_info['infeasible_nonlinear'])[0]
 
@@ -3418,8 +3267,8 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
         # check whether the relative error is within cobyla_prec. There can also be a difference between constrviolation
         # and conv, especially if the problem is scaled.
         constrviolation = np.float64(0)
-        if 'constrviolation' in output.keys():
-            constrviolation = output['constrviolation']
+        if 'maxcv' in output.keys():
+            constrviolation = output['maxcv']
         if method == 'bobyqa' and np.nanmax((constrviolation, np.nanmax(chist_c))) > 0 and \
                 not prob_info_c['infeasible'] and not prob_info_c['fixedx']:
             raise ValueError(

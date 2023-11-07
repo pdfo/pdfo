@@ -7,21 +7,26 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
 
     PDFO is an interface to call Powell's derivatives-free optimization solvers:
     UOBYQA, NEWUOA, BOBYQA, LINCOA, and COBYLA. They are designed to minimize a
-    scalar function of several variables subject to (possibly) simple bound
+    scalar function of several variables subject to (possibly) bound
     constraints, linear constraints, and nonlinear constraints.
+
+    .. attention::
+
+        This method does not accept any ``'solver'`` options. If you want to
+        specify which solver to use, please use the `method` argument.
 
     Parameters
     ----------
-    fun: callable
+    fun : callable
         Objective function to be minimized.
 
             ``fun(x, *args) -> float``
 
         where ``x`` is an array with shape (n,) and `args` is a tuple.
-    x0: ndarray, shape (n,)
+    x0 : array_like, shape (n,)
         Initial guess.
-    args: tuple, optional
-        Parameters of the objective function. For example,
+    args : tuple, optional
+        Extra arguments of the objective function. For example,
 
             ``pdfo(fun, x0, args, ...)``
 
@@ -29,101 +34,91 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
 
             ``pdfo(lambda x: fun(x, *args), x0, ...)``
 
-    method: str, optional
+    method : {'uobyqa', 'newuoa', 'bobyqa', 'lincoa', 'cobyla'}, optional
         Name of the Powell method that will be used. By default, the most
-        appropriate method will be chosen automatically. The available methods
-        are: ``'uobyqa'``, ``'newuoa'``, ``'bobyqa'``, ``'lincoa'``, and
-        ``'cobyla'``.
-    bounds: {Bounds, ndarray, shape (n, 2)}, optional
+        appropriate method will be chosen automatically.
+    bounds : {`scipy.optimize.Bounds`, array_like, shape (n, 2)}, optional
         Bound constraints of the problem. It can be one of the cases below.
 
-        #. An instance of `Bounds`.
-        #. An ndarray with shape (n, 2). The bound constraint for x[i] is
+        #. An instance of `scipy.optimize.Bounds`.
+        #. An array with shape (n, 2). The bound constraints for ``x[i]`` are
            ``bounds[i, 0] <= x[i] <= bounds[i, 1]``. Set ``bounds[i, 0]`` to
            :math:`-\infty` or ``None`` if there is no lower bound, and set
            ``bounds[i, 1]`` to :math:`\infty` or ``None`` if there is no upper
            bound.
 
-    constraints: {dict, LinearConstraint, NonlinearConstraint, list}, optional
+    constraints : {dict, `scipy.optimize.LinearConstraint`, `scipy.optimize.NonlinearConstraint`, list}, optional
         Constraints of the problem. It can be one of the cases below.
 
         #. A dictionary with fields:
 
-            type: str
-                Constraint type: ``'eq'`` for equality constraints and
-                ``'ineq'`` for inequality constraints.
-            fun: callable
-                The constraint function.
+            type : {``'eq'``, ``'ineq'``}
+                Whether the constraint is ``fun(x) = 0`` or ``fun(x) >= 0``.
+            fun : callable
+                Constraint function.
 
-            When ``type='eq'``, such a dictionary specifies an equality
-            constraint ``fun(x) = 0``; when ``type='ineq'``, it specifies an
-            inequality constraint ``fun(x) >= 0``.
-        #. An instance of `LinearConstraint` or `NonlinearConstraint`.
-        #. A list, each of whose elements is a dictionary described in 1, or an
-           instance of `LinearConstraint` or `NonlinearConstraint`.
+        #. An instance of `scipy.optimize.LinearConstraint` or
+           `scipy.optimize.NonlinearConstraint`.
+        #. A list, each of whose elements are described in 1 and 2.
 
-    options: dict, optional
-        The options passed to the solver. It contains optionally:
+    options : dict, optional
+        The options passed to the solver. Accepted options are:
 
-            rhobeg: float, optional
+            rhobeg : float, optional
                 Initial value of the trust region radius, which should be a
-                positive scalar. Typically, ``options['rhobeg']`` should be in
-                the order of one tenth of the greatest expected change to a
-                variable. By default, it is ``1`` if the problem is not scaled
-                (but ``min(1, min(ub - lb) / 4)`` if the solver is BOBYQA),
-                ``0.5`` if the problem is scaled.
-            rhoend: float, optional
+                positive scalar. Typically, it should be in the order of one
+                tenth of the greatest expected change to the variables.
+            rhoend : float, optional
                 Final value of the trust region radius, which should be a
-                positive scalar. ``options['rhoend']`` should indicate the
-                accuracy required in the final values of the variables.
-                Moreover, ``options['rhoend']`` should be no more than
-                ``options['rhobeg']`` and is by default ``1e-6``.
-            maxfev: int, optional
-                Upper bound of the number of calls of the objective function
-                `fun`. Its value must be not less than ``options['npt'] + 1``.
-                By default, it is ``500 * n``.
-            npt: int, optional
-                Number of interpolation points of each model used in Powell's
-                Fortran code. It is used only if the solver is NEWUOA, BOBYQA,
-                or LINCOA.
-            ftarget: float, optional
-                Target value of the objective function. If a feasible iterate
-                achieves an objective function value lower or equal to
-                ```options['ftarget']``, the algorithm stops immediately. By
-                default, it is :math:`-\infty`.
-            scale: bool, optional
-                Whether to scale the problem according to the bound constraints.
-                By default, it is ``False``. If the problem is to be scaled,
-                then ``rhobeg`` and ``rhoend`` will be used as the initial and
-                final trust region radii for the scaled problem.
-            honour_x0: bool, optional
-                Whether to respect the user-defined ``x0``. By default, it is
-                ``False``. It is used only if the solver is BOBYQA.
-            quiet: bool, optional
+                positive scalar. It should indicate the accuracy required in the
+                final values of the variables.
+            maxfev : int, optional
+                Maximum number of function evaluations.
+            npt : int, optional
+                Number of interpolation points for NEWUOA, BOBYQA, and LINCOA.
+            ftarget : float, optional
+                Target value of the objective function. The optimization
+                procedure is terminated when the objective function value of a
+                nearly feasible point is less than or equal to this target.
+            quiet : bool, optional
                 Whether the interface is quiet. If it is set to ``True``, the
                 output message will not be printed. This flag does not interfere
                 with the warning and error printing.
-            classical: bool, optional
-                Whether to call the classical Powell code or not. It is not
-                encouraged in production. By default, it is ``False``.
-            eliminate_lin_eq: bool, optional
+            scale : bool, optional
+                Whether to scale the problem according to the bound constraints.
+            honour_x0 : bool, optional
+                Whether to respect the user-defined initial guess. It is used
+                only if the solver is BOBYQA.
+            eliminate_lin_eq : bool, optional
                 Whether the linear equality constraints should be eliminated.
-                By default, it is ``True``.
-            debug: bool, optional
-                Debugging flag. It is not encouraged in production. By default,
-                it is ``False``.
-            chkfunval: bool, optional
-                Flag used when debugging. If both ``options['debug']`` and
-                ``options['chkfunval']`` are ``True``, an extra
-                function/constraint evaluation would be performed to check
-                whether the returned values of objective function and constraint
-                match the returned ``x``. By default, it is ``False``.
+            classical : bool, optional
+                Whether to call the classical Powell code or not. It is not
+                encouraged in production.
+            debug : bool, optional
+                Debugging flag. It is not encouraged in production.
+            chkfunval : bool, optional
+                Flag used when debugging. In debug mode, an extra
+                function/constraint evaluation is performed to check whether the
+                returned values of the objective and constraint functions match
+                the final iterate.
 
     Returns
     -------
-    res: OptimizeResult
-        The results of the solver. Check `OptimizeResult` for a description of
-        the attributes.
+    res : `scipy.optimize.OptimizeResult`
+        Result of the optimization procedure, with the following fields:
+
+            message : str
+                Description of the cause of the termination.
+            success : bool
+                Whether the optimization procedure terminated successfully.
+            status : int
+                Termination status of the optimization procedure.
+            x : `numpy.ndarray`, shape (n,)
+                Solution point.
+            fun : float
+                Objective function value at the solution point.
+
+        TODO: complete the docstring
 
     See also
     --------
@@ -142,9 +137,10 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
 
     Examples
     --------
-    The following example shows how to solve a simple constrained optimization
-    problem. The problem considered below should be solved with a
-    derivative-based method. It is used here only as an illustration.
+    The following example shows how to solve a simple optimization problem using
+    `pdfo`. In practice, the  problem considered below should be solved with a
+    derivative-based method as it is a smooth problem for which the derivatives
+    are known. We solve it here using `pdfo` only as an illustration.
 
     We consider the 2-dimensional problem
 
@@ -166,16 +162,18 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
         import numpy as np
         np.set_printoptions(precision=1, suppress=True)
 
-    >>> from pdfo import Bounds, LinearConstraint, NonlinearConstraint, pdfo
+    >>> from pdfo import pdfo
+    >>> from scipy.optimize import Bounds, LinearConstraint, NonlinearConstraint
+    >>>
     >>> bounds = Bounds([0, 0.5], [2, 3])
     >>> linear_constraints = LinearConstraint([1, 1], 0, 1)
     >>> nonlinear_constraints = NonlinearConstraint(lambda x: x[0]**2 - x[1], None, 0)
-    >>> options = {'maxfev': 200}
-    >>> res = pdfo(lambda x: x[0]**2 + x[1]**2, [0, 1], bounds=bounds, constraints=[linear_constraints, nonlinear_constraints], options=options)
+    >>> res = pdfo(lambda x: x[0]**2 + x[1]**2, [0, 1], bounds=bounds, constraints=[linear_constraints, nonlinear_constraints], options={'maxfev': 200})
     >>> res.x
     array([0. , 0.5])
     """
-    from ._dependencies import prepdfo, postpdfo
+    from .common import prepdfo, postpdfo
+    from .settings import ExitStatus
 
     # A cell that records all the warnings.
     output = dict()
@@ -187,7 +185,7 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
 
     if prob_info['infeasible']:
         # The problem turned out infeasible during prepdfo.
-        exitflag = -4
+        exitflag = ExitStatus.INFEASIBLE_ERROR.value
         nf = 1
         x = x0_c
         fx = fun_c(x)
@@ -198,7 +196,7 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
         output['constr_modified'] = False
     elif prob_info['nofreex']:
         # x was fixed by the bound constraints during prepdfo.
-        exitflag = 13
+        exitflag = ExitStatus.FIXED_SUCCESS.value
         nf = 1
         x = prob_info['fixedx_value']
         fx = fun_c(x)
@@ -220,9 +218,9 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
         output['constr_value'] = np.asarray([], dtype=np.float64)
         if constrviolation < np.finfo(np.float64).eps:
             # Did prepdfo find a feasible point?
-            exitflag = 14
+            exitflag = ExitStatus.FEASIBILITY_SUCCESS.value
         else:
-            exitflag = 15
+            exitflag = ExitStatus.INFEASIBILITY_ERROR.value
         output['constr_modified'] = False
     else:
         # The problem turns out 'normal' during prepdfo.
@@ -244,7 +242,7 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
                 from . import cobyla
                 opti_res = cobyla(fun_c, x0_c, bounds=bounds_c, constraints=constraints_c, options=options_c)
         except ImportError:
-            from ._dependencies import import_error_so
+            from .common import import_error_so
             import_error_so(lower_method)
 
         # Extract the output from the solvers. The output is extended with the possible outputs returned by some

@@ -1,8 +1,7 @@
 Release notes
 =============
 
-We provide below the release notes for the different versions of the
-PDFO package.
+We provide below release notes for different versions of the PDFO package.
 
 .. list-table::
    :widths: 20 20 60
@@ -16,7 +15,7 @@ PDFO package.
      - Change PDFO's license and upgrade the compilation of the Fortran backend for Python to use `Meson <https://mesonbuild.com>`_.
    * - 1.2
      - October 7, 2021
-     - Rebuilt of Python wheels to include `devlewheel <https://github.com/adang1345/delvewheel>`_ patch for Anaconda.
+     - Rebuild Python wheels to include `devlewheel <https://github.com/adang1345/delvewheel>`_ patch for Anaconda.
    * - 1.1
      - August 23, 2021
      - Simplify installation for Python by providing wheels on `PyPI <https://pypi.org/project/pdfo/#files>`_ for Linux, macOS, and Windows.
