@@ -28,7 +28,7 @@ under `fsrc` for [Powell's](https://www.zhangzk.net/powell.html) original code.
 #### Recommended installation
 
 To use the Python version of PDFO on Linux, Mac, or Windows, you need
-[Python](https://www.python.org/) (version 3.7 or above).
+[Python](https://www.python.org/) (version 3.8 or above).
 
 It is highly recommended to install PDFO via [PyPI](https://pypi.org).
 
