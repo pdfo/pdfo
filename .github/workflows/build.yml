@@ -33,6 +33,9 @@ jobs:
           - os: ubuntu-22.04
             python: 311
             platform: manylinux_x86_64
+          - os: ubuntu-22.04
+            python: 312
+            platform: manylinux_x86_64
 
           # 64-bit macOS
           - os: macos-12
@@ -47,6 +50,9 @@ jobs:
           - os: macos-12
             python: 311
             platform: macosx_x86_64
+          - os: macos-12
+            python: 312
+            platform: macosx_x86_64
 
           # 64-bit Windows
           - os: windows-2019
@@ -60,6 +66,9 @@ jobs:
             platform: win_amd64
           - os: windows-2019
             python: 311
+            platform: win_amd64
+          - os: windows-2019
+            python: 312
             platform: win_amd64
 
     steps:
