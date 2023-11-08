@@ -20,15 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # 32-bit Linux
-          - os: ubuntu-22.04
-            python: 37
-            platform: manylinux_i686
-
           # 64-bit Linux
-          - os: ubuntu-22.04
-            python: 37
-            platform: manylinux_x86_64
           - os: ubuntu-22.04
             python: 38
             platform: manylinux_x86_64
@@ -44,9 +36,6 @@ jobs:
 
           # 64-bit macOS
           - os: macos-12
-            python: 37
-            platform: macosx_x86_64
-          - os: macos-12
             python: 38
             platform: macosx_x86_64
           - os: macos-12
@@ -60,9 +49,6 @@ jobs:
             platform: macosx_x86_64
 
           # 64-bit Windows
-          - os: windows-2019
-            python: 37
-            platform: win_amd64
           - os: windows-2019
             python: 38
             platform: win_amd64
