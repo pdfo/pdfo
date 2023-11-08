@@ -2944,7 +2944,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     output['success'] = (exitflag_c in [ExitStatus.RADIUS_SUCCESS.value, ExitStatus.TARGET_SUCCESS.value, ExitStatus.FEASIBILITY_SUCCESS.value]) or (exitflag_c == ExitStatus.FIXED_SUCCESS.value and abs(constrviolation_c) <= 1e-15)
     if len(stack()) >= 4 and stack()[2][3].lower() == 'pdfo':
         output['nfev'] = nf_c
-        output['maxcv'] = constrviolation_c
+        output['constrviolation'] = constrviolation_c
         output['fhist'] = fhist_c
         output['chist'] = chist_c
 
@@ -3111,7 +3111,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
 
     # Set output.{nf, constrviolation, fhist, chist, method}.
     output['nfev'] = nf_c
-    output['maxcv'] = constrviolation_c
+    output['constrviolation'] = constrviolation_c
     output['fhist'] = fhist_c
     output['chist'] = chist_c
     output['method'] = method
@@ -3135,12 +3135,12 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     #         'problem.'.format(invoker, method))
 
     if prob_info_c['raw_type'] == 'unconstrained':
-        if 'maxcv' in output.keys():
-            del output['maxcv']
+        if 'constrviolation' in output.keys():
+            del output['constrviolation']
         if 'chist' in output.keys():
             del output['chist']
     elif prob_info_c['refined_type'] == 'unconstrained' and prob_info_c['raw_type'] != 'unconstrained':
-        output['maxcv'] = np.float64(0)
+        output['constrviolation'] = np.float64(0)
         output['chist'] = np.zeros(nf_c)
 
     # Revise output['constr_value'] according to problem type.
@@ -3267,8 +3267,8 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
         # check whether the relative error is within cobyla_prec. There can also be a difference between constrviolation
         # and conv, especially if the problem is scaled.
         constrviolation = np.float64(0)
-        if 'maxcv' in output.keys():
-            constrviolation = output['maxcv']
+        if 'constrviolation' in output.keys():
+            constrviolation = output['constrviolation']
         if method == 'bobyqa' and np.nanmax((constrviolation, np.nanmax(chist_c))) > 0 and \
                 not prob_info_c['infeasible'] and not prob_info_c['fixedx']:
             raise ValueError(
