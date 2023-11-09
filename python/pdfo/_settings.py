@@ -31,32 +31,32 @@ class Options(str, Enum):
     """
     Option names.
     """
-    CHECK_EVAL = 'check_eval'
-    CLASSICAL = 'classical'
-    DEBUG = 'debug'
-    ELIMINATE_LINEAR_EQ = 'eliminate_lin_eq'
-    HONOR_X0 = 'honour_x0'
-    MAX_EVAL = 'max_eval'
+    RHOBEG = 'rhobeg'
+    RHOEND = 'rhoend'
+    MAXFEV = 'maxfev'
+    FTARGET = 'ftarget'
     NPT = 'npt'
     QUIET = 'quiet'
-    RADIUS_INIT = 'radius_init'
-    RADIUS_FINAL = 'radius_final'
     SCALE = 'scale'
-    TARGET = 'target'
+    ELIMINATE_LIN_EQ = 'eliminate_lin_eq'
+    HONOUR_X0 = 'honour_x0'
+    CLASSICAL = 'classical'
+    DEBUG = 'debug'
+    CHKFUNVAL = 'chkfunval'
 
 
 # Default options.
 DEFAULT_OPTIONS = {
-    Options.CHECK_EVAL.value: False,
-    Options.CLASSICAL.value: False,
-    Options.DEBUG.value: False,
-    Options.ELIMINATE_LINEAR_EQ.value: True,
-    Options.HONOR_X0.value: False,
-    Options.MAX_EVAL.value: lambda n: 500 * n,
+    Options.RHOBEG.value: 1.0,
+    Options.RHOEND.value: 1e-6,
+    Options.MAXFEV.value: lambda n: 500 * n,
+    Options.FTARGET.value: float('-inf'),
     Options.NPT.value: lambda n: 2 * n + 1,
     Options.QUIET.value: True,
-    Options.RADIUS_INIT.value: 1.0,
-    Options.RADIUS_FINAL.value: 1e-6,
     Options.SCALE.value: False,
-    Options.TARGET.value: float('-inf'),
+    Options.ELIMINATE_LIN_EQ.value: True,
+    Options.HONOUR_X0.value: False,
+    Options.CLASSICAL.value: False,
+    Options.DEBUG.value: False,
+    Options.CHKFUNVAL.value: False,
 }

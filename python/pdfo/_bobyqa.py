@@ -44,54 +44,39 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
     options : dict, optional
         The options passed to the solver. Accepted options are:
 
-            rhobeg: float, optional
-                Initial value of the trust region radius, which should be a
-                positive scalar. Typically, ``options['rhobeg']`` should be in
-                the order of one tenth of the greatest expected change to a
-                variable. By default, it is ``min(1, min(ub - lb) / 4)``, and
-                ``0.5`` if the problem is scaled.
-            rhoend: float, optional
-                Final value of the trust region radius, which should be a
-                positive scalar. ``options['rhoend']`` should indicate the
-                accuracy required in the final values of the variables.
-                Moreover, ``options['rhoend']`` should be no more than
-                ``options['rhobeg']`` and is by default ``1e-6``.
-            maxfev: int, optional
-                Upper bound of the number of calls of the objective function
-                `fun`. Its value must be not less than ``options['npt'] + 1``.
-                By default, it is ``500 * n``.
-            npt: int, optional
-                Number of interpolation points of each model used in Powell's
-                Fortran code.
-            ftarget: float, optional
-                Target value of the objective function. If a feasible iterate
-                achieves an objective function value lower or equal to
-                ```options['ftarget']``, the algorithm stops immediately. By
-                default, it is :math:`-\infty`.
-            scale: bool, optional
-                Whether to scale the problem according to the bound constraints.
-                By default, it is ``False``. If the problem is to be scaled,
-                then ``rhobeg`` and ``rhoend`` will be used as the initial and
-                final trust region radii for the scaled problem.
-            honour_x0: bool, optional
-                Whether to respect the user-defined ``x0``. By default, it is
-                ``False``.
+            rhobeg : float, optional
+                Initial value of the trust-region radius. Typically, it should
+                be in the order of one tenth of the greatest expected change to
+                the variables.
+            rhoend : float, optional
+                Final value of the trust-region radius, which should be a
+                positive scalar. It should indicate the accuracy required in the
+                final values of the variables.
+            maxfev : int, optional
+                Maximum number of function evaluations.
+            ftarget : float, optional
+                Target value of the objective function. The optimization
+                procedure is terminated when the objective function value of a
+                feasible point is less than or equal to this target.
+            npt : int, optional
+                Number of interpolation points.
             quiet: bool, optional
-                Whether the interface is quiet. If it is set to ``True``, the
-                output message will not be printed. This flag does not interfere
-                with the warning and error printing.
-            classical: bool, optional
-                Whether to call the classical Powell code or not. It is not
-                encouraged in production. By default, it is ``False``.
-            debug: bool, optional
-                Debugging flag. It is not encouraged in production. By default,
-                it is ``False``.
-            chkfunval: bool, optional
-                Flag used when debugging. If both ``options['debug']`` and
-                ``options['chkfunval']`` are ``True``, an extra
-                function/constraint evaluation would be performed to check
-                whether the returned values of objective function and constraint
-                match the returned ``x``. By default, it is ``False``.
+                Whether to suppress the output messages.
+            scale : bool, optional
+                Whether to scale the problem according to the bound constraints.
+            honour_x0 : bool, optional
+                Whether to honour the initial guess.
+            classical : bool, optional
+                Whether to use the classical version of Powell's method. It is
+                highly discourared in production.
+            debug : bool, optional
+                Whether to perform debugging checks. It is highly discourared in
+                production.
+            chkfunval : bool, optional
+                Whether to check the value of the objective and constraint
+                functions at the solution. This is only done in the debug mode,
+                and requires one extra function evalution. It is highly
+                discourared in production.
 
     Returns
     -------
@@ -199,7 +184,7 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
         import_error_so('gethuge')
 
     from ._common import prepdfo, postpdfo
-    from ._settings import ExitStatus
+    from ._settings import ExitStatus, Options
 
     # This method is deprecated. Warn the user.
     warnings.warn('The `bobyqa` function is deprecated. Use the `pdfo` function with the argument `method=\'bobyqa\'` to use the BOBYQA method.', DeprecationWarning, 2)
@@ -253,11 +238,11 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
         exitflag = ExitStatus.FEASIBILITY_SUCCESS.value
     else:
         # The problem turns out 'normal' during prepdfo extract the options and parameters.
-        npt = options_c['npt']
-        maxfev = options_c['maxfev']
-        rhobeg = options_c['rhobeg']
-        rhoend = options_c['rhoend']
-        ftarget = options_c['ftarget']
+        npt = options_c[Options.NPT.value]
+        maxfev = options_c[Options.MAXFEV.value]
+        rhobeg = options_c[Options.RHOBEG.value]
+        rhoend = options_c[Options.RHOEND.value]
+        ftarget = options_c[Options.FTARGET.value]
 
         # The largest integer in the fortran functions; the factor 0.99 provides a buffer.
         max_int = np.floor(0.99 * gethuge('integer'))
@@ -277,19 +262,19 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
         if npt > max_npt:
             npt = max_npt
             w_message = \
-                '{}: npt is so large that it is unable to allocate the workspace; it is set to {}'.format(fun_name, npt)
+                '{}: {} is so large that it is unable to allocate the workspace; it is set to {}'.format(fun_name, Options.NPT.value, npt)
             warnings.warn(w_message, Warning, 2)
             output['warnings'].append(w_message)
         if maxfev > max_int:
             maxfev = max_int
             w_message = \
-                '{}: maxfev exceeds the upper limit of Fortran integer; it is set to {}'.format(fun_name, maxfev)
+                '{}: {} exceeds the upper limit of Fortran integer; it is set to {}'.format(fun_name, Options.MAXFEV.value, maxfev)
             warnings.warn(w_message, Warning, 2)
             output['warnings'].append(w_message)
 
         # Call the Fortran code.
         try:
-            if options_c['classical']:
+            if options_c[Options.CLASSICAL.value]:
                 from . import fbobyqa_classical as fbobyqa
             else:
                 from . import fbobyqa

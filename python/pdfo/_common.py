@@ -6,7 +6,7 @@ from inspect import stack
 import numpy as np
 from scipy.optimize import OptimizeResult
 
-from ._settings import ExitStatus
+from ._settings import ExitStatus, Options, DEFAULT_OPTIONS
 
 python_version = sys.version_info.major
 if python_version >= 3:
@@ -318,39 +318,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
             3. A list, each of whose elements can be a dictionary described in 1, an instance of LinearConstraint or an
                instance of NonlinearConstraint.
     options: dict, optional
-        The options passed to the solver. It is a structure that contains optionally:
-            rhobeg: float, optional
-                Initial value of the trust region radius, which should be a positive scalar. `options['rhobeg']` should
-                be typically set roughly to one tenth of the greatest expected change to a variable. By default, it is
-                1.
-            rhoend: float, optional
-                Final value of the trust region radius, which should be a positive scalar. `options['rhoend']` should
-                indicate typically the accuracy required in the final values of the variables. Moreover,
-                `options['rhoend']` should be no more than `options['rhobeg']` and is by default 1e-6.
-            maxfev: int, optional
-                Upper bound of the number of calls of the objective function `fun`. Its value must be not less than
-                `options['npt']`+1. By default, it is 500*n.
-            npt: int, optional
-                Number of interpolation points of each model used in Powell's Fortran code.
-            ftarget: float, optional
-                Target value of the objective function. If a feasible iterate achieves an objective function value lower
-                or equal to `options['ftarget']`, the algorithm stops immediately. By default, it is -np.inf.
-            scale: bool, optional
-                Flag indicating whether to scale the problem. If it is True, the variables will be scaled according to
-                the bounds constraints if any. By default, it is False.
-            quiet: bool, optional
-                Flag of quietness of the interface. If it is set to True, the output message will not be printed. This
-                flag does not interfere with the warning and error printing.
-            classical: bool, optional
-                Flag indicating whether to call the classical Powell code or not. By default, it is False.
-            eliminate_lin_eq: bool, optional
-                Flag indicating whether the linear equality constraints should be eliminated. By default, it is True.
-            debug: bool, optional
-                Debugging flag. By default, it is False.
-            chkfunval: bool, optional
-                Flag used when debugging. If both `options['debug']` and `options['chkfunval']` are True, an extra
-                function evaluation would be performed to check whether the returned objective function value is
-                consistent with the returned `x`. By default, it is False.
+        The options passed to the solver.
 
     Returns
     -------
@@ -558,7 +526,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     prob_info['scaled'] = False
     prob_info['scaling_factor'] = np.ones(lenx0)
     prob_info['shift'] = np.zeros_like(x0_c)
-    if options_c['scale'] and not prob_info['nofreex'] and not prob_info['infeasible']:
+    if options_c[Options.SCALE.value] and not prob_info['nofreex'] and not prob_info['infeasible']:
         # Scale and shift the problem so that all the bounds become [-1, 1]. It is done only if all variables have both
         # lower and upper bounds.
         fun_c_reduced, x0_c, lb, ub, constraints_c, scaling_factor, shift, _ = \
@@ -574,7 +542,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
     # If the problem contains any linear equality constraints, remove them from the constraints and force the iterates
     # to lie on the affine space generate by them as long as possible. The affine space is computed using the QR
     # factorization with pivoting (or the SVD factorization) of the Jacobian of the linear equality constraints.
-    if not prob_info['nofreex'] and not prob_info['infeasible'] and options_c['eliminate_lin_eq']:
+    if not prob_info['nofreex'] and not prob_info['infeasible'] and options_c[Options.ELIMINATE_LIN_EQ.value]:
         space_chg, lb, ub, constraints_c, prob_info = _eliminate_linear_equalities(
             invoker, constraints_c, x0_c, lb, ub, prob_info, list_warnings)
 
@@ -686,7 +654,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
             not prob_info['feasibility_problem']:
         # The Fortran code of BOBYQA will revise x0 so that the distance between x0 and the inactive bounds is at least
         # rhobeg. We do it here in order to raise a warning when such a revision occurs. After this, the Fortran code
-        # will not revise x0 again. If the options['honour_x0'] = True, then we keep x0 unchanged and revise rhobeg if
+        # will not revise x0 again. If the options[Options.HONOUR_X0.value] = True, then we keep x0 unchanged and revise rhobeg if
         # necessary.
         x0_c, options_c = \
             _pre_rhobeg_x0(invoker, x0_c, lb, ub, prob_info['user_options_fields'], options_c, list_warnings)
@@ -705,7 +673,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
         prob_info['constrv_x0'], prob_info['nlc_x0'] = \
             _constr_violation(invoker, x0_c, lb, ub, constraints_c, prob_info)
 
-    if not options_c['debug']:
+    if not options_c[Options.DEBUG.value]:
         # Do not carry the raw data with us unless in debug mode.
         del prob_info['raw_data']
 
@@ -1481,17 +1449,17 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
     user_option_fields = list(option_fields)
 
     # Default values for each options.
-    maxfev = 500 * lenx0
-    rhobeg = 1  # The default rhobeg and rhoend will be revised for BOBYQA
-    rhoend = 1e-6
-    ftarget = -np.inf
-    classical = False  # call the classical Powell code?
-    eliminate_lin_eq = True
-    scale = False  # scale the problem according to bounds?
-    honour_x0 = False  # Respect the user-defined x0? Needed by BOBYQA
-    quiet = True
-    debugflag = False
-    chkfunval = False
+    maxfev = DEFAULT_OPTIONS[Options.MAXFEV.value](lenx0)
+    rhobeg = DEFAULT_OPTIONS[Options.RHOBEG.value]  # The default rhobeg and rhoend will be revised for BOBYQA
+    rhoend = DEFAULT_OPTIONS[Options.RHOEND.value]
+    ftarget = DEFAULT_OPTIONS[Options.FTARGET.value]
+    classical = DEFAULT_OPTIONS[Options.CLASSICAL.value]  # call the classical Powell code?
+    eliminate_lin_eq = DEFAULT_OPTIONS[Options.ELIMINATE_LIN_EQ.value]
+    scale = DEFAULT_OPTIONS[Options.SCALE.value]  # scale the problem according to bounds?
+    honour_x0 = DEFAULT_OPTIONS[Options.HONOUR_X0.value]  # Respect the user-defined x0? Needed by BOBYQA
+    quiet = DEFAULT_OPTIONS[Options.QUIET.value]
+    debugflag = DEFAULT_OPTIONS[Options.DEBUG.value]
+    chkfunval = DEFAULT_OPTIONS[Options.CHKFUNVAL.value]
 
     # DO NOT REMOVE THE FOLLOWING!! Scale only if all variables are with finite lower and upper bounds.
     scale = scale and np.all(np.logical_not(np.isinf(np.r_[lb, ub])))
@@ -1514,14 +1482,14 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
         method = invoker
 
     # Check whether the used provided any unknown option.
-    known_field = ['maxfev', 'rhobeg', 'rhoend', 'ftarget', 'classical', 'eliminate_lin_eq', 'quiet', 'debug',
-                   'chkfunval']
+    known_field = [Options.MAXFEV.value, Options.RHOBEG.value, Options.RHOEND.value, Options.FTARGET.value, Options.CLASSICAL.value, Options.ELIMINATE_LIN_EQ.value, Options.QUIET.value, Options.DEBUG.value,
+                   Options.CHKFUNVAL.value]
     if method is None or method.lower() in ['bobyqa', 'lincoa', 'newuoa']:
-        known_field.append('npt')
+        known_field.append(Options.NPT.value)
     if method is None or method.lower() in ['bobyqa', 'cobyla', 'lincoa']:
-        known_field.append('scale')
+        known_field.append(Options.SCALE.value)
     if method is None or method.lower() == 'bobyqa':
-        known_field.append('honour_x0')
+        known_field.append(Options.HONOUR_X0.value)
     unknown_field = list(set(option_fields).difference(set(known_field)))
 
     # Remove the unknown fields. If we do not removed unknown fields, we may still complain later if an unknown field is
@@ -1543,41 +1511,41 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
         npt = np.nan
     else:
         if method.lower() in ['bobyqa', 'lincoa', 'newuoa']:
-            npt = 2 * lenx0 + 1
+            npt = DEFAULT_OPTIONS[Options.NPT.value](lenx0)
         elif method.lower() == 'uobyqa':
             npt = (lenx0 + 1) * (lenx0 + 2) / 2
         else:
             # The method is necessarily COBYLA.
             npt = lenx0 + 1
 
-    # Validate options['scale'] at first. It needs to be done here since the trust-region radii revision required for
+    # Validate options[Options.SCALE.value] at first. It needs to be done here since the trust-region radii revision required for
     # BOBYQA asks for the true scaling flag.
     validated = False
-    if 'scale' in option_fields:
-        if not isinstance(options['scale'], (bool, np.bool_)):
-            warn_message = '{}: invalid scale flag; it should be True or False; it is set to {}.'.format(invoker, scale)
+    if Options.SCALE.value in option_fields:
+        if not isinstance(options[Options.SCALE.value], (bool, np.bool_)):
+            warn_message = '{}: invalid {} flag; it should be True or False; it is set to {}.'.format(invoker, Options.SCALE.value, scale)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
-        elif options['scale'] and np.any(np.isinf(ub - lb)):
+        elif options[Options.SCALE.value] and np.any(np.isinf(ub - lb)):
             warn_message = \
                 '{}: problem cannot be scaled because not all variables have both lower and upper ' \
                 'bounds.'.format(invoker)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
-            options['scale'] = False  # it must be set to False not to be performed
+            options[Options.SCALE.value] = False  # it must be set to False not to be performed
             validated = True
         else:
             validated = True
 
-    if not validated:  # options['scale'] has not got a valid value yet.
-        options['scale'] = scale
-    options['scale'] = bool(options['scale'])
+    if not validated:  # options[Options.SCALE.value] has not got a valid value yet.
+        options[Options.SCALE.value] = scale
+    options[Options.SCALE.value] = bool(options[Options.SCALE.value])
 
     # Revise default rhobeg and rhoend if the solver is BOBYQA.
-    if options['scale']:
-        rhobeg = .5  # this value cannot be bigger than 1. Otherwise, BOBYQA will complain
-        rhoend = 1e-6
-    if method is not None and method.lower() == 'bobyqa' and not options['scale']:
+    if options[Options.SCALE.value]:
+        rhobeg = 0.5  # this value cannot be bigger than 1. Otherwise, BOBYQA will complain
+        rhoend = DEFAULT_OPTIONS[Options.RHOEND.value]
+    if method is not None and method.lower() == 'bobyqa' and not options[Options.SCALE.value]:
         lb_mod, ub_mod = lb.copy(), ub.copy()
         lb_mod[np.logical_and(lb_mod > 0, np.isinf(lb_mod))] = -np.inf
         ub_mod[np.logical_and(ub_mod < 0, np.isinf(ub_mod))] = np.inf
@@ -1586,274 +1554,274 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
         rhoend = max(eps, min(.1 * rhobeg, rhoend))
 
     # Validate the user-specified options (except scale that has already been done); adopt the default values if needed.
-    # Validate options['npt'].
+    # Validate options[Options.NPT.value].
     # There are the following possibilities.
-    # 1. The user specifies options['npt']
-    # 1.1. The solver is yet to decide (method=None): we keep options['npt'] if it is a positive integer; otherwise,
-    #      raise a warning and set options['npt'] to NaN;
-    # 1.2. The user has chosen a valid solver: we keep options['npt'] if it is compatible with the solver; otherwise,
-    #      raise a warning and set options['npt'] to the default value according to the solver.
-    # 2. The user does not specify options['npt']
-    # 2.1. The solver is yet to decide (solver=None): we set options['npt'] to NaN;
+    # 1. The user specifies options[Options.NPT.value]
+    # 1.1. The solver is yet to decide (method=None): we keep options[Options.NPT.value] if it is a positive integer; otherwise,
+    #      raise a warning and set options[Options.NPT.value] to NaN;
+    # 1.2. The user has chosen a valid solver: we keep options[Options.NPT.value] if it is compatible with the solver; otherwise,
+    #      raise a warning and set options[Options.NPT.value] to the default value according to the solver.
+    # 2. The user does not specify options[Options.NPT.value]
+    # 2.1. The solver is yet to decide (solver=None): we set options[Options.NPT.value] to NaN;
     # 2.2. The user has chosen a valid solver: we set options.npt to the default value according to the solver. After
-    #      this process, options['npt'] is either a positive integer (compatible with method if it is specified by the
+    #      this process, options[Options.NPT.value] is either a positive integer (compatible with method if it is specified by the
     #      user) or NaN (only if the user does not specify a valid solver while options.npt is either unspecified or not
     #      a positive integer).
     validated = False
-    if 'npt' in option_fields:
+    if Options.NPT.value in option_fields:
         # Note 2023-05-11: np.int was deprecated in NumPy 1.20.0, and is no
         # longer available in recent NumPy versions. It was only an alias for
         # int anyway, so it is safe to remove it from the type detection below.
         integer_types = (int, np.int8, np.int16, np.int32, np.int64)
         if method is not None and \
-                (not isinstance(options['npt'], integer_types) or options['npt'] < 1 or np.isnan(options['npt'])):
-            warn_message = '{}: invalid npt. It should be a positive integer.'.format(invoker)
+                (not isinstance(options[Options.NPT.value], integer_types) or options[Options.NPT.value] < 1 or np.isnan(options[Options.NPT.value])):
+            warn_message = '{}: invalid {}. It should be a positive integer.'.format(invoker, Options.NPT.value)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         elif method is not None and method.lower() in ['bobyqa', 'lincoa', 'newuoa'] and \
-                (not isinstance(options['npt'], integer_types) or np.isnan(options['npt']) or
-                 options['npt'] < lenx0 + 2 or options['npt'] > (lenx0 + 1) * (lenx0 + 2) / 2):
+                (not isinstance(options[Options.NPT.value], integer_types) or np.isnan(options[Options.NPT.value]) or
+                 options[Options.NPT.value] < lenx0 + 2 or options[Options.NPT.value] > (lenx0 + 1) * (lenx0 + 2) / 2):
             warn_message = \
-                '{}: invalid npt. {} requires it to be an integer and n+2 <= npt <= (n+1)*(n+2)/2; it is set to ' \
-                '2n+1.'.format(invoker, method)
+                '{}: invalid {}. {} requires it to be an integer and n+2 <= {} <= (n+1)*(n+2)/2; it is set to ' \
+                '2n+1.'.format(invoker, Options.NPT.value, method, Options.NPT.value)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         else:
             validated = True
 
-    if not validated:  # options['npt'] has not got a valid value yet
+    if not validated:  # options[Options.NPT.value] has not got a valid value yet
         # For uobyqa and cobyla or empty solver, we adopt the 'default npt' defined above, although it will NOT be used
         # by the solver.
-        options['npt'] = npt
+        options[Options.NPT.value] = npt
 
     # If prepdfo is called by pdfo, and if pdfo has been called without precising the method, npt will be set to np.nan.
     # If we do not check whether this value is np.nan before casting it into np.int32, it will lead to an error.
-    if not np.isnan(options['npt']):
-        options['npt'] = np.int32(options['npt'])
+    if not np.isnan(options[Options.NPT.value]):
+        options[Options.NPT.value] = np.int32(options[Options.NPT.value])
 
-    # Validate options['maxfev'].
+    # Validate options[Options.MAXFEV.value].
     validated = False
-    if 'maxfev' in option_fields:
-        if not isinstance(options['maxfev'], scalar_types) or options['maxfev'] <= 0 or np.isnan(options['maxfev']) or \
-                np.isinf(options['maxfev']):
+    if Options.MAXFEV.value in option_fields:
+        if not isinstance(options[Options.MAXFEV.value], scalar_types) or options[Options.MAXFEV.value] <= 0 or np.isnan(options[Options.MAXFEV.value]) or \
+                np.isinf(options[Options.MAXFEV.value]):
             warn_message = \
-                '{}: invalid maxfev; it should be a positive integer; it is set to {}.'.format(invoker, maxfev)
+                '{}: invalid {}; it should be a positive integer; it is set to {}.'.format(invoker, Options.MAXFEV.value, maxfev)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
-        elif method is None and options['maxfev'] <= lenx0 + 1:
-            options['maxfev'] = lenx0 + 2  # The smallest possible value
+        elif method is None and options[Options.MAXFEV.value] <= lenx0 + 1:
+            options[Options.MAXFEV.value] = lenx0 + 2  # The smallest possible value
             validated = True
             warn_message = \
-                '{}: invalid maxfev; it should be a positive integer at least n+2; it is set to n+2.'.format(invoker)
+                '{}: invalid {}; it should be a positive integer at least n+2; it is set to n+2.'.format(invoker, Options.MAXFEV.value)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
-        elif method is not None and options['maxfev'] <= options['npt']:
-            options['maxfev'] = options['npt'] + 1
+        elif method is not None and options[Options.MAXFEV.value] <= options[Options.NPT.value]:
+            options[Options.MAXFEV.value] = options[Options.NPT.value] + 1
             validated = True
             if method.lower() in ['bobyqa', 'lincoa', 'newuoa']:
                 warn_message = \
-                    '{}: invalid maxfev; {} requires maxfev > npt; it is set to npt+1.'.format(invoker, method)
+                    '{}: invalid {}; {} requires {} > {}; it is set to {}+1.'.format(invoker, Options.MAXFEV.value, method, Options.MAXFEV.value, Options.NPT.value, Options.NPT.value)
             elif method.lower() == 'uobyqa':
                 warn_message = \
-                    '{}: invalid maxfev; {} requires maxfev > (n+1)*(n+2)/2; it is set to ' \
-                    '(n+1)*(n+2)/2+1.'.format(invoker, method)
-                options['maxfev'] = (lenx0 + 1) * (lenx0 + 2) / 2 + 1
+                    '{}: invalid {}; {} requires {} > (n+1)*(n+2)/2; it is set to ' \
+                    '(n+1)*(n+2)/2+1.'.format(invoker, Options.MAXFEV.value, method, Options.MAXFEV.value)
+                options[Options.MAXFEV.value] = (lenx0 + 1) * (lenx0 + 2) / 2 + 1
             else:
                 # The method is necessarily COBYLA.
-                warn_message = '{}: invalid maxfev; {} requires maxfev > n+1; it is set to n+2.'.format(invoker, method)
+                warn_message = '{}: invalid {}; {} requires {} > n+1; it is set to n+2.'.format(invoker, Options.MAXFEV.value, method, Options.MAXFEV.value)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         else:
             validated = True
 
-    if not validated:  # options['maxfev'] has not got a valid value yet.
-        options['maxfev'] = max(maxfev, npt+1)
-    if not np.isnan(options['maxfev']):
-        options['maxfev'] = np.int32(options['maxfev'])
+    if not validated:  # options[Options.MAXFEV.value] has not got a valid value yet.
+        options[Options.MAXFEV.value] = max(maxfev, npt+1)
+    if not np.isnan(options[Options.MAXFEV.value]):
+        options[Options.MAXFEV.value] = np.int32(options[Options.MAXFEV.value])
 
-    # Validate options['rhobeg'].
-    # NOTE: if the problem is to be scaled, then options['rhobeg'] and options['rhoend'] will be used as the initial and
+    # Validate options[Options.RHOBEG.value].
+    # NOTE: if the problem is to be scaled, then options[Options.RHOBEG.value] and options[Options.RHOEND.value] will be used as the initial and
     # final trust-region radii for the scaled problem.
     validated = False
-    if 'rhobeg' in option_fields:
-        if not isinstance(options['rhobeg'], scalar_types) or options['rhobeg'] <= 0 or np.isnan(options['rhobeg']) or \
-                np.isinf(options['rhobeg']):
+    if Options.RHOBEG.value in option_fields:
+        if not isinstance(options[Options.RHOBEG.value], scalar_types) or options[Options.RHOBEG.value] <= 0 or np.isnan(options[Options.RHOBEG.value]) or \
+                np.isinf(options[Options.RHOBEG.value]):
             warn_message = \
-                '{}: invalid rhobeg; it should be a positive number; it is set to ' \
-                'max({}, rhoend).'.format(invoker, rhobeg)
+                '{}: invalid {}; it should be a positive number; it is set to ' \
+                'max({}, {}).'.format(invoker, Options.RHOBEG.value, rhobeg, Options.RHOEND.value)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         elif method is not None and method.lower() == 'bobyqa':
-            if options['scale'] and options['rhobeg'] > 1:
+            if options[Options.SCALE.value] and options[Options.RHOBEG.value] > 1:
                 warn_message = \
-                    '{}: invalid rhobeg; {} requires rhobeg <= 1 when the problem is scaled; it is set to ' \
-                    '0.5.'.format(invoker, method)
+                    '{}: invalid {}; {} requires {} <= 1 when the problem is scaled; it is set to ' \
+                    '0.5.'.format(invoker, Options.RHOBEG.value, method, Options.RHOBEG.value)
                 warnings.warn(warn_message, Warning)
                 list_warnings.append(warn_message)
-                options['rhobeg'] = 0.5
-            elif not options['scale'] and options['rhobeg'] > np.min(ub - lb) / 2:
+                options[Options.RHOBEG.value] = 0.5
+            elif not options[Options.SCALE.value] and options[Options.RHOBEG.value] > np.min(ub - lb) / 2:
                 warn_message = \
-                    '{}: invalid rhobeg; {} requires rhobeg <= min(ub-lb)/2; it is set to ' \
-                    'min(ub-lb)/4.'.format(invoker, method)
+                    '{}: invalid {}; {} requires {} <= min(ub-lb)/2; it is set to ' \
+                    'min(ub-lb)/4.'.format(invoker, Options.RHOBEG.value, method, Options.RHOBEG.value)
                 warnings.warn(warn_message, Warning)
                 list_warnings.append(warn_message)
-                options['rhobeg'] = np.min(ub - lb) / 4
-            validated = True  # The value in options['rhobeg'] needs to be used.
+                options[Options.RHOBEG.value] = np.min(ub - lb) / 4
+            validated = True  # The value in options[Options.RHOBEG.value] needs to be used.
         else:
             validated = True
 
-    if not validated:  # options['rhobeg'] has not got a valid value yet.
-        if 'rhoend' in option_fields and isinstance(options['rhoend'], scalar_types):
-            options['rhobeg'] = max(rhobeg, 1e1 * options['rhoend'])
+    if not validated:  # options[Options.RHOBEG.value] has not got a valid value yet.
+        if Options.RHOEND.value in option_fields and isinstance(options[Options.RHOEND.value], scalar_types):
+            options[Options.RHOBEG.value] = max(rhobeg, 1e1 * options[Options.RHOEND.value])
         else:
-            options['rhobeg'] = rhobeg
-    options['rhobeg'] = np.float64(max(options['rhobeg'], eps))
+            options[Options.RHOBEG.value] = rhobeg
+    options[Options.RHOBEG.value] = np.float64(max(options[Options.RHOBEG.value], eps))
 
-    # Validate options['rhoend'].
+    # Validate options[Options.RHOEND.value].
     validated = False
-    if 'rhoend' in option_fields:
-        if not isinstance(options['rhoend'], scalar_types) or options['rhoend'] > options['rhobeg'] or \
-                0 >= options['rhoend'] or np.isnan(options['rhobeg']):
+    if Options.RHOEND.value in option_fields:
+        if not isinstance(options[Options.RHOEND.value], scalar_types) or options[Options.RHOEND.value] > options[Options.RHOBEG.value] or \
+                0 >= options[Options.RHOEND.value] or np.isnan(options[Options.RHOBEG.value]):
             warn_message = \
-                '{}: invalid rhoend; we should have rhobeg >= rhoend > 0; it is set to ' \
-                'min(0.1*rhobeg, {}).'.format(invoker, rhoend)
+                '{}: invalid {}; we should have {} >= {} > 0; it is set to ' \
+                'min(0.1*{}, {}).'.format(invoker, Options.RHOEND.value, Options.RHOBEG.value, Options.RHOEND.value, Options.RHOBEG.value, rhoend)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         else:
             validated = True
 
-    if not validated:  # options['rhoend'] has not got a valid value yet.
-        options['rhoend'] = min(0.1 * options['rhobeg'], rhoend)
-    options['rhoend'] = np.float64(np.nanmax((options['rhoend'], eps)))
+    if not validated:  # options[Options.RHOEND.value] has not got a valid value yet.
+        options[Options.RHOEND.value] = min(0.1 * options[Options.RHOBEG.value], rhoend)
+    options[Options.RHOEND.value] = np.float64(np.nanmax((options[Options.RHOEND.value], eps)))
 
-    # Validate options['ftarget'].
+    # Validate options[Options.FTARGET.value].
     validated = False
-    if 'ftarget' in option_fields:
-        if not isinstance(options['ftarget'], scalar_types) or np.isnan(options['ftarget']):
-            warn_message = '{}: invalid ftarget; it should be real number; it is set to {}.'.format(invoker, ftarget)
+    if Options.FTARGET.value in option_fields:
+        if not isinstance(options[Options.FTARGET.value], scalar_types) or np.isnan(options[Options.FTARGET.value]):
+            warn_message = '{}: invalid {}; it should be real number; it is set to {}.'.format(invoker, Options.FTARGET.value, ftarget)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         else:
             validated = True
 
-    if not validated:  # options['ftarget'] has not got a valid value yet.
-        options['ftarget'] = ftarget
-    options['ftarget'] = np.float64(options['ftarget'])
+    if not validated:  # options[Options.FTARGET.value] has not got a valid value yet.
+        options[Options.FTARGET.value] = ftarget
+    options[Options.FTARGET.value] = np.float64(options[Options.FTARGET.value])
 
-    # Validate options['classical'].
+    # Validate options[Options.CLASSICAL.value].
     validated = False
-    if 'classical' in option_fields:
-        if not isinstance(options['classical'], (bool, np.bool_)):
+    if Options.CLASSICAL.value in option_fields:
+        if not isinstance(options[Options.CLASSICAL.value], (bool, np.bool_)):
             warn_message = \
-                '{}: invalid scale flag; it should be True or False; it is set to {}.'.format(invoker, classical)
+                '{}: invalid {} flag; it should be True or False; it is set to {}.'.format(invoker, Options.SCALE.value, classical)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         else:
             validated = True
 
-    if not validated:  # options['classical'] has not got a valid value yet.
-        options['classical'] = classical
-    options['classical'] = bool(options['classical'])
-    if options['classical']:
+    if not validated:  # options[Options.CLASSICAL.value] has not got a valid value yet.
+        options[Options.CLASSICAL.value] = classical
+    options[Options.CLASSICAL.value] = bool(options[Options.CLASSICAL.value])
+    if options[Options.CLASSICAL.value]:
         warn_message = \
-            "{}: in classical mode, which is recommended only for research purpose; set options['classical']=False " \
-            "to disable classical mode.".format(invoker)
+            "{}: in {} mode, which is recommended only for research purpose; set options['{}']=False " \
+            "to disable {} mode.".format(invoker, Options.CLASSICAL.value, Options.CLASSICAL.value, Options.CLASSICAL.value)
         warnings.warn(warn_message, Warning)
         list_warnings.append(warn_message)
 
-    # Validate options['eliminate_lin_eq'].
+    # Validate options[Options.ELIMINATE_LIN_EQ.value].
     validated = False
-    if 'eliminate_lin_eq' in option_fields:
-        if not isinstance(options['eliminate_lin_eq'], (bool, np.bool_)):
+    if Options.ELIMINATE_LIN_EQ.value in option_fields:
+        if not isinstance(options[Options.ELIMINATE_LIN_EQ.value], (bool, np.bool_)):
             warn_message = \
-                '{}: invalid eliminate_lin_eq flag; it should be True or False; it is set to ' \
-                '{}.'.format(invoker, eliminate_lin_eq)
+                '{}: invalid {} flag; it should be True or False; it is set to ' \
+                '{}.'.format(invoker, Options.ELIMINATE_LIN_EQ.value, eliminate_lin_eq)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         else:
             validated = True
 
-    if not validated:  # options['eliminate_lin_eq'] has not got a valid value yet.
-        options['eliminate_lin_eq'] = eliminate_lin_eq
-    options['eliminate_lin_eq'] = bool(options['eliminate_lin_eq'])
+    if not validated:  # options[Options.ELIMINATE_LIN_EQ.value] has not got a valid value yet.
+        options[Options.ELIMINATE_LIN_EQ.value] = eliminate_lin_eq
+    options[Options.ELIMINATE_LIN_EQ.value] = bool(options[Options.ELIMINATE_LIN_EQ.value])
 
-    # Validate options['honour_x0'].
+    # Validate options[Options.HONOUR_X0.value].
     validated = False
-    if 'honour_x0' in option_fields:
-        if not isinstance(options['honour_x0'], (bool, np.bool_)):
+    if Options.HONOUR_X0.value in option_fields:
+        if not isinstance(options[Options.HONOUR_X0.value], (bool, np.bool_)):
             warn_message = \
-                '{}: invalid honour_x0 flag; it should be True or False; it is set to {}.'.format(invoker, honour_x0)
+                '{}: invalid {} flag; it should be True or False; it is set to {}.'.format(invoker, Options.HONOUR_X0.value, honour_x0)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         else:
             validated = True
 
-    if not validated:  # options['honour_x0'] has not got a valid value yet.
-        options['honour_x0'] = honour_x0
-    options['honour_x0'] = bool(options['honour_x0'])
+    if not validated:  # options[Options.HONOUR_X0.value] has not got a valid value yet.
+        options[Options.HONOUR_X0.value] = honour_x0
+    options[Options.HONOUR_X0.value] = bool(options[Options.HONOUR_X0.value])
 
-    # Validate options['quiet'].
+    # Validate options[Options.QUIET.value].
     validated = False
-    if 'quiet' in option_fields:
-        if not isinstance(options['quiet'], (bool, np.bool_)):
-            warn_message = '{}: invalid quiet flag; it should be True or False; it is set to {}.'.format(invoker, quiet)
+    if Options.QUIET.value in option_fields:
+        if not isinstance(options[Options.QUIET.value], (bool, np.bool_)):
+            warn_message = '{}: invalid {} flag; it should be True or False; it is set to {}.'.format(invoker, Options.QUIET.value, quiet)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         else:
             validated = True
 
-    if not validated:  # options['quiet'] has not got a valid value yet.
-        options['quiet'] = quiet
-    options['quiet'] = bool(options['quiet'])
+    if not validated:  # options[Options.QUIET.value] has not got a valid value yet.
+        options[Options.QUIET.value] = quiet
+    options[Options.QUIET.value] = bool(options[Options.QUIET.value])
 
-    # Validate options['debug'].
+    # Validate options[Options.DEBUG.value].
     validated = False
-    if 'debug' in option_fields:
-        if not isinstance(options['debug'], (bool, np.bool_)):
+    if Options.DEBUG.value in option_fields:
+        if not isinstance(options[Options.DEBUG.value], (bool, np.bool_)):
             warn_message = \
-                '{}: invalid debug flag; it should be True or False; it is set to {}.'.format(invoker, debugflag)
+                '{}: invalid {} flag; it should be True or False; it is set to {}.'.format(invoker, Options.DEBUG.value, debugflag)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         else:
             validated = True
 
-    if not validated:  # options['debug'] has not got a valid value yet.
-        options['debug'] = debugflag
-    options['debug'] = bool(options['debug'])
-    if options['debug']:
-        warn_message = "{}: in debug mode; set options['debug']=False to disable debug.".format(invoker)
+    if not validated:  # options[Options.DEBUG.value] has not got a valid value yet.
+        options[Options.DEBUG.value] = debugflag
+    options[Options.DEBUG.value] = bool(options[Options.DEBUG.value])
+    if options[Options.DEBUG.value]:
+        warn_message = "{}: in {} mode; set options['{}']=False to disable debug.".format(invoker, Options.DEBUG.value, Options.DEBUG.value)
         warnings.warn(warn_message, Warning)
         list_warnings.append(warn_message)
-        if options['quiet']:
-            options['quiet'] = False
-            warn_message = "options['quiet'] is set to False because options['debug'] = True.".format(invoker)
+        if options[Options.QUIET.value]:
+            options[Options.QUIET.value] = False
+            warn_message = "options['{}'] is set to False because options['{}'] = True.".format(invoker, Options.QUIET.value, Options.DEBUG.value)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
 
-    # Validate options['chkfunval'].
+    # Validate options[Options.CHKFUNVAL.value].
     validated = False
-    if 'chkfunval' in option_fields:
-        if not isinstance(options['chkfunval'], (bool, np.bool_)):
+    if Options.CHKFUNVAL.value in option_fields:
+        if not isinstance(options[Options.CHKFUNVAL.value], (bool, np.bool_)):
             warn_message = \
-                '{}: invalid chkfunval flag; it should be True or False; it is set to {}.'.format(invoker, chkfunval)
+                '{}: invalid {} flag; it should be True or False; it is set to {}.'.format(invoker, Options.CHKFUNVAL.value, chkfunval)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
-        elif options['chkfunval'] and not options['debug']:
+        elif options[Options.CHKFUNVAL.value] and not options[Options.DEBUG.value]:
             warn_message = \
-                '{}: chkfunval = True but debug = False; chkfunval is set to false; set both flags to true to check ' \
-                'function values.'.format(invoker)
+                '{}: {} = True but {} = False; {} is set to false; set both flags to true to check ' \
+                'function values.'.format(invoker, Options.CHKFUNVAL.value, Options.DEBUG.value, Options.CHKFUNVAL.value)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         else:
             validated = True
 
-    if not validated:  # options['chkfunval'] has not got a valid value yet.
-        options['chkfunval'] = chkfunval
-    options['chkfunval'] = bool(options['chkfunval'])
-    if options['chkfunval']:
+    if not validated:  # options[Options.CHKFUNVAL.value] has not got a valid value yet.
+        options[Options.CHKFUNVAL.value] = chkfunval
+    options[Options.CHKFUNVAL.value] = bool(options[Options.CHKFUNVAL.value])
+    if options[Options.CHKFUNVAL.value]:
         warn_message = \
             "{}: checking whether fx = fun(x) and possibly conval = con(x) at exit, which will cost an extra " \
-            "function/constraint evaluation; set options['chkfunval'] = False to disable the check.".format(invoker)
+            "function/constraint evaluation; set options['{}'] = False to disable the check.".format(invoker, Options.CHKFUNVAL.value)
         warnings.warn(warn_message, Warning)
         list_warnings.append(warn_message)
 
@@ -2295,7 +2263,7 @@ def _scale_problem(fun, x0, lb, ub, constraints, list_warnings):
     # if any(scaling_factor != 1):
     #     warn_message = \
     #         "{}: problem scaled according to bound constraints; do this only if the bounds reflect the scaling of " \
-    #         "variables; if not, set options['scale']=False to disable scaling.".format(invoker)
+    #         "variables; if not, set options['{}']=False to disable scaling.".format(invoker, Options.SCALE.value)
     #     warnings.warn(warn_message, Warning)
     #     list_warnings.append(warn_message)
 
@@ -2363,10 +2331,10 @@ def _solver_selection(invoker, method, options, prob_info, list_warnings):
         raise ValueError('{}: UNEXPECTED ERROR: method should be a string.'.format(invoker))
 
     # Validate options.
-    option_fields = {'maxfev', 'rhobeg', 'rhoend'}
+    option_fields = {Options.MAXFEV.value, Options.RHOBEG.value, Options.RHOEND.value}
     if options is None or not isinstance(options, dict) or not (option_fields <= set(options.keys())) or \
-            not isinstance(options['maxfev'], scalar_types) or not isinstance(options['rhobeg'], scalar_types) or \
-            not isinstance(options['rhoend'], scalar_types):
+            not isinstance(options[Options.MAXFEV.value], scalar_types) or not isinstance(options[Options.RHOBEG.value], scalar_types) or \
+            not isinstance(options[Options.RHOEND.value], scalar_types):
         raise ValueError('{}: UNEXPECTED ERROR: options should be a valid dictionary.'.format(invoker))
 
     # Validate prob_info.
@@ -2394,10 +2362,10 @@ def _solver_selection(invoker, method, options, prob_info, list_warnings):
 
         # Define the solver depending on the problem characteristics.
         if ptype == 'unconstrained':
-            if 2 <= n <= 8 and options['maxfev'] >= (n + 1) * (n + 2) / 2:
-                solver = 'uobyqa'  # does not need options['npt']
-            elif options['maxfev'] <= n + 2:  # options['maxfev'] == n + 2
-                solver = 'cobyla'  # does not need options['npt']
+            if 2 <= n <= 8 and options[Options.MAXFEV.value] >= (n + 1) * (n + 2) / 2:
+                solver = 'uobyqa'  # does not need options[Options.NPT.value]
+            elif options[Options.MAXFEV.value] <= n + 2:  # options[Options.MAXFEV.value] == n + 2
+                solver = 'cobyla'  # does not need options[Options.NPT.value]
             else:
                 # Interestingly, we note in our tests that LINCOA may outperformed NEWUOA on unconstrained CUTEst
                 # problems when the dimension was not large (i.e., <= 50) or the precision requirement was not high
@@ -2406,45 +2374,45 @@ def _solver_selection(invoker, method, options, prob_info, list_warnings):
                 # the solver was intended to solve these problems.
                 solver = 'newuoa'
         elif ptype == 'bound-constrained':
-            if options['maxfev'] <= n + 2:
-                solver = 'cobyla'  # Does not need options['npt']
+            if options[Options.MAXFEV.value] <= n + 2:
+                solver = 'cobyla'  # Does not need options[Options.NPT.value]
             else:
                 solver = 'bobyqa'
         elif ptype == 'linearly-constrained':
-            if options['maxfev'] <= n + 2:
-                solver = 'cobyla'  # Does not need options['npt']
+            if options[Options.MAXFEV.value] <= n + 2:
+                solver = 'cobyla'  # Does not need options[Options.NPT.value]
             else:
                 solver = 'lincoa'
         elif ptype == 'nonlinearly-constrained':
-            solver = 'cobyla'  # does not need options['npt']
+            solver = 'cobyla'  # does not need options[Options.NPT.value]
         else:
             raise SystemError("{}: UNEXPECTED ERROR: unknown problem type '{}' received.".format(fun_name, ptype))
 
-    # Revise options['npt'] according to the selected solver.
+    # Revise options[Options.NPT.value] according to the selected solver.
     if solver.lower() in ['bobyqa', 'lincoa', 'newuoa'] and \
-            (np.isnan(options['npt']) or options['npt'] < n + 2 or
-             options['npt'] > min((n + 1)*(n + 2) // 2, options['maxfev'] - 1)):
-        options['npt'] = min(2 * n + 1, options['maxfev'] - 1)
-        if 'npt' in prob_info['user_options_fields']:
+            (np.isnan(options[Options.NPT.value]) or options[Options.NPT.value] < n + 2 or
+             options[Options.NPT.value] > min((n + 1)*(n + 2) // 2, options[Options.MAXFEV.value] - 1)):
+        options[Options.NPT.value] = min(2 * n + 1, options[Options.MAXFEV.value] - 1)
+        if Options.NPT.value in prob_info['user_options_fields']:
             warn_message = \
-                '{}: npt is set to {} according to the selected solver {}, which requires n+2 <= npt <= ' \
-                '(n+1)*(n+2)/2.'.format(invoker, options['npt'], solver)
+                '{}: {} is set to {} according to the selected solver {}, which requires n+2 <= {} <= ' \
+                '(n+1)*(n+2)/2.'.format(invoker, Options.NPT.value, options[Options.NPT.value], solver, Options.NPT.value)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
 
-    # Revise options['rhobeg'] and options['rhoend'] according to the selected solver.
+    # Revise options[Options.RHOBEG.value] and options[Options.RHOEND.value] according to the selected solver.
     # For the moment, only BOBYQA needs such a revision.
     if solver.lower() == 'bobyqa' and \
-            options['rhobeg'] > np.min(prob_info['refined_data']['ub'] - prob_info['refined_data']['lb']) / 2:
+            options[Options.RHOBEG.value] > np.min(prob_info['refined_data']['ub'] - prob_info['refined_data']['lb']) / 2:
         lb_mod, ub_mod = prob_info['refined_data']['lb'].copy(), prob_info['refined_data']['ub'].copy()
         lb_mod[np.logical_and(lb_mod > 0, np.isinf(lb_mod))] = -np.inf
         ub_mod[np.logical_and(ub_mod < 0, np.isinf(ub_mod))] = np.inf
-        options['rhobeg'] = max(eps, np.min(ub_mod - lb_mod) / 4)
-        options['rhoend'] = max(eps, min(0.1 * options['rhobeg'], options['rhoend']))
-        if 'rhobeg' in prob_info['user_options_fields'] or 'rhoend' in prob_info['user_options_fields']:
+        options[Options.RHOBEG.value] = max(eps, np.min(ub_mod - lb_mod) / 4)
+        options[Options.RHOEND.value] = max(eps, min(0.1 * options[Options.RHOBEG.value], options[Options.RHOEND.value]))
+        if Options.RHOBEG.value in prob_info['user_options_fields'] or Options.RHOEND.value in prob_info['user_options_fields']:
             warn_message = \
-                '{}: rhobeg is set to {} and rhoend to {} according to the selected solver bobyqa, which requires ' \
-                'rhoend <= rhobeg <= min(ub-lb)/2.'.format(invoker, options['rhobeg'], options['rhoend'])
+                '{}: {} is set to {} and {} to {} according to the selected solver bobyqa, which requires ' \
+                '{} <= {} <= min(ub-lb)/2.'.format(invoker, Options.RHOBEG.value, options[Options.RHOBEG.value], Options.RHOEND.value, options[Options.RHOEND.value], Options.RHOEND.value, Options.RHOBEG.value)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
 
@@ -2474,52 +2442,52 @@ def _pre_rhobeg_x0(invoker, x0, lb, ub, user_options_fields, options, list_warni
         raise TypeError('{}: UNEXPECTED ERROR: the user defined option fields should be a list.'.format(invoker))
 
     # Validate options.
-    option_fields = {'honour_x0', 'rhobeg', 'rhoend'}
+    option_fields = {Options.HONOUR_X0.value, Options.RHOBEG.value, Options.RHOEND.value}
     if options is None or not isinstance(options, dict) or not (option_fields <= set(options.keys())) or \
-            not isinstance(options['honour_x0'], (bool, np.bool_)) or \
-            not isinstance(options['rhobeg'], scalar_types) or not isinstance(options['rhoend'], scalar_types):
+            not isinstance(options[Options.HONOUR_X0.value], (bool, np.bool_)) or \
+            not isinstance(options[Options.RHOBEG.value], scalar_types) or not isinstance(options[Options.RHOEND.value], scalar_types):
         raise ValueError('{}: UNEXPECTED ERROR: options should be a valid dictionary.'.format(invoker))
 
     # Validate list_warnings.
     if not hasattr(list_warnings, '__len__'):
         raise ValueError('{}: UNEXPECTED ERROR: list_warnings should be a list.'.format(invoker))
 
-    if options['honour_x0']:
+    if options[Options.HONOUR_X0.value]:
         # In this case, we respect the user-defined x0 and revise rhobeg.
-        rhobeg_old = options['rhobeg']
+        rhobeg_old = options[Options.RHOBEG.value]
         lbx = np.logical_and(np.logical_or(np.logical_not(np.isinf(lb)), lb > 0),
                              x0 - lb <= eps * np.max(np.r_[1, np.abs(lb)]))
         nlbx = np.logical_not(lbx)
         ubx = np.logical_and(np.logical_or(np.logical_not(np.isinf(ub)), ub < 0),
                              x0 - ub >= -eps * np.max(np.r_[1, np.abs(ub)]))
         nubx = np.logical_not(ubx)
-        options['rhobeg'] = max(eps, np.min(np.r_[options['rhobeg'], x0[nlbx] - lb[nlbx], ub[nubx] - x0[nubx]]))
-        options['rhoend'] = min(options['rhoend'], options['rhobeg'])
+        options[Options.RHOBEG.value] = max(eps, np.min(np.r_[options[Options.RHOBEG.value], x0[nlbx] - lb[nlbx], ub[nubx] - x0[nubx]]))
+        options[Options.RHOEND.value] = min(options[Options.RHOEND.value], options[Options.RHOBEG.value])
         x0[lbx] = lb[lbx]
         x0[ubx] = ub[ubx]
-        if rhobeg_old - options['rhobeg'] > eps * max(1, rhobeg_old):
+        if rhobeg_old - options[Options.RHOBEG.value] > eps * max(1, rhobeg_old):
             # If the user does not specify rhobeg, no warning should be raised.
-            options['rhoend'] = max(eps, min(options['rhoend'], .1 * options['rhobeg']))
-            if 'rhobeg' in user_options_fields or 'rhoend' in user_options_fields:
+            options[Options.RHOEND.value] = max(eps, min(options[Options.RHOEND.value], .1 * options[Options.RHOBEG.value]))
+            if Options.RHOBEG.value in user_options_fields or Options.RHOEND.value in user_options_fields:
                 warn_message = \
-                    '{}: rhobeg is revised so that the distance between x0 and the inactive bounds is at least ' \
-                    'rhobeg.'.format(invoker)
+                    '{}: {} is revised so that the distance between x0 and the inactive bounds is at least ' \
+                    '{}.'.format(invoker, Options.RHOBEG.value, Options.RHOBEG.value)
                 warnings.warn(warn_message, Warning)
                 list_warnings.append(warn_message)
     else:
         x0_old = x0.copy()
-        lbx = x0 <= lb + options['rhobeg'] / 2
-        lbx_plus = np.logical_and(x0 > lb + options['rhobeg'] / 2, x0 < lb + options['rhobeg'])
-        ubx = x0 >= ub - options['rhobeg'] / 2
-        ubx_minus = np.logical_and(x0 < ub - options['rhobeg'] / 2, x0 > ub - options['rhobeg'])
+        lbx = x0 <= lb + options[Options.RHOBEG.value] / 2
+        lbx_plus = np.logical_and(x0 > lb + options[Options.RHOBEG.value] / 2, x0 < lb + options[Options.RHOBEG.value])
+        ubx = x0 >= ub - options[Options.RHOBEG.value] / 2
+        ubx_minus = np.logical_and(x0 < ub - options[Options.RHOBEG.value] / 2, x0 > ub - options[Options.RHOBEG.value])
         x0[lbx] = lb[lbx]
-        x0[lbx_plus] = lb[lbx_plus] +options['rhobeg']
-        x0[ubx_minus] = ub[ubx_minus] - options['rhobeg']
+        x0[lbx_plus] = lb[lbx_plus] +options[Options.RHOBEG.value]
+        x0[ubx_minus] = ub[ubx_minus] - options[Options.RHOBEG.value]
         x0[ubx] = ub[ubx]
         if np.linalg.norm(x0_old - x0) > eps * max(1, np.linalg.norm(x0_old)):
             warn_message = \
-                "{}: x0 is revised so that the distance between x0 and the inactive bounds is at least rhobeg; set " \
-                "options['honour_x0']=True if you prefer to keep x0.".format(invoker)
+                "{}: x0 is revised so that the distance between x0 and the inactive bounds is at least {}; set " \
+                "options[Options.HONOUR_X0.value]=True if you prefer to keep x0.".format(invoker, Options.RHOBEG.value)
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
 
@@ -2527,13 +2495,13 @@ def _pre_rhobeg_x0(invoker, x0, lb, ub, user_options_fields, options, list_warni
 
 
 def _pre_npt_elimination(invoker, n, user_options_fields, options, list_warnings):
-    npt_old = options['npt']
-    options['npt'] = max(min(npt_old, (n + 1) * (n + 2) // 2), n + 2)
+    npt_old = options[Options.NPT.value]
+    options[Options.NPT.value] = max(min(npt_old, (n + 1) * (n + 2) // 2), n + 2)
 
-    if npt_old != options['npt'] and 'npt' in user_options_fields:
+    if npt_old != options[Options.NPT.value] and Options.NPT.value in user_options_fields:
         warn_message = \
-            '{}: the dimension of the searching space has been reduced, and npt must be revised to satisfy the ' \
-            'requirements.'.format(invoker)
+            '{}: the dimension of the searching space has been reduced, and {} must be revised to satisfy the ' \
+            'requirements.'.format(invoker, Options.NPT.value)
         warnings.warn(warn_message, Warning)
         list_warnings.append(warn_message)
 
@@ -2824,7 +2792,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     fhist: ndarray, shape (m,)
         The history of every objective function evaluations.
     options: dict, optional
-        The same as in pdfo. It has been preprocessed by prepdfo. `options['quiet']` will be used.
+        The same as in pdfo. It has been preprocessed by prepdfo. `options[Options.QUIET.value]` will be used.
     prob_info: dict
         An internal dictionary containing the problem information.
     constrviolation: np.float64, optional
@@ -2846,7 +2814,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
 
     Dedicated to the late Professor M. J. D. Powell FRS (1936--2015).
     """
-    # With extreme barrier (implemented when options['classical']=False), all the function values that are NaN or larger
+    # With extreme barrier (implemented when options[Options.CLASSICAL.value]=False), all the function values that are NaN or larger
     # than hugefun are replaced by hugefun; all the constraint values that are NaN or larger than hugecon are replaced
     # by hugecon. hugefun and hugecon are defined in pdfoconst.F, and can be obtained by gethuge.
     try:
@@ -2949,11 +2917,11 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
         return OptimizeResult(**output)
 
     # If the solver is not called by pdfo (can be pdfo directly), perform the post-processing.
-    option_fields = {'quiet', 'debug', 'classical', 'chkfunval'}
+    option_fields = {Options.QUIET.value, Options.DEBUG.value, Options.CLASSICAL.value, Options.CHKFUNVAL.value}
     if options is None or not isinstance(options, dict) or not (option_fields <= set(options.keys())) or \
-            not isinstance(options['quiet'], (bool, np.bool_)) or not isinstance(options['debug'], (bool, np.bool_)) or \
-            not isinstance(options['classical'], (bool, np.bool_)) or \
-            not isinstance(options['chkfunval'], (bool, np.bool_)):
+            not isinstance(options[Options.QUIET.value], (bool, np.bool_)) or not isinstance(options[Options.DEBUG.value], (bool, np.bool_)) or \
+            not isinstance(options[Options.CLASSICAL.value], (bool, np.bool_)) or \
+            not isinstance(options[Options.CHKFUNVAL.value], (bool, np.bool_)):
         raise ValueError('{}: UNEXPECTED ERROR: options should be a valid dictionary.'.format(invoker))
 
     # Validate prob_info.
@@ -2994,7 +2962,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     prob_info_c = dict(prob_info)
 
     # Manage the extreme barriers.
-    if not options['classical']:
+    if not options[Options.CLASSICAL.value]:
         if ((fhist_c > hugefun).any() or np.isnan(fhist_c).any()) and not prob_info_c['infeasible'] and \
                 not prob_info_c['nofreex']:
             raise ValueError(
@@ -3162,14 +3130,14 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
             'Return from {} because a trust region step has failed to reduce the quadratic model.'.format(method)
     elif exitflag_c == ExitStatus.MAX_EVAL_WARNING.value:
         output['message'] = \
-            'Return from {} because the objective function has been evaluated maxfev times.'.format(method)
+            'Return from {} because the objective function has been evaluated {} times.'.format(method, Options.MAXFEV.value)
     elif exitflag_c == ExitStatus.SMALL_DENOMINATOR_WARNING.value:
         output['message'] = 'Return from {} because of much cancellation in a denominator.'.format(method)
     elif exitflag_c == ExitStatus.NPT_ERROR.value:
-        output['message'] = 'Return from {} because npt is not in the required interval.'.format(method)
+        output['message'] = 'Return from {} because {} is not in the required interval.'.format(method, Options.NPT.value)
     elif exitflag_c == ExitStatus.BOUND_ERROR.value:
         output['message'] = \
-            'Return from {} because one of the differences xu(i) - xl(i) is less than 2*rhobeg.'.format(method)
+            'Return from {} because one of the differences xu(i) - xl(i) is less than 2*{}.'.format(method, Options.RHOBEG.value)
     elif exitflag_c == ExitStatus.DAMAGE_ROUNDING_ERROR.value:
         output['message'] = 'Return from {} because rounding errors are becoming damaging.'.format(method)
     elif exitflag_c == ExitStatus.X_ROUNDING_ERROR.value:
@@ -3179,7 +3147,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     elif exitflag_c == ExitStatus.N_ERROR.value:
         output['message'] = 'Return from {} because n should not be less than 2.'.format(method)
     elif exitflag_c == ExitStatus.MAXFEV_ERROR.value:
-        output['message'] = 'Return from {} because maxfev is less than npt+1.'.format(method)
+        output['message'] = 'Return from {} because {} is less than {}+1.'.format(method, Options.MAXFEV.value, Options.NPT.value)
     elif exitflag_c == ExitStatus.TRIVIAL_CONSTRAINT_ERROR.value:
         output['message'] = 'Return from {} because the gradient of a constraint is zero.'.format(method)
     elif exitflag_c == ExitStatus.FIXED_SUCCESS.value:
@@ -3235,7 +3203,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     # More careful checks about fx, constrviolation, fhist and chist.
     # We do this only if the coe is in debug mode but not in classical mode. The classical mode cannot pass these
     # checks.
-    if options['debug'] and not options['classical']:
+    if options[Options.DEBUG.value] and not options[Options.CLASSICAL.value]:
         if 'raw_data' not in prob_info_keys:
             raise ValueError("{}: UNEXPECTED ERROR: 'raw_data' should be a field of prob_info".format(invoker))
 
@@ -3315,7 +3283,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
                     '{}: UNEXPECTED ERROR: {} returns a CONSTRVIOLATION that does not match '
                     'chist.'.format(invoker, method))
 
-        if options['chkfunval']:
+        if options[Options.CHKFUNVAL.value]:
             # Check whether fx = fun(x).
             if prob_info_c['raw_data']['objective'] is not None:
                 fun_x = prob_info_c['raw_data']['objective'](x_c, *prob_info_c['raw_data']['args'])
@@ -3323,7 +3291,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
                 fun_x = np.float64(0)
             if np.isnan(fun_x) or (fun_x > hugefun):
                 fun_x = hugefun
-                # Due to extreme barrier (implemented when options['classical']=False), all the function values that are
+                # Due to extreme barrier (implemented when options[Options.CLASSICAL.value]=False), all the function values that are
                 # NaN or larger than hugefun are replaced by hugefun.
 
             # It seems that COBYLA can return fx~=fun(x) due to rounding errors. Moreover, in the general case, the
@@ -3453,7 +3421,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
 
     # Build the result and return.
     result = _build_result(output)
-    if not options['quiet']:
+    if not options[Options.QUIET.value]:
         print(output['message'], end='\n\n')
     return result
 

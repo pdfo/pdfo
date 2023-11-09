@@ -64,42 +64,40 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
         The options passed to the solver. Accepted options are:
 
             rhobeg : float, optional
-                Initial value of the trust region radius, which should be a
-                positive scalar. Typically, it should be in the order of one
-                tenth of the greatest expected change to the variables.
+                Initial value of the trust-region radius. Typically, it should
+                be in the order of one tenth of the greatest expected change to
+                the variables.
             rhoend : float, optional
-                Final value of the trust region radius, which should be a
+                Final value of the trust-region radius, which should be a
                 positive scalar. It should indicate the accuracy required in the
                 final values of the variables.
             maxfev : int, optional
                 Maximum number of function evaluations.
-            npt : int, optional
-                Number of interpolation points for NEWUOA, BOBYQA, and LINCOA.
             ftarget : float, optional
                 Target value of the objective function. The optimization
                 procedure is terminated when the objective function value of a
                 nearly feasible point is less than or equal to this target.
-            quiet : bool, optional
-                Whether the interface is quiet. If it is set to ``True``, the
-                output message will not be printed. This flag does not interfere
-                with the warning and error printing.
+            npt : int, optional
+                Number of interpolation points for NEWUOA, BOBYQA, and LINCOA.
+            quiet: bool, optional
+                Whether to suppress the output messages.
             scale : bool, optional
                 Whether to scale the problem according to the bound constraints.
-            honour_x0 : bool, optional
-                Whether to respect the user-defined initial guess. It is used
-                only if the solver is BOBYQA.
             eliminate_lin_eq : bool, optional
-                Whether the linear equality constraints should be eliminated.
+                Whether to eliminate linear equality constraints.
+            honour_x0 : bool, optional
+                Whether to honour the initial guess. It is only used by BOBYQA.
             classical : bool, optional
-                Whether to call the classical Powell code or not. It is not
-                encouraged in production.
+                Whether to use the classical version of Powell's methods. It is
+                highly discourared in production.
             debug : bool, optional
-                Debugging flag. It is not encouraged in production.
+                Whether to perform debugging checks. It is highly discourared in
+                production.
             chkfunval : bool, optional
-                Flag used when debugging. In debug mode, an extra
-                function/constraint evaluation is performed to check whether the
-                returned values of the objective and constraint functions match
-                the final iterate.
+                Whether to check the value of the objective and constraint
+                functions at the solution. This is only done in the debug mode,
+                and requires one extra function evalution. It is highly
+                discourared in production.
 
     Returns
     -------
