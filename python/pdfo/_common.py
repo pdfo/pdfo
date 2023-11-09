@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import division, print_function, absolute_import
-
 import sys
 import warnings
 from inspect import stack
@@ -3453,10 +3451,41 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     if len(warning_list) > 0:
         output['warnings'] = warning_list
 
+    # Build the result and return.
+    result = _build_result(output)
     if not options['quiet']:
         print(output['message'], end='\n\n')
+    return result
 
-    return OptimizeResult(**output)
+
+def _build_result(output):
+    """Build the result of the optimization."""
+    result = OptimizeResult()
+    result.message=output['message']
+    result.success=output['success']
+    result.status=output['status']
+    result.fun=output['fun']
+    result.x=output['x']
+    if 'constr_value' in output:
+        result.constraints = output['constr_value']
+    if 'constrviolation' in output:
+        result.maxcv = output['constrviolation']
+    result.nfev = output['nfev']
+    if 'fhist' in output:
+        result.fun_history = output['fhist']
+    if 'chist' in output:
+        result.maxcv_history = output['chist']
+    if 'method' in output:
+        result.method = output['method']
+    if 'InfeasibleBound' in output:
+        result.infeasible_bounds = output['InfeasibleBound']
+    if 'InfeasibleLinear' in output:
+        result.infeasible_linear_constraint = output['InfeasibleLinear']
+    if 'InfeasibleNonlinear' in output:
+        result.infeasible_nonlinear_constraint = output['InfeasibleNonlinear']
+    if 'warnings' in output:
+        result.warnings = output['warnings']
+    return result
 
 
 def import_error_so(missing_file=None):

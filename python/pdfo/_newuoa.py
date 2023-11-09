@@ -15,25 +15,25 @@ def newuoa(fun, x0, args=(), options=None):
 
     Parameters
     ----------
-    fun: callable
+    fun : callable
         Objective function to be minimized.
 
             ``fun(x, *args) -> float``
 
         where ``x`` is an array with shape (n,) and `args` is a tuple.
-    x0: ndarray, shape (n,)
+    x0 : array_like, shape (n,)
         Initial guess.
-    args: tuple, optional
-        Parameters of the objective function. For example,
+    args : tuple, optional
+        Extra arguments of the objective function. For example,
 
-            ``pdfo(fun, x0, args, ...)``
+            ``newuoa(fun, x0, args, ...)``
 
         is equivalent to
 
-            ``pdfo(lambda x: fun(x, *args), x0, ...)``
+            ``newuoa(lambda x: fun(x, *args), x0, ...)``
 
-    options: dict, optional
-        The options passed to the solver. It contains optionally:
+    options : dict, optional
+        The options passed to the solver. Accepted options are:
 
             rhobeg: float, optional
                 Initial value of the trust region radius, which should be a
@@ -77,9 +77,31 @@ def newuoa(fun, x0, args=(), options=None):
 
     Returns
     -------
-    res: OptimizeResult
-        The results of the solver. Check `OptimizeResult` for a description of
-        the attributes.
+    res : `scipy.optimize.OptimizeResult`
+        Result of the optimization procedure, with the following fields:
+
+            message : str
+                Description of the cause of the termination.
+            success : bool
+                Whether the optimization procedure terminated successfully.
+            status : int
+                Termination status of the optimization procedure.
+            fun : float
+                Objective function value at the solution point.
+            x : `numpy.ndarray`, shape (n,)
+                Solution point.
+            nfev : int
+                Number of function evaluations.
+            fun_history : `numpy.ndarray`, shape (nfev,)
+                History of the objective function values.
+            method : str
+                Name of the Powell method used.
+
+        If warnings are raised during the optimization procedure, the following
+        field is also returned:
+
+            warnings : list
+                A list of the warnings raised during the optimization procedure.
 
     References
     ----------
@@ -92,11 +114,11 @@ def newuoa(fun, x0, args=(), options=None):
 
     See also
     --------
-    bobyqa : Bounded Optimization BY Quadratic Approximations.
-    cobyla : Constrained Optimization BY Linear Approximations.
-    lincoa : LINearly Constrained Optimization Algorithm.
-    uobyqa : Unconstrained Optimization BY Quadratic Approximation.
     pdfo : Powell's Derivative-Free Optimization solvers.
+    uobyqa : Unconstrained Optimization BY Quadratic Approximation.
+    bobyqa : Bounded Optimization BY Quadratic Approximations.
+    lincoa : LINearly Constrained Optimization Algorithm.
+    cobyla : Constrained Optimization BY Linear Approximations.
 
     Examples
     --------

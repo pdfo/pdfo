@@ -43,9 +43,8 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
         #. An instance of `scipy.optimize.Bounds`.
         #. An array with shape (n, 2). The bound constraints for ``x[i]`` are
            ``bounds[i, 0] <= x[i] <= bounds[i, 1]``. Set ``bounds[i, 0]`` to
-           :math:`-\infty` or ``None`` if there is no lower bound, and set
-           ``bounds[i, 1]`` to :math:`\infty` or ``None`` if there is no upper
-           bound.
+           :math:`-\infty` if there is no lower bound, and set ``bounds[i, 1]``
+           to :math:`\infty` if there is no upper bound.
 
     constraints : {dict, `scipy.optimize.LinearConstraint`, `scipy.optimize.NonlinearConstraint`, list}, optional
         Constraints of the problem. It can be one of the cases below.
@@ -57,9 +56,9 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
             fun : callable
                 Constraint function.
 
-        #. An instance of `scipy.optimize.LinearConstraint` or
-           `scipy.optimize.NonlinearConstraint`.
-        #. A list, each of whose elements are described in 1 and 2.
+        #. An instance of `scipy.optimize.LinearConstraint`.
+        #. An instance of `scipy.optimize.NonlinearConstraint`.
+        #. A list, each of whose elements are described in 1, 2, and 3.
 
     options : dict, optional
         The options passed to the solver. Accepted options are:
@@ -113,12 +112,51 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
                 Whether the optimization procedure terminated successfully.
             status : int
                 Termination status of the optimization procedure.
-            x : `numpy.ndarray`, shape (n,)
-                Solution point.
             fun : float
                 Objective function value at the solution point.
+            x : `numpy.ndarray`, shape (n,)
+                Solution point.
+            nfev : int
+                Number of function evaluations.
+            fun_history : `numpy.ndarray`, shape (nfev,)
+                History of the objective function values.
+            method : str
+                Name of the Powell method used.
 
-        TODO: complete the docstring
+        For constrained problems, the following fields are also returned:
+
+            maxcv : float
+                Maximum constraint violation at the solution point.
+            maxcv_history : `numpy.ndarray`, shape (nfev,)
+                History of the maximum constraint violation.
+
+        For linearly and nonlinearly constrained problems, the following field
+        is also returned:
+
+            constraints : {`numpy.ndarray`, list}
+                The values of the constraints at the solution point. If a single
+                constraint is passed, i.e., if the `constraints` argument is
+                either a dict, a `scipy.optimize.LinearConstraint`, or a
+                `scipy.optimize.NonlinearConstraint`, then the returned value is
+                a `numpy.ndarray`. Otherwise, it is a list of `numpy.ndarray`,
+                each of whose element corresponds to a constraint.
+
+        If the optimization procedure terminated because the constraints are
+        infeasible (i.e., when the exit status is -4), the following fields may
+        also be returned:
+
+            infeasible_bounds : `numpy.ndarray`
+                Indices of the bounds that are infeasible.
+            infeasible_linear_constraints : `numpy.ndarray`
+                Indices of the linear constraints that are infeasible.
+            infeasible_nonlinear_constraints : `numpy.ndarray`
+                Indices of the nonlinear constraints that are infeasible.
+
+        If warnings are raised during the optimization procedure, the following
+        field is also returned:
+
+            warnings : list
+                A list of the warnings raised during the optimization procedure.
 
     See also
     --------
@@ -162,13 +200,19 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
         import numpy as np
         np.set_printoptions(precision=1, suppress=True)
 
+    >>> import numpy as np
     >>> from pdfo import pdfo
     >>> from scipy.optimize import Bounds, LinearConstraint, NonlinearConstraint
     >>>
+    >>> # Build the constraints.
     >>> bounds = Bounds([0, 0.5], [2, 3])
     >>> linear_constraints = LinearConstraint([1, 1], 0, 1)
-    >>> nonlinear_constraints = NonlinearConstraint(lambda x: x[0]**2 - x[1], None, 0)
-    >>> res = pdfo(lambda x: x[0]**2 + x[1]**2, [0, 1], bounds=bounds, constraints=[linear_constraints, nonlinear_constraints], options={'maxfev': 200})
+    >>> nonlinear_constraints = NonlinearConstraint(lambda x: x[0]**2 - x[1], -np.inf, 0)
+    >>> constraints = [linear_constraints, nonlinear_constraints]
+    >>>
+    >>> # Solve the problem.
+    >>> options = {'maxfev': 200}
+    >>> res = pdfo(lambda x: x[0]**2 + x[1]**2, [0, 1], bounds=bounds, constraints=constraints, options=options)
     >>> res.x
     array([0. , 0.5])
     """

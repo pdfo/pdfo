@@ -58,7 +58,7 @@ class TestPDFO(unittest.TestCase):
                 print('\nTest {}:\n'.format(irun))
             for i_type, p_type in enumerate(self.type_list):
                 if not self.QUIET:
-                    print('\nTesting {} problems ...'.format(p_type.replace('-', ' ')))
+                    print('\nTesting {} problems...'.format(p_type.replace('-', ' ')))
                     if not self.RELEASE:
                         print()
 
@@ -119,7 +119,7 @@ class TestPDFO(unittest.TestCase):
                             self.assertLessEqual(np.linalg.norm(global_res.x - x),  tol)
                             self.assertLessEqual((fx - fopt) / max(1., abs(fopt)),  tol)
                 if not self.QUIET:
-                    print('Succeed.')
+                    print('Success.')
 
     @staticmethod
     def chrosen(x):
