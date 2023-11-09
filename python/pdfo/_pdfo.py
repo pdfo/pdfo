@@ -89,15 +89,15 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
                 Whether to honour the initial guess. It is only used by BOBYQA.
             classical : bool, optional
                 Whether to use the classical version of Powell's methods. It is
-                highly discourared in production.
+                highly discouraged in production.
             debug : bool, optional
-                Whether to perform debugging checks. It is highly discourared in
+                Whether to perform debugging checks. It is highly discouraged in
                 production.
             chkfunval : bool, optional
                 Whether to check the value of the objective and constraint
                 functions at the solution. This is only done in the debug mode,
-                and requires one extra function evalution. It is highly
-                discourared in production.
+                and requires one extra function evaluation. It is highly
+                discouraged in production.
 
     Returns
     -------

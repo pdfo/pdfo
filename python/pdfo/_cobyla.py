@@ -80,15 +80,15 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
                 Whether to eliminate linear equality constraints.
             classical : bool, optional
                 Whether to use the classical version of Powell's method. It is
-                highly discourared in production.
+                highly discouraged in production.
             debug : bool, optional
-                Whether to perform debugging checks. It is highly discourared in
+                Whether to perform debugging checks. It is highly discouraged in
                 production.
             chkfunval : bool, optional
                 Whether to check the value of the objective and constraint
                 functions at the solution. This is only done in the debug mode,
-                and requires one extra function evalution. It is highly
-                discourared in production.
+                and requires one extra function evaluation. It is highly
+                discouraged in production.
 
     Returns
     -------
