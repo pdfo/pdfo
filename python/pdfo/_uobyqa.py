@@ -104,6 +104,9 @@ def uobyqa(fun, x0, args=(), options=None):
     ----------
     .. [1] M. J. D. Powell. UOBYQA: unconstrained optimization by quadratic
        approximation. *Math. Program.*, 92:555--582, 2002.
+    .. [2] T. M. Ragonneau and Z. Zhang. PDFO: a cross-platform package for
+       Powell's derivative-free optimization solvers.
+       arXiv:`2302.13246 [math.OC] <https://arxiv.org/abs/2302.13246>`_, 2023.
 
     See also
     --------
@@ -115,9 +118,10 @@ def uobyqa(fun, x0, args=(), options=None):
 
     Examples
     --------
-    The following example shows how to solve a simple unconstrained optimization
-    problem. The problem considered below should be solved with a
-    derivative-based method. It is used here only as an illustration.
+    The following example shows how to solve a simple optimization problem using
+    `uobyqa`. In practice, the  problem considered below should be solved with a
+    derivative-based method as it is a smooth problem for which the derivatives
+    are known. We solve it here using `uobyqa` only as an illustration.
 
     We consider the 2-dimensional problem
 
@@ -134,6 +138,8 @@ def uobyqa(fun, x0, args=(), options=None):
         np.set_printoptions(precision=1, suppress=True)
 
     >>> from pdfo import uobyqa
+    >>>
+    >>> # Solve the problem.
     >>> options = {'maxfev': 200}
     >>> res = uobyqa(lambda x: x[0]**2 + x[1]**2, [0, 1], options=options)
     >>> res.x
@@ -149,6 +155,9 @@ def uobyqa(fun, x0, args=(), options=None):
 
     from ._common import prepdfo, postpdfo
     from ._settings import ExitStatus
+
+    # This method is deprecated. Warn the user.
+    warnings.warn('The `uobyqa` function is deprecated. Use the `pdfo` function with the argument `method=\'uobyqa\'` to use the UOBYQA method.', DeprecationWarning)
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:

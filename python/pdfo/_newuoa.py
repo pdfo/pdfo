@@ -107,10 +107,13 @@ def newuoa(fun, x0, args=(), options=None):
     ----------
     .. [1] M. J. D. Powell. The NEWUOA software for unconstrained optimization
        without derivatives. In G. Di Pillo and M. Roma, editors, *Large-Scale
-       Nonlinear Optimization*, volume 83 of Nonconvex Optimization and Its
-       Applications, 255--297. Springer, 2006.
+       Nonlinear Optimization*, volume 83 of *Nonconvex Optimization and Its
+       Applications*, pages 255--297, Boston, MA, USA, 2006. Springer.
     .. [2] M. J. D. Powell. Developments of NEWUOA for minimization without
        derivatives. *IMA J. Numer. Anal.*, 28:649--664, 2008.
+    .. [3] T. M. Ragonneau and Z. Zhang. PDFO: a cross-platform package for
+       Powell's derivative-free optimization solvers.
+       arXiv:`2302.13246 [math.OC] <https://arxiv.org/abs/2302.13246>`_, 2023.
 
     See also
     --------
@@ -122,9 +125,10 @@ def newuoa(fun, x0, args=(), options=None):
 
     Examples
     --------
-    The following example shows how to solve a simple unconstrained optimization
-    problem. The problem considered below should be solved with a
-    derivative-based method. It is used here only as an illustration.
+    The following example shows how to solve a simple optimization problem using
+    `newuoa`. In practice, the  problem considered below should be solved with a
+    derivative-based method as it is a smooth problem for which the derivatives
+    are known. We solve it here using `newuoa` only as an illustration.
 
     We consider the 2-dimensional problem
 
@@ -141,6 +145,8 @@ def newuoa(fun, x0, args=(), options=None):
         np.set_printoptions(precision=1, suppress=True)
 
     >>> from pdfo import newuoa
+    >>>
+    >>> # Solve the problem.
     >>> options = {'maxfev': 200}
     >>> res = newuoa(lambda x: x[0]**2 + x[1]**2, [0, 1], options=options)
     >>> res.x
@@ -156,6 +162,9 @@ def newuoa(fun, x0, args=(), options=None):
 
     from ._common import prepdfo, postpdfo
     from ._settings import ExitStatus
+
+    # This method is deprecated. Warn the user.
+    warnings.warn('The `newuoa` function is deprecated. Use the `pdfo` function with the argument `method=\'newuoa\'` to use the NEWUOA method.', DeprecationWarning)
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:

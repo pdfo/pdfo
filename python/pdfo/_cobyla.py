@@ -166,7 +166,10 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
     .. [1] M. J. D. Powell. A direct search optimization method that models the
        objective and constraint functions by linear interpolation. In S. Gomez
        and J. P. Hennart, editors, *Advances in Optimization and Numerical
-       Analysis*, 51--67. Springer, 1994.
+       Analysis*, pages 51–67, Dordrecht, The Netherlands, 1994. Springer.
+    .. [2] T. M. Ragonneau and Z. Zhang. PDFO: a cross-platform package for
+       Powell's derivative-free optimization solvers.
+       arXiv:`2302.13246 [math.OC] <https://arxiv.org/abs/2302.13246>`_, 2023.
 
     See also
     --------
@@ -178,9 +181,10 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
 
     Examples
     --------
-    The following example shows how to solve a simple nonlinearly constrained
-    optimization problem. The problem considered below should be solved with a
-    derivative-based method. It is used here only as an illustration.
+    The following example shows how to solve a simple optimization problem using
+    `cobyla`. In practice, the  problem considered below should be solved with a
+    derivative-based method as it is a smooth problem for which the derivatives
+    are known. We solve it here using `cobyla` only as an illustration.
 
     We consider the 2-dimensional problem
 
@@ -202,17 +206,21 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
         import numpy as np
         np.set_printoptions(precision=1, suppress=True)
 
-    >>> from pdfo import Bounds, LinearConstraint, NonlinearConstraint, cobyla
+    >>> import numpy as np
+    >>> from pdfo import pdfo
+    >>> from scipy.optimize import Bounds, LinearConstraint, NonlinearConstraint
+    >>>
+    >>> # Build the constraints.
     >>> bounds = Bounds([0, 0.5], [2, 3])
     >>> linear_constraints = LinearConstraint([1, 1], 0, 1)
-    >>> nonlinear_constraints = NonlinearConstraint(lambda x: x[0]**2 - x[1], None, 0)
+    >>> nonlinear_constraints = NonlinearConstraint(lambda x: x[0]**2 - x[1], -np.inf, 0)
+    >>> constraints = [linear_constraints, nonlinear_constraints]
+    >>>
+    >>> # Solve the problem.
     >>> options = {'maxfev': 200}
-    >>> res = cobyla(lambda x: x[0]**2 + x[1]**2, [0, 1], bounds=bounds, constraints=[linear_constraints, nonlinear_constraints], options=options)
+    >>> res = pdfo(lambda x: x[0]**2 + x[1]**2, [0, 1], bounds=bounds, constraints=constraints, options=options)
     >>> res.x
     array([0. , 0.5])
-
-    Note that `cobyla` can also be used to solve unconstrained,
-    bound-constrained, and linearly constrained problems.
     """
     try:
         from .gethuge import gethuge
@@ -224,6 +232,9 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
 
     from ._common import prepdfo, _augmented_linear_constraint, postpdfo
     from ._settings import ExitStatus
+
+    # This method is deprecated. Warn the user.
+    warnings.warn('The `cobyla` function is deprecated. Use the `pdfo` function with the argument `method=\'cobyla\'` to use the COBYLA method.', DeprecationWarning)
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:

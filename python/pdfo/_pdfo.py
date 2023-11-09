@@ -172,7 +172,6 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
        Powell's derivative-free optimization solvers.
        arXiv:`2302.13246 [math.OC] <https://arxiv.org/abs/2302.13246>`_, 2023.
 
-
     Examples
     --------
     The following example shows how to solve a simple optimization problem using

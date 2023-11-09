@@ -140,7 +140,10 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
     .. [1] M. J. D. Powell. The BOBYQA algorithm for bound constrained
        optimization without derivatives. Technical Report DAMTP 2009/NA06,
        Department of Applied Mathematics and Theoretical Physics, University of
-       Cambridge, 2009.
+       Cambridge, Cambridge, UK, 2009.
+    .. [2] T. M. Ragonneau and Z. Zhang. PDFO: a cross-platform package for
+       Powell's derivative-free optimization solvers.
+       arXiv:`2302.13246 [math.OC] <https://arxiv.org/abs/2302.13246>`_, 2023.
 
     See also
     --------
@@ -152,9 +155,10 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
 
     Examples
     --------
-    The following example shows how to solve a simple bound-constrained
-    optimization problem. The problem considered below should be solved with a
-    derivative-based method. It is used here only as an illustration.
+    The following example shows how to solve a simple optimization problem using
+    `bobyqa`. In practice, the  problem considered below should be solved with a
+    derivative-based method as it is a smooth problem for which the derivatives
+    are known. We solve it here using `bobyqa` only as an illustration.
 
     We consider the 2-dimensional problem
 
@@ -174,14 +178,17 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
         import numpy as np
         np.set_printoptions(precision=1, suppress=True)
 
-    >>> from pdfo import Bounds, bobyqa
+    >>> from pdfo import bobyqa
+    >>> from scipy.optimize import Bounds
+    >>>
+    >>> # Build the constraints.
     >>> bounds = Bounds([0, 0.5], [2, 3])
+    >>>
+    >>> # Solve the problem.
     >>> options = {'maxfev': 200}
     >>> res = bobyqa(lambda x: x[0]**2 + x[1]**2, [0, 1], bounds=bounds, options=options)
     >>> res.x
     array([0. , 0.5])
-
-    Note that `bobyqa` can also be used to solve unconstrained problems.
     """
     try:
         from .gethuge import gethuge
@@ -193,6 +200,9 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
 
     from ._common import prepdfo, postpdfo
     from ._settings import ExitStatus
+
+    # This method is deprecated. Warn the user.
+    warnings.warn('The `bobyqa` function is deprecated. Use the `pdfo` function with the argument `method=\'bobyqa\'` to use the BOBYQA method.', DeprecationWarning)
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:

@@ -164,11 +164,18 @@ def lincoa(fun, x0, args=(), bounds=None, constraints=(), options=None):
     bobyqa : Bounded Optimization BY Quadratic Approximations.
     cobyla : Constrained Optimization BY Linear Approximations.
 
+    References
+    ----------
+    .. [1] T. M. Ragonneau and Z. Zhang. PDFO: a cross-platform package for
+       Powell's derivative-free optimization solvers.
+       arXiv:`2302.13246 [math.OC] <https://arxiv.org/abs/2302.13246>`_, 2023.
+
     Examples
     --------
-    The following example shows how to solve a simple linearly constrained
-    optimization problem. The problem considered below should be solved with a
-    derivative-based method. It is used here only as an illustration.
+    The following example shows how to solve a simple optimization problem using
+    `lincoa`. In practice, the  problem considered below should be solved with a
+    derivative-based method as it is a smooth problem for which the derivatives
+    are known. We solve it here using `lincoa` only as an illustration.
 
     We consider the 2-dimensional problem
 
@@ -189,16 +196,18 @@ def lincoa(fun, x0, args=(), bounds=None, constraints=(), options=None):
         import numpy as np
         np.set_printoptions(precision=1, suppress=True)
 
-    >>> from pdfo import Bounds, LinearConstraint, lincoa
+    >>> from pdfo import lincoa
+    >>> from scipy.optimize import Bounds, LinearConstraint
+    >>>
+    >>> # Build the constraints.
     >>> bounds = Bounds([0, 0.5], [2, 3])
     >>> constraints = LinearConstraint([1, 1], 0, 1)
+    >>>
+    >>> # Solve the problem.
     >>> options = {'maxfev': 200}
     >>> res = lincoa(lambda x: x[0]**2 + x[1]**2, [0, 1], bounds=bounds, constraints=constraints, options=options)
     >>> res.x
     array([0. , 0.5])
-
-    Note that `lincoa` can also be used to solve unconstrained and
-    bound-constrained problems.
     """
     try:
         from .gethuge import gethuge
@@ -210,6 +219,9 @@ def lincoa(fun, x0, args=(), bounds=None, constraints=(), options=None):
 
     from ._common import prepdfo, _augmented_linear_constraint, postpdfo
     from ._settings import ExitStatus
+
+    # This method is deprecated. Warn the user.
+    warnings.warn('The `lincoa` function is deprecated. Use the `pdfo` function with the argument `method=\'lincoa\'` to use the LINCOA method.', DeprecationWarning)
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:
