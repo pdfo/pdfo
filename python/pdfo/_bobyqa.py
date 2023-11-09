@@ -202,7 +202,7 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
     from ._settings import ExitStatus
 
     # This method is deprecated. Warn the user.
-    warnings.warn('The `bobyqa` function is deprecated. Use the `pdfo` function with the argument `method=\'bobyqa\'` to use the BOBYQA method.', DeprecationWarning)
+    warnings.warn('The `bobyqa` function is deprecated. Use the `pdfo` function with the argument `method=\'bobyqa\'` to use the BOBYQA method.', DeprecationWarning, 2)
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:
@@ -278,13 +278,13 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
             npt = max_npt
             w_message = \
                 '{}: npt is so large that it is unable to allocate the workspace; it is set to {}'.format(fun_name, npt)
-            warnings.warn(w_message, Warning)
+            warnings.warn(w_message, Warning, 2)
             output['warnings'].append(w_message)
         if maxfev > max_int:
             maxfev = max_int
             w_message = \
                 '{}: maxfev exceeds the upper limit of Fortran integer; it is set to {}'.format(fun_name, maxfev)
-            warnings.warn(w_message, Warning)
+            warnings.warn(w_message, Warning, 2)
             output['warnings'].append(w_message)
 
         # Call the Fortran code.

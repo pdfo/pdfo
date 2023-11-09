@@ -116,6 +116,7 @@ html_theme_options = {
     ],
     'navbar_align': 'left',
     'navigation_with_keys': False,  # TODO: Remove this when pydata-sphinx-theme 0.15 is released.
+    # 'announcement': '<p>Message</p>',
 }
 
 html_static_path = ['_static']

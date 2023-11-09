@@ -157,7 +157,7 @@ def uobyqa(fun, x0, args=(), options=None):
     from ._settings import ExitStatus
 
     # This method is deprecated. Warn the user.
-    warnings.warn('The `uobyqa` function is deprecated. Use the `pdfo` function with the argument `method=\'uobyqa\'` to use the UOBYQA method.', DeprecationWarning)
+    warnings.warn('The `uobyqa` function is deprecated. Use the `pdfo` function with the argument `method=\'uobyqa\'` to use the UOBYQA method.', DeprecationWarning, 2)
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:
@@ -196,7 +196,7 @@ def uobyqa(fun, x0, args=(), options=None):
         n = x0_c.size
         if n <= 1:
             w_message = '{}: a univariate problem received; {} may fail. Try other solvers.'.format(fun_name, fun_name)
-            warnings.warn(w_message, Warning)
+            warnings.warn(w_message, Warning, 2)
             output['warnings'].append(w_message)
 
         # The largest integer in the fortran functions; the factor 0.99 provides a buffer.
@@ -213,7 +213,7 @@ def uobyqa(fun, x0, args=(), options=None):
         if maxfev > max_int:
             maxfev = max_int
             w_message = '{}: maxfev exceeds the upper limit of Fortran integer; it is set to {}'.format(fun_name, maxfev)
-            warnings.warn(w_message, Warning)
+            warnings.warn(w_message, Warning, 2)
             output['warnings'].append(w_message)
 
         # Call the Fortran code.

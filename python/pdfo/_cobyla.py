@@ -234,7 +234,7 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
     from ._settings import ExitStatus
 
     # This method is deprecated. Warn the user.
-    warnings.warn('The `cobyla` function is deprecated. Use the `pdfo` function with the argument `method=\'cobyla\'` to use the COBYLA method.', DeprecationWarning)
+    warnings.warn('The `cobyla` function is deprecated. Use the `pdfo` function with the argument `method=\'cobyla\'` to use the COBYLA method.', DeprecationWarning, 2)
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:
@@ -335,7 +335,7 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
             maxfev = max_int
             w_message = '{}: maxfev exceeds the upper limit of Fortran integer; it is set to ' \
                         '{}'.format(fun_name, maxfev)
-            warnings.warn(w_message, Warning)
+            warnings.warn(w_message, Warning, 2)
             output['warnings'].append(w_message)
 
         # Call the Fortran code.

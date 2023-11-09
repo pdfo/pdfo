@@ -221,7 +221,7 @@ def lincoa(fun, x0, args=(), bounds=None, constraints=(), options=None):
     from ._settings import ExitStatus
 
     # This method is deprecated. Warn the user.
-    warnings.warn('The `lincoa` function is deprecated. Use the `pdfo` function with the argument `method=\'lincoa\'` to use the LINCOA method.', DeprecationWarning)
+    warnings.warn('The `lincoa` function is deprecated. Use the `pdfo` function with the argument `method=\'lincoa\'` to use the LINCOA method.', DeprecationWarning, 2)
 
     fun_name = stack()[0][3]  # name of the current function
     if len(stack()) >= 3:
@@ -243,7 +243,7 @@ def lincoa(fun, x0, args=(), bounds=None, constraints=(), options=None):
     # Check whether nonlinear constraints are passed to the function.
     if constraints_c['nonlinear'] is not None:
         warn_message = '{}: Nonlinear constraints are given as parameter; they will be ignored.'.format(fun_name)
-        warnings.warn(warn_message, Warning)
+        warnings.warn(warn_message, Warning, 2)
         output['warnings'].append(warn_message)
 
     if invoker != 'pdfo' and prob_info['infeasible']:
@@ -317,13 +317,13 @@ def lincoa(fun, x0, args=(), bounds=None, constraints=(), options=None):
             npt = max_npt
             w_message = \
                 '{}: npt is so large that it is unable to allocate the workspace; it is set to {}'.format(fun_name, npt)
-            warnings.warn(w_message, Warning)
+            warnings.warn(w_message, Warning, 2)
             output['warnings'].append(w_message)
         if maxfev > max_int:
             maxfev = max_int
             w_message = \
                 '{}: maxfev exceeds the upper limit of Fortran integer; it is set to {}'.format(fun_name, maxfev)
-            warnings.warn(w_message, Warning)
+            warnings.warn(w_message, Warning, 2)
             output['warnings'].append(w_message)
 
         # If x0 is not feasible, LINCOA will modify the constraints to make it feasible (which is a bit strange).
@@ -335,7 +335,7 @@ def lincoa(fun, x0, args=(), bounds=None, constraints=(), options=None):
                 '{}: preprocessing code did not find a feasible x0; problem is likely infeasible or SciPy is not ' \
                 'installed on the machine; {} will modify the right-hand side of the constraints to make x0 ' \
                 'feasible.'.format(fun_name, fun_name)
-            warnings.warn(w_message, Warning)
+            warnings.warn(w_message, Warning, 2)
             output['warnings'].append(w_message)
         else:
             output['constr_modified'] = False
