@@ -70,3 +70,4 @@ Public beta release of PDFO.
 - The rhobeg and rhoend options now become radius_init and radius_final, respectively.
 - Python version: the package does not provide the Bounds, LinearConstraint, and NonlinearConstraint classes anymore. Only those provided by the scipy.optimize module are now supported.
 - Python version: the pdfo, uobyqa, newuoa, bobyqa, lincoa, and cobyla functions now return an instance of scipy.optimize.OptimizeResult. The names of the returned fields are changed, and are now well-documented.
+- Python version: scipy>=1.10.0 is now required and Python 3.7 is not supported anymore.
