@@ -31,8 +31,8 @@ class Options(str, Enum):
     """
     Option names.
     """
-    RHOBEG = 'rhobeg'
-    RHOEND = 'rhoend'
+    RHOBEG = 'radius_init'
+    RHOEND = 'radius_final'
     MAXFEV = 'maxfev'
     FTARGET = 'ftarget'
     NPT = 'npt'

@@ -35,13 +35,13 @@ def uobyqa(fun, x0, args=(), options=None):
     options : dict, optional
         The options passed to the solver. Accepted options are:
 
-            rhobeg : float, optional
-                Initial value of the trust-region radius, which should be
-                positive. Typically, it should be in the order of one tenth of
-                the greatest expected change to the variables.
-            rhoend : float, optional
-                Final value of the trust-region radius, which should be positive
-                and at most ``options['rhobeg']``. It should indicate the
+            radius_init : float, optional
+                Initial value of the trust-region radius. Typically, it should
+                be in the order of one tenth of the greatest expected change to
+                the variables.
+            radius_final : float, optional
+                Final value of the trust-region radius. It must be smaller than
+                or equal to ``options['radius_init']`` and should indicate the
                 accuracy required in the final values of the variables.
             maxfev : int, optional
                 Maximum number of function evaluations.
@@ -85,11 +85,51 @@ def uobyqa(fun, x0, args=(), options=None):
             method : str
                 Name of the Powell method used.
 
-        If warnings are raised during the optimization procedure, the following
-        field is also returned:
+        Finally, if warnings are raised during the optimization procedure, the
+        following field is also returned:
 
             warnings : list
                 A list of the warnings raised during the optimization procedure.
+
+        A description of the termination statuses is given below.
+
+        .. list-table::
+            :widths: 25 75
+            :header-rows: 1
+
+            * - Exit status
+              - Description
+            * - 0
+              - The lower bound on the trust-region radius is reached.
+            * - 1
+              - The target value of the objective function is reached.
+            * - 2
+              - A trust-region step has failed to reduce the quadratic model.
+            * - 3
+              - The maximum number of function evaluations is reached.
+            * - 4
+              - Much cancellation occurred in a denominator.
+            * - 7
+              - Rounding errors are becoming damaging.
+            * - 8
+              - Rounding errors are damaging the solution point.
+            * - 9
+              - A denominator has become zero.
+            * - 13
+              - All variables are fixed by the bounds.
+            * - 14
+              - A linear feasibility problem has been received and solved.
+            * - 15
+              - A linear feasibility problem has been received but failed.
+            * - -1
+              - NaN is encountered in the solution point.
+            * - -2
+              - NaN is encountered in the objective/constraint function value.
+                This is possible only in the classical mode.
+            * - -3
+              - NaN is encountered in the model parameter.
+            * - -4
+              - The problem is infeasible.
 
     References
     ----------

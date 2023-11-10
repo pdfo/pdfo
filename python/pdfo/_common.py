@@ -1446,7 +1446,6 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
         option_fields = list(options.keys())
     else:
         option_fields = []
-    user_option_fields = list(option_fields)
 
     # Default values for each options.
     maxfev = DEFAULT_OPTIONS[Options.MAXFEV.value](lenx0)
@@ -1480,6 +1479,26 @@ def _options_validation(invoker, options, method, lenx0, lb, ub, list_warnings):
             warnings.warn(warn_message, Warning)
             list_warnings.append(warn_message)
         method = invoker
+
+    # Modify the deprecated options.
+    if 'rhobeg' in option_fields:
+        if Options.RHOBEG.value in option_fields:
+            warnings.warn('{}: both {} and rhobeg are provided; rhobeg is ignored.'.format(invoker, Options.RHOBEG.value), Warning)
+            options.pop('rhobeg')
+        else:
+            warnings.warn('{}: rhobeg is deprecated; use {} instead.'.format(invoker, Options.RHOBEG.value), DeprecationWarning)
+            options[Options.RHOBEG.value] = options.pop('rhobeg')
+
+    if 'rhoend' in option_fields:
+        if Options.RHOEND.value in option_fields:
+            warnings.warn('{}: both {} and rhoend are provided; rhoend is ignored.'.format(invoker, Options.RHOEND.value), Warning)
+            options.pop('rhoend')
+        else:
+            warnings.warn('{}: rhoend is deprecated; use {} instead.'.format(invoker, Options.RHOEND.value), DeprecationWarning)
+            options[Options.RHOEND.value] = options.pop('rhoend')
+    if options is not None:
+        option_fields = list(options.keys())  # The fields may have been revised
+    user_option_fields = list(option_fields)
 
     # Check whether the used provided any unknown option.
     known_field = [Options.MAXFEV.value, Options.RHOBEG.value, Options.RHOEND.value, Options.FTARGET.value, Options.CLASSICAL.value, Options.ELIMINATE_LIN_EQ.value, Options.QUIET.value, Options.DEBUG.value,
