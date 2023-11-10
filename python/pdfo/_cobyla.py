@@ -59,13 +59,13 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
         The options passed to the solver. Accepted options are:
 
             rhobeg : float, optional
-                Initial value of the trust-region radius. Typically, it should
-                be in the order of one tenth of the greatest expected change to
-                the variables.
+                Initial value of the trust-region radius, which should be
+                positive. Typically, it should be in the order of one tenth of
+                the greatest expected change to the variables.
             rhoend : float, optional
-                Final value of the trust-region radius, which should be a
-                positive scalar. It should indicate the accuracy required in the
-                final values of the variables.
+                Final value of the trust-region radius, which should be positive
+                and at most ``options['rhobeg']``. It should indicate the
+                accuracy required in the final values of the variables.
             maxfev : int, optional
                 Maximum number of function evaluations.
             ftarget : float, optional
@@ -130,9 +130,11 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
                 a `numpy.ndarray`. Otherwise, it is a list of `numpy.ndarray`,
                 each of whose element corresponds to a constraint.
 
-        If the optimization procedure terminated because the constraints are
-        infeasible (i.e., when the exit status is -4), the following fields may
-        also be returned:
+        This function attempts to detect the infeasibility of constraints
+        (however, if no such infeasibility is detected, it does not mean that
+        the problem is feasible). If the optimization procedure terminated
+        because some constraints are infeasible (i.e., when the exit status is
+        -4), the following fields may also be returned:
 
             infeasible_bounds : `numpy.ndarray`
                 Indices of the bounds that are infeasible.
@@ -219,7 +221,7 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
     from ._common import prepdfo, _augmented_linear_constraint, postpdfo
     from ._settings import ExitStatus, Options
 
-    # This method is deprecated. Warn the user.
+    # This function is deprecated. Warn the user.
     warnings.warn('The `cobyla` function is deprecated. Use the `pdfo` function with the argument `method=\'cobyla\'` to use the COBYLA method.', DeprecationWarning, 2)
 
     fun_name = stack()[0][3]  # name of the current function

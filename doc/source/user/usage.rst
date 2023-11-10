@@ -21,7 +21,7 @@ The user can also specify the solver by setting the ``method`` argument of `pdfo
 
 .. attention::
 
-    The `pdfo` method does not accept any ``'solver'`` options.
+    The `pdfo` method does not accept any ``'solver'`` option.
     If you want to specify which solver to use, please use the ``method`` argument of the `pdfo` function.
 
 The pdfo function is designed to be compatible with the `scipy.optimize.minimize` function of `SciPy <https://scipy.org>`_.

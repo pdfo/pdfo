@@ -12,7 +12,7 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
 
     .. attention::
 
-        This method does not accept any ``'solver'`` options. If you want to
+        This function does not accept any ``'solver'`` options. If you want to
         specify which solver to use, please use the `method` argument.
 
     Parameters
@@ -64,13 +64,13 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
         The options passed to the solver. Accepted options are:
 
             rhobeg : float, optional
-                Initial value of the trust-region radius. Typically, it should
-                be in the order of one tenth of the greatest expected change to
-                the variables.
+                Initial value of the trust-region radius, which should be
+                positive. Typically, it should be in the order of one tenth of
+                the greatest expected change to the variables.
             rhoend : float, optional
-                Final value of the trust-region radius, which should be a
-                positive scalar. It should indicate the accuracy required in the
-                final values of the variables.
+                Final value of the trust-region radius, which should be positive
+                and at most ``options['rhobeg']``. It should indicate the
+                accuracy required in the final values of the variables.
             maxfev : int, optional
                 Maximum number of function evaluations.
             ftarget : float, optional
@@ -139,9 +139,11 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
                 a `numpy.ndarray`. Otherwise, it is a list of `numpy.ndarray`,
                 each of whose element corresponds to a constraint.
 
-        If the optimization procedure terminated because the constraints are
-        infeasible (i.e., when the exit status is -4), the following fields may
-        also be returned:
+        This function attempts to detect the infeasibility of constraints
+        (however, if no such infeasibility is detected, it does not mean that
+        the problem is feasible). If the optimization procedure terminated
+        because some constraints are infeasible (i.e., when the exit status is
+        -4), the following fields may also be returned:
 
             infeasible_bounds : `numpy.ndarray`
                 Indices of the bounds that are infeasible.

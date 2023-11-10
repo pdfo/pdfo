@@ -36,13 +36,13 @@ def uobyqa(fun, x0, args=(), options=None):
         The options passed to the solver. Accepted options are:
 
             rhobeg : float, optional
-                Initial value of the trust-region radius. Typically, it should
-                be in the order of one tenth of the greatest expected change to
-                the variables.
+                Initial value of the trust-region radius, which should be
+                positive. Typically, it should be in the order of one tenth of
+                the greatest expected change to the variables.
             rhoend : float, optional
-                Final value of the trust-region radius, which should be a
-                positive scalar. It should indicate the accuracy required in the
-                final values of the variables.
+                Final value of the trust-region radius, which should be positive
+                and at most ``options['rhobeg']``. It should indicate the
+                accuracy required in the final values of the variables.
             maxfev : int, optional
                 Maximum number of function evaluations.
             ftarget : float, optional
