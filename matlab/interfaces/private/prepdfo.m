@@ -60,6 +60,48 @@ if (nargin == 1)
     [fun, x0, Aineq, bineq, Aeq, beq, lb, ub, nonlcon, options, warnings] = decode_problem(invoker, fun, warnings);
 end
 
+% Modify the deprecated options.
+if isfield(options, 'rhobeg')
+    if isfield(options, 'radius_init')
+        wid = sprintf('%s:ConflictingOptions', invoker);
+        wmessage = sprintf('%s: both radius_init and rhobeg are provided; rhobeg is ignored.', invoker);
+        warning(wid, '%s', wmessage);
+        warnings = [warnings, wmessage];
+        options = rmfield(options, 'rhobeg');
+    else
+        wid = sprintf('%s:DeprecatedOption', invoker);
+        wmessage = sprintf('%s: rhobeg is deprecated; use radius_init instead.', invoker);
+        warning(wid, '%s', wmessage);
+        warnings = [warnings, wmessage];
+        options.radius_init = options.rhobeg;
+        options = rmfield(options, 'rhobeg');
+    end
+end
+if isfield(options, 'rhoend')
+    if isfield(options, 'radius_final')
+        wid = sprintf('%s:ConflictingOptions', invoker);
+        wmessage = sprintf('%s: both radius_final and rhoend are provided; rhoend is ignored.', invoker);
+        warning(wid, '%s', wmessage);
+        warnings = [warnings, wmessage];
+        options = rmfield(options, 'rhoend');
+    else
+        wid = sprintf('%s:DeprecatedOption', invoker);
+        wmessage = sprintf('%s: rhoend is deprecated; use radius_final instead.', invoker);
+        warning(wid, '%s', wmessage);
+        warnings = [warnings, wmessage];
+        options.radius_final = options.rhoend;
+        options = rmfield(options, 'rhoend');
+    end
+end
+if isfield(options, 'radius_init')
+    options.rhobeg = options.radius_init;
+    options = rmfield(options, 'radius_init');
+end
+if isfield(options, 'radius_final')
+    options.rhoend = options.radius_final;
+    options = rmfield(options, 'radius_final');
+end
+
 % Save problem information in probinfo.
 % At return, probinfo has the following fields:
 % 1. raw_data: problem data before preprocessing/validating, including
@@ -1065,20 +1107,20 @@ options.maxfun = double(options.maxfun); % maxfun will be passed as a double
 validated = false;
 if isfield(options, 'rhobeg')
     if ~isrealscalar(options.rhobeg) || options.rhobeg <= 0 || isnan(options.rhobeg) || options.rhobeg == inf
-        wid = sprintf('%s:InvalidRhobeg', invoker);
-        wmessage = sprintf('%s: invalid rhobeg; it should be a positive number; it is set to max(%f, rhoend).', invoker, rhobeg);
+        wid = sprintf('%s:InvalidRadiusInit', invoker);
+        wmessage = sprintf('%s: invalid radius_init; it should be a positive number; it is set to max(%f, radius_final).', invoker, rhobeg);
         warning(wid, '%s', wmessage);
         warnings = [warnings, wmessage];
     elseif strcmpi(solver, 'bobyqa')  % Validate options.rhobeg for bobyqa
         if options.scale && options.rhobeg > 1  % This case cannot be combined with the next case, as ub and lb are NOT scaled yet in prepdfo
-            wid = sprintf('%s:InvalidRhobeg', invoker);
-            wmessage = sprintf('%s: invalid rhobeg; %s requires rhobeg <= 1 when the problem is scaled; it is set to 0.5.', invoker, solver);
+            wid = sprintf('%s:InvalidRadiusInit', invoker);
+            wmessage = sprintf('%s: invalid radius_init; %s requires radius_init <= 1 when the problem is scaled; it is set to 0.5.', invoker, solver);
             warning(wid, '%s', wmessage);
             warnings = [warnings, wmessage];
             options.rhobeg = 0.5;
         elseif ~options.scale && options.rhobeg > min(ub-lb)/2
-            wid = sprintf('%s:InvalidRhobeg', invoker);
-            wmessage = sprintf('%s: invalid rhobeg; %s requires rhobeg <= min(ub-lb)/2; it is set to min(ub-lb)/4.', invoker, solver);
+            wid = sprintf('%s:InvalidRadiusInit', invoker);
+            wmessage = sprintf('%s: invalid radius_init; %s requires radius_init <= min(ub-lb)/2; it is set to min(ub-lb)/4.', invoker, solver);
             warning(wid, '%s', wmessage);
             warnings = [warnings, wmessage];
             options.rhobeg = min(ub-lb)/4; % Here we do not take the default rhobeg
@@ -1101,8 +1143,8 @@ options.rhobeg = double(max(options.rhobeg, eps));
 validated = false;
 if isfield(options, 'rhoend')
     if ~isrealscalar(options.rhoend) || options.rhoend > options.rhobeg || isnan(options.rhoend)
-        wid = sprintf('%s:InvalidRhoend', invoker);
-        wmessage = sprintf('%s: invalid rhoend; we should have rhobeg >= rhoend > 0; it is set to min(0.1*rhobeg, %f).', invoker, rhoend);
+        wid = sprintf('%s:InvalidRadiusFinal', invoker);
+        wmessage = sprintf('%s: invalid radius_final; we should have radius_init >= radius_final > 0; it is set to min(0.1*radius_init, %f).', invoker, rhoend);
         warning(wid, '%s', wmessage);
         warnings = [warnings, wmessage];
     else
@@ -1430,8 +1472,8 @@ if strcmp(solver, 'bobyqa') && options.rhobeg > min(probinfo.refined_data.ub-pro
     options.rhobeg = max(eps, min(probinfo.refined_data.ub-probinfo.refined_data.lb)/4);
     options.rhoend = max(eps, min(0.1*options.rhobeg, options.rhoend));
     if ismember('rhobeg', probinfo.user_options_fields) || ismember('rhoend', probinfo.user_options_fields)
-        wid = sprintf('%s:InvalidRhobeg', invoker);
-        wmessage = sprintf('%s: rhobeg is set to %f and rhoend to %f according to the selected solver bobyqa, which requires rhoend <= rhobeg <= min(ub-lb)/2.', invoker, options.rhobeg, options.rhoend);
+        wid = sprintf('%s:InvalidRadiusInit', invoker);
+        wmessage = sprintf('%s: radius_init is set to %f and radius_final to %f according to the selected solver bobyqa, which requires radius_final <= radius_init <= min(ub-lb)/2.', invoker, options.rhobeg, options.rhoend);
         warning(wid, '%s', wmessage);
         warnings = [warnings, wmessage];
     end
@@ -1557,7 +1599,7 @@ if isfield(options, 'honour_x0') && options.honour_x0  % In this case, we respec
         options.rhoend = max(eps, min(0.1*options.rhobeg, options.rhoend));  % We do not revise rhoend unless rhobeg is revised
         if ismember('rhobeg', user_options_fields) || ismember('rhoend', user_options_fields)
             wid = sprintf('%s:ReviseRhobeg', invoker);
-            wmessage = sprintf('%s: rhobeg is revised to %f and rhoend to %f so that the distance between x0 and the inactive bounds is at least rhobeg.', invoker, options.rhobeg, options.rhoend);
+            wmessage = sprintf('%s: radius_init is revised to %f and radius_final to %f so that the distance between x0 and the inactive bounds is at least radius_init.', invoker, options.rhobeg, options.rhoend);
             warning(wid, '%s', wmessage);
             warnings = [warnings, wmessage];
         end
@@ -1574,7 +1616,7 @@ else
     x0(ubx) = ub(ubx);
     if norm(x0_old-x0) > eps*max(1, norm(x0_old))
         wid = sprintf('%s:ReviseX0', invoker);
-        wmessage = sprintf('%s: x0 is revised so that the distance between x0 and the inactive bounds is at least rhobeg; set options.honour_x0=true if you prefer to keep x0.', invoker);
+        wmessage = sprintf('%s: x0 is revised so that the distance between x0 and the inactive bounds is at least radius_init; set options.honour_x0=true if you prefer to keep x0.', invoker);
         warning(wid, '%s', wmessage);
         warnings = [warnings, wmessage];
     end

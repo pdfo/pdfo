@@ -58,12 +58,12 @@ function [x, fx, exitflag, output] = uobyqa(varargin)
 %   The options include
 %   *** maxfun: maximal number of function evaluations; default: 500*length(x0)
 %   *** ftarget: target function value; default: -Inf
-%   *** rhobeg: initial trust-region radius; typically, rhobeg should be in
+%   *** radius_init: initial trust-region radius; typically, radius_init should be in
 %       the order of one tenth of the greatest expected change to a variable;
-%       rhobeg should be positive; default: 1
-%   *** rhoend: final trust-region radius; rhoend reflects the precision
-%       of the approximate solution obtained by UOBYQA; rhoend should be
-%       positive and not larger than rhobeg; default: 1e-6
+%       radius_init should be positive; default: 1
+%   *** radius_final: final trust-region radius; radius_final reflects the precision
+%       of the approximate solution obtained by UOBYQA; radius_final should be
+%       positive and not larger than radius_init; default: 1e-6
 %   *** classical: a boolean value indicating whether to call the classical
 %       Powell code or not; default: false
 %   *** quiet: a boolean value indicating whether to keep quiet or not;

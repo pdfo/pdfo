@@ -44,7 +44,7 @@ credits = {'Tom M. Ragonneau', 'Zaikun Zhang'};
 
 license = '3-Clause BSD';
 
-version = '1.2';
+version = '2.0.0';
 
 date = 'October, 2021';
 

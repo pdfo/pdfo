@@ -77,20 +77,20 @@ function [x, fx, exitflag, output] = bobyqa(varargin)
 %   The options include
 %   *** maxfun: maximal number of function evaluations; default: 500*length(x0)
 %   *** ftarget: target function value; default: -Inf
-%   *** rhobeg: initial trust region radius; typically, rhobeg should be
+%   *** radius_init: initial trust region radius; typically, radius_init should be
 %       in the order of one tenth of the greatest expected change to a variable;
-%       rhobeg should be positive; default: min(1, min(ub-lb)/4) if the
+%       radius_init should be positive; default: min(1, min(ub-lb)/4) if the
 %       problem is not scaled, 0.5 if the problem is scaled
-%   *** rhoend: final trust region radius; rhoend reflects the precision
-%       of the approximate solution obtained by BOBYQA; rhoend should be
-%       positive and not larger than rhobeg; default: 1e-6
+%   *** radius_final: final trust region radius; radius_final reflects the precision
+%       of the approximate solution obtained by BOBYQA; radius_final should be
+%       positive and not larger than radius_init; default: 1e-6
 %   *** npt: number of interpolation points for constructing a model
 %       default: 2*length(x0)+1
 %   *** classical: a boolean value indicating whether to call the classical
 %       Powell code or not; default: false
 %   *** scale: a boolean value indicating whether to scale the problem
 %       according to bounds or not; default: false; if the problem is to be
-%       scaled, then rhobeg and rhoend mentioned above will be used as the
+%       scaled, then radius_init and radius_final mentioned above will be used as the
 %       initial and final trust region radii for the scaled  problem
 %   *** honour_x0: a boolean value indicating whether to respect the
 %       user-defined x0 or not; default: false
