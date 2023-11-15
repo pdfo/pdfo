@@ -60,7 +60,7 @@ if (nargin == 1)
     [fun, x0, Aineq, bineq, Aeq, beq, lb, ub, nonlcon, options, warnings] = decode_problem(invoker, fun, warnings);
 end
 
-% Modify the deprecated options.
+% Handle the deprecated options.
 if isfield(options, 'rhobeg')
     if isfield(options, 'radius_init')
         wid = sprintf('%s:ConflictingOptions', invoker);
@@ -93,6 +93,11 @@ if isfield(options, 'rhoend')
         options = rmfield(options, 'rhoend');
     end
 end
+% In the remainder of the code, we keep the original option names "rhobeg" and
+% "rhoend", so that no other changes are needed. Hence, if the "radius_init"
+% and/or the "radius_final" options are provided, we set the values of "rhobeg"
+% and/or "rhoend" accordingly. Note that the messages printed to the users have
+% been modified to show the non-deprecated names of the options.
 if isfield(options, 'radius_init')
     options.rhobeg = options.radius_init;
     options = rmfield(options, 'radius_init');
