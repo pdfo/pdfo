@@ -3467,9 +3467,9 @@ def _build_result(output):
     if 'InfeasibleBound' in output:
         result.infeasible_bounds = output['InfeasibleBound']
     if 'InfeasibleLinear' in output:
-        result.infeasible_linear_constraint = output['InfeasibleLinear']
+        result.infeasible_linear_constraints = output['InfeasibleLinear']
     if 'InfeasibleNonlinear' in output:
-        result.infeasible_nonlinear_constraint = output['InfeasibleNonlinear']
+        result.infeasible_nonlinear_constraints = output['InfeasibleNonlinear']
     if 'warnings' in output:
         result.warnings = output['warnings']
     return result
