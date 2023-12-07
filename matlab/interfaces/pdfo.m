@@ -136,6 +136,10 @@ function [x, fx, exitflag, output] = pdfo(varargin)
 %       'lincoa' (for linearly-constrained or bound-constrained or
 %       unconstrained problems),
 %       'cobyla' (for general constrained or unconstrained problems)
+%       By default, 'uobyqa' is selected if the problem is unconstrained with 2 <= n <= 8,
+%       'newuoa' is selected if the problem is unconstrained with n = 1 or n >= 9,
+%       'bobyqa' is selected if the problem is bound-constrained, 'lincoa' is selected if
+%       the problem is linearly constrained, and 'cobyla' is selected otherwise.
 %   *** classical: a boolean value indicating whether to call the classical
 %       Powell code or not; default: false
 %   *** scale: (only for BOBYQA, LINCOA, and COBYLA) a boolean value
