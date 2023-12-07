@@ -3453,10 +3453,10 @@ def _build_result(output):
     result.status=output['status']
     result.fun=output['fun']
     result.x=output['x']
-    if 'constr_value' in output:
-        result.constraints = output['constr_value']
     if 'constrviolation' in output:
         result.maxcv = output['constrviolation']
+    if 'constr_value' in output:
+        result.constraints = output['constr_value']
     result.nfev = output['nfev']
     if 'fhist' in output:
         result.fun_history = output['fhist']
