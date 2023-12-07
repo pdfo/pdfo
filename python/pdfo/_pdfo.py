@@ -136,8 +136,9 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
                 constraint is passed, i.e., if the `constraints` argument is
                 either a dict, a `scipy.optimize.LinearConstraint`, or a
                 `scipy.optimize.NonlinearConstraint`, then the returned value is
-                a `numpy.ndarray`. Otherwise, it is a list of `numpy.ndarray`,
-                each of whose element corresponds to a constraint.
+                a `numpy.ndarray`, which is the value of the constraint at
+                ``x``. Otherwise, it is a list of `numpy.ndarray`, each element
+                being the value of a constraint at ``x``.
 
         This function attempts to detect the infeasibility of constraints
         (however, if no such infeasibility is detected, it does not mean that
