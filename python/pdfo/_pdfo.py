@@ -35,8 +35,12 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
             ``pdfo(lambda x: fun(x, *args), x0, ...)``
 
     method : {'uobyqa', 'newuoa', 'bobyqa', 'lincoa', 'cobyla'}, optional
-        Name of the Powell method that will be used. By default, the most
-        appropriate method will be chosen automatically.
+        Name of the Powell method that will be used. By default, ``'uobyqa'``
+        is selected if the problem is unconstrained with ``2 <= n <= 8``,
+        ``'newuoa'`` is selected if the problem is unconstrained with ``n = 1``
+        or ``n >= 9``, ``'bobyqa'`` is selected if the problem is
+        bound-constrained, ``'lincoa'`` is selected if the problem is linearly
+        constrained, and ``'cobyla'`` is selected otherwise.
     bounds : {`scipy.optimize.Bounds`, array_like, shape (n, 2)}, optional
         Bound constraints of the problem. It can be one of the cases below.
 
@@ -51,7 +55,7 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
 
         #. A dictionary with fields:
 
-            type : {``'eq'``, ``'ineq'``}
+            type : {'eq', 'ineq'}
                 Whether the constraint is ``fun(x) = 0`` or ``fun(x) >= 0``.
             fun : callable
                 Constraint function.
