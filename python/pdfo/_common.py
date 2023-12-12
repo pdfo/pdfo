@@ -2926,7 +2926,7 @@ def postpdfo(x, fx, exitflag, output, method, nf, fhist, options, prob_info, con
     output['x'] = x_c
     output['fun'] = fx_c
     output['status'] = exitflag_c
-    output['success'] = (exitflag_c in [ExitStatus.RADIUS_SUCCESS.value, ExitStatus.TARGET_SUCCESS.value, ExitStatus.FEASIBILITY_SUCCESS.value]) or (exitflag_c == ExitStatus.FIXED_SUCCESS.value and abs(constrviolation_c) <= 1e-15)
+    output['success'] = exitflag_c in [ExitStatus.RADIUS_SUCCESS.value, ExitStatus.TARGET_SUCCESS.value, ExitStatus.FEASIBILITY_SUCCESS.value, ExitStatus.FIXED_SUCCESS.value] and constrviolation_c <= np.sqrt(np.finfo(float).eps)
     if len(stack()) >= 4 and stack()[2][3].lower() == 'pdfo':
         output['nfev'] = nf_c
         output['constrviolation'] = constrviolation_c
