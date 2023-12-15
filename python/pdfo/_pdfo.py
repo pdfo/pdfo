@@ -12,7 +12,7 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
 
     .. attention::
 
-        This function does not accept any ``'solver'`` options. If you want to
+        This function does not accept any 'solver' options. If you want to
         specify which solver to use, please use the `method` argument.
 
     Parameters
@@ -35,12 +35,12 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
             ``pdfo(lambda x: fun(x, *args), x0, ...)``
 
     method : {'uobyqa', 'newuoa', 'bobyqa', 'lincoa', 'cobyla'}, optional
-        Name of the Powell method that will be used. By default, ``'uobyqa'``
+        Name of the Powell method that will be used. By default, 'uobyqa'
         is selected if the problem is unconstrained with ``2 <= n <= 8``,
-        ``'newuoa'`` is selected if the problem is unconstrained with ``n = 1``
-        or ``n >= 9``, ``'bobyqa'`` is selected if the problem is
-        bound-constrained, ``'lincoa'`` is selected if the problem is linearly
-        constrained, and ``'cobyla'`` is selected otherwise.
+        'newuoa' is selected if the problem is unconstrained with ``n = 1``
+        or ``n >= 9``, 'bobyqa' is selected if the problem is
+        bound-constrained, 'lincoa' is selected if the problem is linearly
+        constrained, and 'cobyla' is selected otherwise.
     bounds : {`scipy.optimize.Bounds`, array_like, shape (n, 2)}, optional
         Bound constraints of the problem. It can be one of the cases below.
 
@@ -109,7 +109,8 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
         Result of the optimization procedure, with the following fields:
 
             message : str
-                Description of the cause of the termination.
+                Description of the exit status specified in the ``status``
+                field (i.e., the cause of the termination of the solver).
             success : bool
                 Whether the optimization procedure terminated successfully.
             status : int

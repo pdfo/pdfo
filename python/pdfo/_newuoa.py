@@ -71,7 +71,8 @@ def newuoa(fun, x0, args=(), options=None):
         Result of the optimization procedure, with the following fields:
 
             message : str
-                Description of the cause of the termination.
+                Description of the exit status specified in the ``status``
+                field (i.e., the cause of the termination of the solver).
             success : bool
                 Whether the optimization procedure terminated successfully.
             status : int
