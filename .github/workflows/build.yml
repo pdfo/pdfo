@@ -89,7 +89,7 @@ jobs:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
 
       - name: Store artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           path: wheelhouse/*.whl
 
@@ -113,7 +113,7 @@ jobs:
         run: bash python/build_tools/test_sdist.sh
 
       - name: Store artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           path: dist/*.tar.gz
 
