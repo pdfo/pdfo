@@ -115,7 +115,6 @@ html_theme_options = {
         },
     ],
     'navbar_align': 'left',
-    'navigation_with_keys': False,  # TODO: Remove this when pydata-sphinx-theme 0.15 is released.
     'announcement': f'<b>Caution:</b> The signatures of the Python and MATLAB functions change in PDFO 2.0. Check the <a href="https://github.com/{html_context["github_user"]}/{html_context["github_repo"]}/blob/main/CHANGELOG.md">changelog</a>.',
 }
 
