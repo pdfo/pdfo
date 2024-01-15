@@ -246,7 +246,7 @@ def lincoa(fun, x0, args=(), bounds=None, constraints=(), options=None):
         # If gethuge cannot be imported, the execution should stop because the package is most likely not built.
         import_error_so('gethuge')
 
-    from ._common import prepdfo, _augmented_linear_constraint, postpdfo, suppress_stderr
+    from ._common import prepdfo, _augmented_linear_constraint, postpdfo
     from ._settings import ExitStatus, Options
 
     # This function is deprecated. Warn the user.
@@ -380,8 +380,7 @@ def lincoa(fun, x0, args=(), bounds=None, constraints=(), options=None):
             import_error_so()
 
         # m should be precised not to raise any error if there is no linear constraints.
-        with suppress_stderr():
-            x, fx, exitflag, fhist, chist, constrviolation = flincoa.mlincoa(npt, m, a_aug, b_aug, x0_c, rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
+        x, fx, exitflag, fhist, chist, constrviolation = flincoa.mlincoa(npt, m, a_aug, b_aug, x0_c, rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
         nf = int(flincoa.flincoa.nf)
 
     # Postprocess the result.

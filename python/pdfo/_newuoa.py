@@ -191,7 +191,7 @@ def newuoa(fun, x0, args=(), options=None):
         # If gethuge cannot be imported, the execution should stop because the package is most likely not built.
         import_error_so('gethuge')
 
-    from ._common import prepdfo, postpdfo, suppress_stderr
+    from ._common import prepdfo, postpdfo
     from ._settings import ExitStatus, Options
 
     # This method is deprecated. Warn the user.
@@ -267,8 +267,7 @@ def newuoa(fun, x0, args=(), options=None):
             from ._common import import_error_so
             import_error_so()
 
-        with suppress_stderr():
-            x, fx, exitflag, fhist = fnewuoa.mnewuoa(npt, x0_c, rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
+        x, fx, exitflag, fhist = fnewuoa.mnewuoa(npt, x0_c, rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
         nf = int(fnewuoa.fnewuoa.nf)
 
     # Postprocess the result.

@@ -3506,22 +3506,3 @@ def import_error_so(missing_file=None):
     raise ImportError('{} is missing. Please reinstall {} and ensure the '
                       'fulfilment of the requirements '
                       '(numpy>=1.20.0).'.format(missing_file, __package__))
-
-
-@contextmanager
-def suppress_stderr():
-    """Suppress the standard error stream temporarily."""
-    f_err = sys.stderr.fileno()
-
-    def _redirect_stderr(to):
-        sys.stderr.close()
-        os.dup2(to.fileno(), f_err)
-        sys.stderr = os.fdopen(f_err, 'w')
-
-    with os.fdopen(os.dup(f_err), 'w') as old_stderr:
-        with open(os.devnull, 'w') as devnull:
-            _redirect_stderr(devnull)
-        try:
-            yield
-        finally:
-            _redirect_stderr(old_stderr)

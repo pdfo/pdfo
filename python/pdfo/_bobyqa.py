@@ -224,7 +224,7 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
         # If gethuge cannot be imported, the execution should stop because the package is most likely not built.
         import_error_so('gethuge')
 
-    from ._common import prepdfo, postpdfo, suppress_stderr
+    from ._common import prepdfo, postpdfo
     from ._settings import ExitStatus, Options
 
     # This method is deprecated. Warn the user.
@@ -323,8 +323,7 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
             from ._common import import_error_so
             import_error_so()
 
-        with suppress_stderr():
-            x, fx, exitflag, fhist, chist, constrviolation = fbobyqa.mbobyqa(npt, x0_c, bounds_c['lb'], bounds_c['ub'], rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
+        x, fx, exitflag, fhist, chist, constrviolation = fbobyqa.mbobyqa(npt, x0_c, bounds_c['lb'], bounds_c['ub'], rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
         nf = int(fbobyqa.fbobyqa.nf)
 
     # Postprocess the result.
