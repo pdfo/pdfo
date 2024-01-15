@@ -185,7 +185,7 @@ def uobyqa(fun, x0, args=(), options=None):
         # If gethuge cannot be imported, the execution should stop because the package is most likely not built.
         import_error_so('gethuge')
 
-    from ._common import prepdfo, postpdfo
+    from ._common import prepdfo, postpdfo, suppress_stderr
     from ._settings import ExitStatus, Options
 
     # This method is deprecated. Warn the user.
@@ -258,7 +258,8 @@ def uobyqa(fun, x0, args=(), options=None):
             from ._common import import_error_so
             import_error_so()
 
-        x, fx, exitflag, fhist = fuobyqa.muobyqa(x0_c, rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
+        with suppress_stderr():
+            x, fx, exitflag, fhist = fuobyqa.muobyqa(x0_c, rhobeg, rhoend, 0, maxfev, ftarget, fun_c)
         nf = int(fuobyqa.fuobyqa.nf)
 
     # Postprocess the result.

@@ -260,7 +260,7 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
         # If gethuge cannot be imported, the execution should stop because the package is most likely not built.
         import_error_so('gethuge')
 
-    from ._common import prepdfo, _augmented_linear_constraint, postpdfo
+    from ._common import prepdfo, _augmented_linear_constraint, postpdfo, suppress_stderr
     from ._settings import ExitStatus, Options
 
     # This function is deprecated. Warn the user.
@@ -379,8 +379,8 @@ def cobyla(fun, x0, args=(), bounds=None, constraints=(), options=None):
             import_error_so()
 
         # m should be precised not to raise any error if there is no linear constraints.
-        x, fx, exitflag, fhist, chist, constrviolation, conval = \
-            fcobyla.mcobyla(x0_c, rhobeg, rhoend, 0, maxfev, ftarget, conval_x0, fun_c, lambda m, x: ctr(x))
+        with suppress_stderr():
+            x, fx, exitflag, fhist, chist, constrviolation, conval = fcobyla.mcobyla(x0_c, rhobeg, rhoend, 0, maxfev, ftarget, conval_x0, fun_c, lambda m, x: ctr(x))
         nf = int(fcobyla.fcobyla.nf)
 
         if m > 0:
