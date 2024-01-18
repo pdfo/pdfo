@@ -3,17 +3,20 @@ Citation
 
 If you would like to acknowledge the significance of PDFO in your research, we suggest citing the project as follows:
 
-- T.\  M.\  Ragonneau and Z.\  Zhang. PDFO: a cross-platform package for Powell's derivative-free optimization solvers. arXiv:`2302.13246 [math.OC] <https://arxiv.org/abs/2302.13246>`_, 2023.
+- T.\  M.\  Ragonneau and Z.\  Zhang. "PDFO: a cross-platform package for Powell's derivative-free optimization solvers." 2023. DOI: `10.48550/arXiv.2302.13246 <https://doi.org/10.48550/arXiv.2302.13246>`_. arXiv: `2302.13246 [math.OC] <https://arxiv.org/abs/2302.13246>`_.
 
 The corresponding BibTeX entry is given hereunder.
 
 .. code-block:: bib
 
-    @misc{pdfo,
+    @unpublished{pdfo,
         author       = {Ragonneau, T. M. and Zhang, Z.},
         title        = {{PDFO}: a cross-platform package for {P}owell's derivative-free optimization solvers},
-        howpublished = {arXiv:2302.13246 [math.OC]},
+        eprint       = {2302.13246},
+        eprinttype   = {arxiv},
+        eprintclass  = {math.OC},
         year         = 2023,
+        doi          = {10.48550/arXiv.2302.13246},
     }
 
 In addition, we provide below a list of references closely related to PDFO.
@@ -31,8 +34,7 @@ In addition, we provide below a list of references closely related to PDFO.
 #. T.\  M.\  Ragonneau. *Model-Based Derivative-Free Optimization Methods and Software*, Chapter 3. PhD thesis, The Hong Kong Polytechnic University, Hong Kong, China, 2022.
 #. Z.\  Zhang, PRIMA: Reference Implementation for Powell's Methods with Modernization and Amelioration, available at http://www.libprima.net, 2023.
 
-Remarks
--------
+**Remarks**
 
 #. A key technique underlying the success of NEWUOA, BOBYQA, and LINCOA is the least Frobenius norm updating of quadratic models elaborated in [3] and [4].
    The idea comes from the `least change update <https://www.jstor.org/stable/2030103?seq=1>`_ for `quasi-Newton methods <https://epubs.siam.org/doi/abs/10.1137/1019005>`_, a vast research area initiated by the `DFP algorithm <https://academic.oup.com/comjnl/article/6/2/163/364776>`_, where P stands for Powell.

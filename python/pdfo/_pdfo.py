@@ -204,14 +204,6 @@ def pdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=Non
             * - -4
               - The problem is infeasible.
 
-    See also
-    --------
-    uobyqa : Unconstrained Optimization BY Quadratic Approximation.
-    newuoa : NEW Unconstrained Optimization Algorithm.
-    bobyqa : Bounded Optimization BY Quadratic Approximations.
-    lincoa : LINearly Constrained Optimization Algorithm.
-    cobyla : Constrained Optimization BY Linear Approximations.
-
     References
     ----------
     .. [1] T. M. Ragonneau and Z. Zhang. PDFO: a cross-platform package for

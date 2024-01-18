@@ -31,7 +31,7 @@ To install PDFO for Python, run in your terminal
 
     pip install pdfo
 
-You can also check the :ref:`installation guide for MATLAB<matlab-installation>`.
+You can also check the :ref:`installation guide for MATLAB<installation-matlab>`.
 For more details, see the :ref:`user guide<user-guide>`.
 
 Citing PDFO
@@ -39,17 +39,20 @@ Citing PDFO
 
 If you would like to acknowledge the significance of PDFO in your research, we suggest citing the project as follows:
 
-- T.\  M.\  Ragonneau and Z.\  Zhang. PDFO: a cross-platform package for Powell's derivative-free optimization solvers. arXiv:`2302.13246 [math.OC] <https://arxiv.org/abs/2302.13246>`_, 2023.
+- T.\  M.\  Ragonneau and Z.\  Zhang. "PDFO: a cross-platform package for Powell's derivative-free optimization solvers." 2023. DOI: `10.48550/arXiv.2302.13246 <https://doi.org/10.48550/arXiv.2302.13246>`_. arXiv: `2302.13246 [math.OC] <https://arxiv.org/abs/2302.13246>`_.
 
 The corresponding BibTeX entry is given hereunder.
 
 .. code-block:: bib
 
-    @misc{pdfo,
+    @unpublished{pdfo,
         author       = {Ragonneau, T. M. and Zhang, Z.},
         title        = {{PDFO}: a cross-platform package for {P}owell's derivative-free optimization solvers},
-        howpublished = {arXiv:2302.13246 [math.OC]},
+        eprint       = {2302.13246},
+        eprinttype   = {arxiv},
+        eprintclass  = {math.OC},
         year         = 2023,
+        doi          = {10.48550/arXiv.2302.13246},
     }
 
 Statistics

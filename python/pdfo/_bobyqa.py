@@ -174,10 +174,6 @@ def bobyqa(fun, x0, args=(), bounds=None, options=None):
     See also
     --------
     pdfo : Powell's Derivative-Free Optimization solvers.
-    uobyqa : Unconstrained Optimization BY Quadratic Approximation.
-    newuoa : NEW Unconstrained Optimization Algorithm.
-    lincoa : LINearly Constrained Optimization Algorithm.
-    cobyla : Constrained Optimization BY Linear Approximations.
 
     Examples
     --------

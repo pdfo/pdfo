@@ -9,14 +9,14 @@ For detail on the Python API of PDFO, see the :ref:`Python API reference <python
 
 .. toctree::
     :caption: Getting started
-    :maxdepth: 1
+    :maxdepth: 2
 
-    installation
-    usage
+    installation/index
+    usage/index
 
 .. toctree::
     :caption: Notes
-    :maxdepth: 1
+    :maxdepth: 2
 
     releases
     issues
