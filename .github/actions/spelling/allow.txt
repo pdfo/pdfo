@@ -11,6 +11,7 @@ ARGLALE
 ARGLBLE
 ARGLCLE
 argsort
+arxiv
 asarray
 ashift
 aub
@@ -86,6 +87,7 @@ DFO
 DFP
 dmax
 documentclass
+doi
 DTOC
 dtype
 edgeitems
@@ -95,6 +97,9 @@ enddo
 endfor
 endforeach
 enumitem
+eprint
+eprintclass
+eprinttype
 eps
 errorid
 errormsg
