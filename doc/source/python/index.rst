@@ -8,10 +8,9 @@ Python API documentation
 
 .. currentmodule:: pdfo
 
-This section references a manual detailing the functions included in the Python version of PDFO.
-For the vast majority of users, the entry point for the Python API of PDFO is the `pdfo` function.
+This section references a manual detailing the main function included in the Python version of PDFO.
 
-.. toctree::
-    :maxdepth: 2
+.. autosummary::
+    :toctree: generated/
 
-    optimizers
+    pdfo

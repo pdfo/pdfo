@@ -46,7 +46,7 @@ license = '3-Clause BSD';
 
 version = '2.0.2';
 
-date = 'December, 2023';
+date = 'Feburary, 2024';
 
 status = 'Production';
 
