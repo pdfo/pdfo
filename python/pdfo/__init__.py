@@ -23,6 +23,6 @@ from .tests import test_pdfo as testpdfo
 #
 # Dev branch marker is: 'X.Y.dev' or 'X.Y.devN' where N is an integer.
 # 'X.Y.dev0' is the canonical version of 'X.Y.dev'.
-__version__ = '2.0.2'
+__version__ = '2.1.0'
 
 __all__ = ['bobyqa', 'cobyla', 'lincoa', 'newuoa', 'uobyqa', 'pdfo', 'tests', 'testpdfo']
