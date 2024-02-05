@@ -3,6 +3,6 @@
 set -e
 set -x
 
-brew unlink gcc@12 && brew link gcc@12
+brew reinstall gcc@12
 ls -l /usr/local/bin
 # sudo ln -fs /usr/local/bin/gfortran-12 /usr/local/bin/gfortran
