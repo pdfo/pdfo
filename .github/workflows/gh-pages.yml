@@ -2,9 +2,7 @@ name: pages-build-deployment
 
 on:
   push:
-    branches: [main]
   pull_request:
-    branches: [main]
   schedule:
     - cron: '0 2 * * *'
   workflow_dispatch:
@@ -46,7 +44,7 @@ jobs:
   deploy:
     name: Deploy documentation
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' }}
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
     needs: build
     environment:
       name: github-pages
