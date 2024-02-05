@@ -32,8 +32,8 @@ If you are an Anaconda user, PDFO is also available through the `conda installer
 
     Python wheels (i.e., pre-compiled packages) are available for Linux, Mac, and Windows.
     However, we only distribute wheels for 64-bit systems.
-    Moreover, we do not yet provide wheels for non x86_64 systems (e.g., ARM-based systems), including recent Apple machines with M1, M2, and M3 chips.
-    These wheels will be provided in the future.
+    We provide wheels for PDFO version 2.0.2 and below only for x86_64 systems.
+    Starting from PDFO version 2.1.0, we provide wheels for ARM-based macOS systems, including recent Apple machines with M1, M2, and M3 chips.
 
 Alternative installation (using source distribution)
 ----------------------------------------------------
