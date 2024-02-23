@@ -2597,7 +2597,7 @@ def _project(x0, lb, ub, constraints, options=None):
         lb_c = np.asarray(lb_c, dtype=np.float64)
     except ValueError:
         raise ValueError('{}: UNEXPECTED ERROR: lb should contain only scalars.'.format(invoker))
-    if len(lb_c.shape) != 1 or lb.size != lenx0:
+    if len(lb_c.shape) != 1 or lb_c.size != lenx0:
         raise ValueError('{}: UNEXPECTED ERROR: the size of lb is inconsistent with x0.'.format(invoker))
 
     # Validate ub.
@@ -2611,7 +2611,7 @@ def _project(x0, lb, ub, constraints, options=None):
         ub_c = np.asarray(ub_c, dtype=np.float64)
     except ValueError:
         raise ValueError('{}: UNEXPECTED ERROR: ub should contain only scalars.'.format(invoker))
-    if len(ub_c.shape) != 1 or ub.size != lenx0:
+    if len(ub_c.shape) != 1 or ub_c.size != lenx0:
         raise ValueError('{}: UNEXPECTED ERROR: the size of ub is inconsistent with x0.'.format(invoker))
 
     # Validate constraints.
