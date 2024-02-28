@@ -2677,7 +2677,7 @@ def _project(x0, lb, ub, constraints, options=None):
                 project_constraints = [ScipyLinearConstraint(**pc_args_ineq), ScipyLinearConstraint(**pc_args_eq)]
             elif pc_args_ineq['A'].size > 0 and pc_args_ineq['lb'].size > 0:
                 project_constraints = ScipyLinearConstraint(**pc_args_ineq)
-            elif pc_args_ineq['A'].size > 0:
+            elif pc_args_eq['A'].size > 0:
                 project_constraints = ScipyLinearConstraint(**pc_args_eq)
             else:
                 project_constraints = ()
