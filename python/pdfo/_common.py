@@ -324,7 +324,7 @@ def prepdfo(fun, x0, args=(), method=None, bounds=None, constraints=(), options=
 
     Returns
     -------
-    The preprocessed `fun`, `x0`, `method`, `bounds`, `options`, and
+    The preprocessed `fun`, `x0`, `bounds`, `constraints`, `options`, `method`, and
     prob_info: dict
         An internal dictionary containing the problem information.
 
