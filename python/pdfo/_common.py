@@ -2615,8 +2615,10 @@ def _project(x0, lb, ub, constraints, options=None):
         raise ValueError('{}: UNEXPECTED ERROR: the size of ub is inconsistent with x0.'.format(invoker))
 
     # Validate constraints.
+    from scipy.optimize import LinearConstraint as ScipyLinearConstraint
     if not isinstance(constraints, dict) or not ({'linear', 'nonlinear'} <= set(constraints.keys())) or \
-            not (isinstance(constraints['linear'], LinearConstraint) or constraints['linear'] is None):
+            not (isinstance(constraints['linear'], LinearConstraint) or
+                 isinstance(constraints['linear'], ScipyLinearConstraint or constraints['linear'] is None):
         # the nonlinear constraints will not be taken into account in this function and are, therefore, not validated
         raise ValueError('{}: UNEXPECTED ERROR: The constraints are ill-defined.'.format(invoker))
 
