@@ -2529,7 +2529,7 @@ def _pre_npt_elimination(invoker, n, user_options_fields, options, list_warnings
     return options
 
 
-def _project(x0, lb, ub, constraints, options=None):
+def _project(x0, lb, ub, constraints):
     """Projection of the initial guess onto the feasible set.
 
     Parameters
@@ -2548,7 +2548,6 @@ def _project(x0, lb, ub, constraints, options=None):
             nonlinear: dict
                 The nonlinear constraints of the problem. When ``_project`` is called, the nonlinear constraints are
                 None.
-    options: dict, optional
 
     Returns
     -------
@@ -2619,10 +2618,6 @@ def _project(x0, lb, ub, constraints, options=None):
             not (isinstance(constraints['linear'], LinearConstraint) or constraints['linear'] is None):
         # the nonlinear constraints will not be taken into account in this function and are, therefore, not validated
         raise ValueError('{}: UNEXPECTED ERROR: The constraints are ill-defined.'.format(invoker))
-
-    # Validate options
-    if options is not None and not isinstance(options, dict):
-        raise ValueError('{}: UNEXPECTED ERROR: The options should be a dictionary.'.format(invoker))
 
     max_con = 1e20  # Decide whether an inequality constraint can be ignored
 
