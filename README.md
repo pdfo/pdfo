@@ -9,6 +9,7 @@ Dedicated to the late Professor [M. J. D. Powell](https://www.zhangzk.net/powell
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/pdfo/pdfo?logo=github&style=for-the-badge)](https://github.com/pdfo/pdfo/releases/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/pdfo?logo=pypi&style=for-the-badge)](https://pypi.org/project/pdfo/)
 [![View PDFO: Powell's Derivative-Free Optimization solvers on File Exchange](https://img.shields.io/badge/MATLAB-File_Exchange-orange?style=for-the-badge)](https://www.mathworks.com/matlabcentral/fileexchange/75195-pdfo-powell-s-derivative-free-optimization-solvers/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3887568.svg)](https://doi.org/10.5281/zenodo.3887568)
 
 ## Introduction
 
