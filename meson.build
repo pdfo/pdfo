@@ -1,7 +1,7 @@
 project(
     'pdfo',
     'c',
-    version: '2.1.0',
+    version: '2.2.0',
     license: 'BSD-3',
     meson_version: '>= 0.64.0',
     default_options: [
