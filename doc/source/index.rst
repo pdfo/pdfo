@@ -11,7 +11,7 @@ PDFO documentation
 :Version: |version|
 :Downloads: |total_downloads|
 :Author of solvers: `M. J. D. Powell <https://www.zhangzk.net/powell.html>`_
-:Authors of PDFO: `Tom M. Ragonneau <https://www.tomragonneau.com>`_ | `Zaikun Zhang <https://www.zhangzk.net>`_
+:Authors of PDFO: `Tom M. Ragonneau <https://ragonneau.github.io>`_ | `Zaikun Zhang <https://www.zhangzk.net>`_
 
 PDFO is a cross-platform package providing the late `Professor M. J. D. Powell <https://www.zhangzk.net/powell.html>`_'s derivative-free (i.e., zeroth-order) optimization solvers.
 Using only function values, but not derivatives, it solves problems of the form
