@@ -106,6 +106,7 @@ jobs:
       - name: Store artifacts
         uses: actions/upload-artifact@v4
         with:
+          name: cp${{ matrix.python }}-${{ matrix.platform }}
           path: wheelhouse/*.whl
 
   build_sdist:
@@ -130,6 +131,7 @@ jobs:
       - name: Store artifacts
         uses: actions/upload-artifact@v4
         with:
+          name: source
           path: dist/*.tar.gz
 
   upload_anaconda:
