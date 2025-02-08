@@ -19,68 +19,71 @@ jobs:
       matrix:
         include:
           # 64-bit Linux
-          - os: ubuntu-22.04
-            python: 38
-            platform: manylinux_x86_64
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             python: 39
             platform: manylinux_x86_64
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             python: 310
             platform: manylinux_x86_64
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             python: 311
             platform: manylinux_x86_64
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             python: 312
+            platform: manylinux_x86_64
+          - os: ubuntu-24.04
+            python: 313
             platform: manylinux_x86_64
 
           # 64-bit macOS (x86_64)
-          - os: macos-12
-            python: 38
-            platform: macosx_x86_64
-          - os: macos-12
+          - os: macos-13
             python: 39
             platform: macosx_x86_64
-          - os: macos-12
+          - os: macos-13
             python: 310
             platform: macosx_x86_64
-          - os: macos-12
+          - os: macos-13
             python: 311
             platform: macosx_x86_64
-          - os: macos-12
+          - os: macos-13
             python: 312
+            platform: macosx_x86_64
+          - os: macos-13
+            python: 313
             platform: macosx_x86_64
 
           # 64-bit macOS (arm64)
-          - os: macos-14
+          - os: macos-15
             python: 39
             platform: macosx_arm64
-          - os: macos-14
+          - os: macos-15
             python: 310
             platform: macosx_arm64
-          - os: macos-14
+          - os: macos-15
             python: 311
             platform: macosx_arm64
-          - os: macos-14
+          - os: macos-15
             python: 312
+            platform: macosx_arm64
+          - os: macos-15
+            python: 313
             platform: macosx_arm64
 
           # 64-bit Windows
-          - os: windows-2019
-            python: 38
-            platform: win_amd64
-          - os: windows-2019
+          - os: windows-2022
             python: 39
             platform: win_amd64
-          - os: windows-2019
+          - os: windows-2022
             python: 310
             platform: win_amd64
-          - os: windows-2019
+          - os: windows-2022
             python: 311
             platform: win_amd64
-          - os: windows-2019
+          - os: windows-2022
             python: 312
+            platform: win_amd64
+          - os: windows-2022
+            python: 313
             platform: win_amd64
 
     steps:
