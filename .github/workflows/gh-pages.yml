@@ -30,14 +30,14 @@ jobs:
         run: |
           # Install dependencies
           python -m pip install --progress-bar=off .[doc]
-          
+
           # Build the documentation
           cd doc || exit
           make html
 
       - name: Upload artifact
         if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v4
         with:
           path: doc/build/html
 
@@ -53,4 +53,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v3
+        uses: actions/deploy-pages@v4
