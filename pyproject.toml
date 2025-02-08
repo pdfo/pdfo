@@ -3,7 +3,8 @@ build-backend = "mesonpy"
 requires = [
     "meson-python>=0.12.1",
     "wheel",
-    "oldest-supported-numpy",
+    "oldest-supported-numpy; python_version<='3.8'",
+    "numpy>=1.25,<2; python_version>'3.8'",
 ]
 
 [project]
