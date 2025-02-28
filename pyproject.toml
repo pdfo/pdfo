@@ -64,7 +64,7 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 doc = [
-    "matplotlib==3.10.0",
+    "matplotlib==3.10.1",
     "numpydoc==1.8.0",
     "pydata-sphinx-theme==0.16.1",
     "Sphinx==8.2.0",
