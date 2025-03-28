@@ -100,20 +100,20 @@ jobs:
 
       - name: Build and test wheels on Linux and Windows
         if: ${{ runner.os == 'Windows' || runner.os == 'Linux' }}
-        uses: pypa/cibuildwheel@v2.22.0
+        uses: pypa/cibuildwheel@v2.23.2
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
 
       - name: Build and test wheels on macOS (x86_64)
         if: ${{ matrix.platform == 'macosx_x86_64' }}
-        uses: pypa/cibuildwheel@v2.22.0
+        uses: pypa/cibuildwheel@v2.23.2
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
           MACOSX_DEPLOYMENT_TARGET: 13.0
 
       - name: Build and test wheels on macOS (arm64)
         if: ${{ matrix.platform == 'macosx_arm64' }}
-        uses: pypa/cibuildwheel@v2.22.0
+        uses: pypa/cibuildwheel@v2.23.2
         env:
           CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform }}
           MACOSX_DEPLOYMENT_TARGET: 14.0
